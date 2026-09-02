@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #15121b;
+  --color-surface-elevated: #1d1a24;
+  --color-surface-inset: #100d16;
+  --color-border: #4a4455;
+
+  --color-text-primary: #e8dfee;
+  --color-text-secondary: #ccc3d8;
+
+  --color-accent: #7c3aed;
+  --color-accent-light: #d2bbff;
+  --color-accent-lighter: #ede0ff;
+
+  --color-status-available: #22c55e;
+  --color-status-occupied: #ef4444;
+  --color-status-booked: #f97316;
+  --color-status-maintenance: #9ca3af;
+
+   /* ── Token khusus Customer/Public (tema merah-hitam) ── */
+  --color-cust-bg: #0a0a0a;
+  --color-cust-elevated: #141414;
+  --color-cust-border: #262626;
+  --color-cust-text-primary: #ffffff;
+  --color-cust-text-secondary: #a3a3a3;
+  --color-cust-red: #e31e24;
+  --color-cust-red-dark: #b8151a;
+  --color-cust-yellow: #fbbf24;
+}
+
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge modern */
+}
+
+body {
+  background-color: var(--color-surface);
+  font-family: 'Inter', sans-serif;
+}
