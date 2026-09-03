@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Gamepad2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function LoginPage() {
@@ -26,53 +27,65 @@ export default function LoginPage() {
   const redirectByRole = (role) => {
     if (role === 'OWNER' || role === 'ADMIN') navigate('/admin/dashboard');
     else if (role === 'STAFF_CAFE') navigate('/cafe/dashboard');
-    else navigate('/dashboard');
+    else navigate('/');
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-950">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-900 p-8 rounded-xl w-full max-w-sm border border-slate-800"
-      >
-        <h1 className="text-2xl font-bold text-white mb-6">Elysium Arena</h1>
+    <div className="min-h-screen bg-cust-bg flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        <Link to="/" className="flex items-center justify-center gap-2.5 mb-8">
+          <Gamepad2 className="text-cust-red" size={30} strokeWidth={2.5} />
+          <span className="text-cust-text-primary font-black text-xl uppercase tracking-tight">Elysium Arena</span>
+        </Link>
 
-        {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-400 text-sm p-3 rounded-lg mb-4">
-            {error}
-          </div>
-        )}
+        <div className="bg-cust-elevated border border-cust-border p-8">
+          <h1 className="text-cust-text-primary font-black text-2xl uppercase mb-1">Masuk</h1>
+          <p className="text-cust-text-secondary text-sm mb-6">Masuk untuk booking dan pantau sesi kamu.</p>
 
-        <div className="mb-4">
-          <label className="block text-slate-400 text-sm mb-1">Email</label>
-          <input
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="w-full bg-slate-800 text-white rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          {error && (
+            <div className="bg-cust-red/10 border border-cust-red/30 text-cust-red text-sm p-3 mb-5">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div>
+              <label className="block text-cust-text-secondary text-xs font-bold uppercase mb-1.5">Email</label>
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full bg-cust-bg border border-cust-border text-cust-text-primary text-sm px-4 py-3 outline-none focus:border-cust-red transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-cust-text-secondary text-xs font-bold uppercase mb-1.5">Password</label>
+              <input
+                type="password"
+                required
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="w-full bg-cust-bg border border-cust-border text-cust-text-primary text-sm px-4 py-3 outline-none focus:border-cust-red transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-cust-red hover:bg-cust-red-dark text-white font-bold uppercase text-sm py-3.5 mt-2 transition disabled:opacity-50"
+            >
+              {loading ? 'Memproses...' : 'Masuk'}
+            </button>
+          </form>
+
+          <p className="text-center text-cust-text-secondary text-sm mt-6">
+            Belum punya akun?{' '}
+            <Link to="/register" className="text-cust-red font-bold hover:underline">Daftar</Link>
+          </p>
         </div>
-
-        <div className="mb-6">
-          <label className="block text-slate-400 text-sm mb-1">Password</label>
-          <input
-            type="password"
-            required
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            className="w-full bg-slate-800 text-white rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 rounded-lg transition disabled:opacity-50"
-        >
-          {loading ? 'Memproses...' : 'Login'}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

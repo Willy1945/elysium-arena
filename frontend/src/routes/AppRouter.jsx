@@ -17,6 +17,8 @@ import DashboardPage from '../features/dashboard/DashboardPage';
 import ReportsPage from '../features/reports/ReportsPage';
 import HomePage from '../features/public/HomePage';
 import BrowseDevicesPage from '../features/public/BrowseDevicesPage';
+import RegisterPage from '../features/auth/RegisterPage';
+import CustomerDashboardPage from '../features/customer/CustomerDashboardPage';
 
 export default function AppRouter() {
   return (
@@ -28,7 +30,7 @@ export default function AppRouter() {
           path="/dashboard"
           element={
             <ProtectedRoute allowedRoles={['CUSTOMER']}>
-              <div className="text-white p-8">Customer Dashboard (placeholder)</div>
+              <CustomerDashboardPage />
             </ProtectedRoute>
           }
         />
@@ -164,6 +166,8 @@ export default function AppRouter() {
         />
 
         <Route path="/browse-devices" element={<BrowseDevicesPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
         <Route path="/" element={<Navigate to="/login" replace />} />
