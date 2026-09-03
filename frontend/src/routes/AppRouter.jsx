@@ -16,6 +16,7 @@ import InvoicePage from '../features/transactions/InvoicePage';
 import DashboardPage from '../features/dashboard/DashboardPage';
 import ReportsPage from '../features/reports/ReportsPage';
 import HomePage from '../features/public/HomePage';
+import BrowseDevicesPage from '../features/public/BrowseDevicesPage';
 
 export default function AppRouter() {
   return (
@@ -161,6 +162,8 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/browse-devices" element={<BrowseDevicesPage />} />
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
         <Route path="/" element={<Navigate to="/login" replace />} />
