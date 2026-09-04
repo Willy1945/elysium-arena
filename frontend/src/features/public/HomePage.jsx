@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Gamepad2, Monitor, DollarSign, ThumbsUp, ShieldCheck, ArrowRight, Cpu, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Gamepad2, Monitor, DollarSign, ThumbsUp, ShieldCheck, ArrowRight, Cpu, ChevronLeft, ChevronRight, UserPlus, CalendarCheck, Joystick } from 'lucide-react';
 import PublicLayout from '../../components/layout/PublicLayout';
 import { publicService } from '../../api/publicService';
 import { resolveImageUrl } from '../../utils/format';
@@ -170,25 +170,48 @@ export default function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {devices.map((device) => {
               const status = STATUS_LABEL[device.status] || STATUS_LABEL.available;
+              const isAvailable = device.status === 'available';
+              const TypeIcon = device.device_type?.name === 'PC' ? Monitor : Gamepad2;
+
               return (
                 <Link
                   key={device.id}
                   to="/browse-devices"
-                  className="bg-cust-elevated border border-cust-border p-4 hover:border-cust-red transition"
+                  className={`relative bg-cust-elevated border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${
+                    isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-60'
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    {device.device_type?.name === 'PC' ? (
-                      <Monitor size={20} className="text-cust-text-secondary" />
-                    ) : (
-                      <Gamepad2 size={20} className="text-cust-text-secondary" />
-                    )}
-                    <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase text-cust-text-secondary">
-                      <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-                      {status.label}
-                    </span>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 rounded-lg bg-cust-bg border border-cust-border flex items-center justify-center">
+                        <TypeIcon size={22} className="text-cust-text-secondary" />
+                      </div>
+                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 border ${
+                        isAvailable ? 'border-green-500/30 text-green-500 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
+                      }`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
+                        {status.label}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="text-cust-text-primary font-black uppercase text-lg">{device.code}</h3>
+                      <span className="text-[10px] font-bold uppercase text-cust-text-secondary border border-cust-border px-2 py-0.5">
+                        {device.device_type?.name}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-cust-border">
+                      <div>
+                        <p className="text-cust-text-secondary text-[10px] uppercase">Tarif</p>
+                        <p className={`font-black text-lg ${isAvailable ? 'text-cust-red' : 'text-cust-text-secondary line-through'}`}>
+                          Rp {Number(device.price_per_hour).toLocaleString('id-ID')}
+                          <span className="text-cust-text-secondary text-xs font-normal">/jam</span>
+                        </p>
+                      </div>
+                      <ArrowRight size={18} className="text-cust-text-secondary group-hover:text-cust-red transition-colors" />
+                    </div>
                   </div>
-                  <p className="text-cust-text-primary font-bold text-sm">{device.code}</p>
-                  <p className="text-cust-text-secondary text-xs mt-0.5">Rp {Number(device.price_per_hour).toLocaleString('id-ID')}/jam</p>
                 </Link>
               );
             })}
@@ -281,6 +304,37 @@ export default function HomePage() {
               Lihat Semua Game <ArrowRight size={16} />
             </Link>
           </div>
+        </div>
+      </section>
+
+       {/* ── CARA KERJA ── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+        <div className="text-center mb-14">
+          <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Gampang Banget</p>
+          <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Cara Kerja</h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+          {[
+            { icon: UserPlus, step: '01', title: 'Daftar Akun', desc: 'Buat akun cuma butuh nama, email, dan password. Kurang dari 2 menit.' },
+            { icon: Gamepad2, step: '02', title: 'Pilih Device', desc: 'Cek daftar PS5, PS4, atau PC beserta status ketersediaan real-time.' },
+            { icon: CalendarCheck, step: '03', title: 'Booking Slot Waktu', desc: 'Pilih tanggal, jam mulai, dan durasi main. Harga langsung terhitung otomatis.' },
+            { icon: Joystick, step: '04', title: 'Datang & Main', desc: 'Datang sesuai jadwal, langsung main tanpa antre atau nunggu device kosong.' },
+          ].map((item, idx) => (
+            <div key={item.step} className="relative">
+              {idx < 3 && (
+                <div className="hidden lg:block absolute top-8 left-[60%] w-full h-px bg-cust-border" />
+              )}
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full bg-cust-elevated border-2 border-cust-red flex items-center justify-center mb-5">
+                  <item.icon size={26} className="text-cust-red" />
+                </div>
+                <span className="text-cust-red font-black text-xs mb-2">{item.step}</span>
+                <h3 className="text-cust-text-primary font-black uppercase text-base mb-2">{item.title}</h3>
+                <p className="text-cust-text-secondary text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

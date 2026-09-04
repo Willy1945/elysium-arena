@@ -23,6 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/public/devices', [DeviceController::class, 'index']);
 Route::get('/public/devices/{device}', [DeviceController::class, 'show']);
 Route::get('/public/games', [GameController::class, 'index']);
+Route::get('/public/games/{game}', [GameController::class, 'show']);
 
 // ── Wajib login (semua role) ──
 Route::middleware('auth:sanctum')->group(function () {

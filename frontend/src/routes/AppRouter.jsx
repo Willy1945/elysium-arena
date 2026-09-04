@@ -19,6 +19,8 @@ import HomePage from '../features/public/HomePage';
 import BrowseDevicesPage from '../features/public/BrowseDevicesPage';
 import RegisterPage from '../features/auth/RegisterPage';
 import CustomerDashboardPage from '../features/customer/CustomerDashboardPage';
+import BrowseGamesPage from '../features/public/BrowseGamesPage';
+import PublicGameDetailPage from '../features/public/GameDetailPage';
 
 export default function AppRouter() {
   return (
@@ -168,6 +170,8 @@ export default function AppRouter() {
         <Route path="/browse-devices" element={<BrowseDevicesPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/browse-games" element={<BrowseGamesPage />} />
+        <Route path="/browse-games/:id" element={<PublicGameDetailPage />} />
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
         <Route path="/" element={<Navigate to="/login" replace />} />
