@@ -38,6 +38,14 @@ class BookingController extends Controller
             $query->where('booking_date', $request->date);
         }
 
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('booking_code', 'like', "%{$search}%")
+                    ->orWhereHas('user', fn($u) => $u->where('name', 'like', "%{$search}%"));
+            });
+        }
+
         return BookingResource::collection($query->orderByDesc('booking_date')->orderByDesc('start_time')->get());
     }
 

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\CustomerDashboardController;
+use App\Http\Controllers\Api\CafeDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -85,11 +86,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/categories/{category}', [CategoryController::class, 'update']);
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-        Route::post('/products', [ProductController::class, 'store']);
-        Route::put('/products/{product}', [ProductController::class, 'update']);
-        Route::post('/products/{product}/adjust-stock', [ProductController::class, 'adjustStock']);
-        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-
         Route::get('/transactions-checkoutable', [TransactionController::class, 'checkoutable']);
         Route::post('/sessions/{session}/checkout', [TransactionController::class, 'checkoutSession']);
         Route::post('/orders-checkout', [TransactionController::class, 'checkoutOrders']);
@@ -112,5 +108,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:OWNER,ADMIN,STAFF_CAFE')->group(function () {
         Route::post('/orders', [OrderController::class, 'store']);
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+        Route::get('/cafe-dashboard', [CafeDashboardController::class, 'index']);
+
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{product}', [ProductController::class, 'update']);
+        Route::post('/products/{product}/adjust-stock', [ProductController::class, 'adjustStock']);
+        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     });
 });
