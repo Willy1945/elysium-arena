@@ -21,6 +21,8 @@ import RegisterPage from '../features/auth/RegisterPage';
 import CustomerDashboardPage from '../features/customer/CustomerDashboardPage';
 import BrowseGamesPage from '../features/public/BrowseGamesPage';
 import PublicGameDetailPage from '../features/public/GameDetailPage';
+import CafeDashboardPage from '../features/cafe/CafeDashboardPage';
+import CustomerBookingPage from '../features/customer/CustomerBookingPage';
 
 export default function AppRouter() {
   return (
@@ -67,7 +69,7 @@ export default function AppRouter() {
           path="/cafe/dashboard"
           element={
             <ProtectedRoute allowedRoles={['STAFF_CAFE']}>
-              <div className="text-white p-8">Cafe Dashboard (placeholder)</div>
+              <CafeDashboardPage />
             </ProtectedRoute>
           }
         />
@@ -127,7 +129,7 @@ export default function AppRouter() {
         <Route
           path="/admin/products"
           element={
-            <ProtectedRoute allowedRoles={['OWNER', 'ADMIN']}>
+            <ProtectedRoute allowedRoles={['OWNER', 'ADMIN', 'STAFF_CAFE']}>
               <ProductsPage />
             </ProtectedRoute>
           }
@@ -163,6 +165,15 @@ export default function AppRouter() {
           element={
             <ProtectedRoute allowedRoles={['OWNER', 'ADMIN']}>
               <InvoicePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/booking/:deviceId"
+          element={
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+              <CustomerBookingPage />
             </ProtectedRoute>
           }
         />

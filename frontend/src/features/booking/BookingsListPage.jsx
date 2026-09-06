@@ -6,7 +6,7 @@ import { bookingService } from '../../api/bookingService';
 import { formatRupiah, BOOKING_STATUS_CONFIG } from '../../utils/format';
 import { useNavigate } from 'react-router-dom';
 import { sessionService } from '../../api/sessionService';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Search } from 'lucide-react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { useToast } from '../../context/ToastContext';
 
@@ -17,6 +17,7 @@ export default function BookingsListPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [search, setSearch] = useState('');
   const [successMessage, setSuccessMessage] = useState(location.state?.successMessage || '');
   const [actingId, setActingId] = useState(null);
   const [deletingBooking, setDeletingBooking] = useState(null);
@@ -26,12 +27,13 @@ export default function BookingsListPage() {
     try {
       const params = {};
       if (statusFilter !== 'All') params.status = statusFilter;
+      if (search) params.search = search;
       const { data } = await bookingService.getAll(params);
       setBookings(data.data);
     } finally {
       setLoading(false);
     }
-  }, [statusFilter]);
+  }, [statusFilter, search]);
 
   useEffect(() => {
     fetchBookings();
@@ -92,24 +94,36 @@ export default function BookingsListPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <div>
           <h2 className="text-text-primary text-2xl font-semibold">Bookings</h2>
           <p className="text-text-secondary text-sm">Kelola jadwal booking gaming station.</p>
         </div>
-        <div className="flex gap-2">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setStatusFilter(f)}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium capitalize transition ${statusFilter === f
-                ? 'bg-accent text-accent-lighter'
-                : 'border border-border text-text-secondary hover:bg-surface-elevated'
-                }`}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="text"
+              placeholder="Cari kode booking / nama..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="bg-surface-elevated border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-accent w-64"
+            />
+          </div>
+          <div className="flex gap-2">
+            {filters.map((f) => (
+              <button
+                key={f}
+                onClick={() => setStatusFilter(f)}
+                className={`px-4 py-1.5 rounded-full text-xs font-medium capitalize transition ${statusFilter === f
+                  ? 'bg-accent text-accent-lighter'
+                  : 'border border-border text-text-secondary hover:bg-surface-elevated'
+                  }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

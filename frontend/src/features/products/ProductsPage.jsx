@@ -8,6 +8,7 @@ import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { productService } from '../../api/productService';
 import { categoryService } from '../../api/categoryService';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
   const toast = useToast();
@@ -75,6 +76,7 @@ function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
 }
 
 export default function ProductsPage() {
+  const { user } = useAuth();
   const toast = useToast();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -184,12 +186,14 @@ export default function ProductsPage() {
               </button>
             ))}
           </div>
-          <button
-            onClick={() => setCategoriesModalOpen(true)}
-            className="flex items-center gap-1 border border-border text-text-secondary text-sm px-3 py-2 rounded-lg hover:bg-surface-elevated transition"
-          >
-            <Tag size={14} /> Kategori
-          </button>
+          {user.role !== 'STAFF_CAFE' && (
+            <button
+              onClick={() => setCategoriesModalOpen(true)}
+              className="flex items-center gap-1 border border-border text-text-secondary text-sm px-3 py-2 rounded-lg hover:bg-surface-elevated transition"
+            >
+              <Tag size={14} /> Kategori
+            </button>
+          )}
           <button
             onClick={handleOpenCreate}
             className="flex items-center gap-1 bg-accent hover:opacity-90 text-white text-sm font-medium px-4 py-2 rounded-lg transition"

@@ -1,10 +1,30 @@
 import { Search, Bell, HelpCircle, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+const SEARCH_PLACEHOLDER = {
+  '/admin/devices': 'Search devices...',
+  '/admin/games': 'Search games...',
+  '/admin/bookings': 'Search bookings...',
+  '/admin/products': 'Search products...',
+  '/admin/orders': 'Search orders...',
+  '/admin/transactions': 'Search transactions...',
+  '/admin/sessions': 'Search sessions...',
+  '/admin/inventory': 'Search inventory...',
+  '/admin/reports': 'Search reports...',
+  '/admin/dashboard': 'Search...',
+  '/cafe/dashboard': 'Search...',
+};
+
+function getPlaceholder(pathname) {
+  const match = Object.keys(SEARCH_PLACEHOLDER).find((path) => pathname.startsWith(path));
+  return match ? SEARCH_PLACEHOLDER[match] : 'Search...';
+}
 
 export default function TopNavbar({ onSearch }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     await logout();
@@ -18,7 +38,7 @@ export default function TopNavbar({ onSearch }) {
           <Search size={16} className="text-text-secondary" />
           <input
             type="text"
-            placeholder="Search devices..."
+            placeholder={getPlaceholder(location.pathname)}
             onChange={(e) => onSearch?.(e.target.value)}
             className="bg-transparent outline-none text-sm text-text-primary placeholder:text-text-secondary flex-1"
           />

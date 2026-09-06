@@ -137,21 +137,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── STATISTIK ── */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-2 sm:grid-cols-4 gap-8">
-          {stats.map((s) => (
-            <div key={s.label} className="flex items-center gap-3">
-              <s.icon size={28} className="text-cust-red shrink-0" strokeWidth={2.5} />
-              <div>
-                <p className="text-cust-text-primary font-black text-2xl leading-tight">{s.value}</p>
-                <p className="text-cust-text-secondary text-xs uppercase tracking-wide">{s.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ── KATEGORI & STATUS DEVICE LIVE ── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
         <div className="flex items-center justify-between mb-10 flex-wrap gap-3">
@@ -177,18 +162,16 @@ export default function HomePage() {
                 <Link
                   key={device.id}
                   to="/browse-devices"
-                  className={`relative bg-cust-elevated border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${
-                    isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-60'
-                  }`}
+                  className={`relative bg-cust-elevated border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-60'
+                    }`}
                 >
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-lg bg-cust-bg border border-cust-border flex items-center justify-center">
                         <TypeIcon size={22} className="text-cust-text-secondary" />
                       </div>
-                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 border ${
-                        isAvailable ? 'border-green-500/30 text-green-500 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
-                      }`}>
+                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 border ${isAvailable ? 'border-green-500/30 text-green-500 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
+                        }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                         {status.label}
                       </span>
@@ -307,7 +290,7 @@ export default function HomePage() {
         </div>
       </section>
 
-       {/* ── CARA KERJA ── */}
+      {/* ── CARA KERJA ── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
         <div className="text-center mb-14">
           <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Gampang Banget</p>
@@ -339,8 +322,12 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA AKHIR ── */}
-      <section>
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24 text-center">
+      <section
+        className="relative overflow-hidden bg-fixed bg-center bg-cover"
+        style={{ backgroundImage: "url('/images/gaming-hall.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-cust-bg/85" />
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-24 text-center">
           <h2 className="text-cust-text-primary font-black text-3xl sm:text-5xl uppercase leading-tight mb-5">
             Siap Main <span className="text-cust-red">Sekarang?</span>
           </h2>

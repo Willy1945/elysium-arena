@@ -8,10 +8,11 @@ import { Timer } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard', roles: ['OWNER', 'ADMIN'] },
+  { label: 'Cafe Dashboard', icon: LayoutDashboard, path: '/cafe/dashboard', roles: ['STAFF_CAFE'] },
   { label: 'Devices', icon: Gamepad2, path: '/admin/devices', roles: ['OWNER', 'ADMIN'] },
   { label: 'Games', icon: Joystick, path: '/admin/games', roles: ['OWNER', 'ADMIN'] },
   { label: 'Bookings', icon: CalendarCheck, path: '/admin/bookings', roles: ['OWNER', 'ADMIN'] },
-  { label: 'Food & Beverage', icon: UtensilsCrossed, path: '/admin/products', roles: ['OWNER', 'ADMIN'] },
+  { label: 'Food & Beverage', icon: UtensilsCrossed, path: '/admin/products', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
   { label: 'Orders', icon: ShoppingBag, path: '/admin/orders', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
   { label: 'Inventory', icon: Package, path: '/admin/inventory', roles: ['OWNER', 'ADMIN'] },
   { label: 'Transactions', icon: Receipt, path: '/admin/transactions', roles: ['OWNER', 'ADMIN'] },

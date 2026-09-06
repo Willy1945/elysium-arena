@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-surface: #15121b;
-  --color-surface-elevated: #1d1a24;
-  --color-surface-inset: #100d16;
-  --color-border: #4a4455;
+  --color-surface: #0a0a0a;
+  --color-surface-elevated: #141414;
+  --color-surface-inset: #000000;
+  --color-border: #262626;
 
-  --color-text-primary: #e8dfee;
-  --color-text-secondary: #ccc3d8;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a3a3a3;
 
-  --color-accent: #7c3aed;
-  --color-accent-light: #d2bbff;
-  --color-accent-lighter: #ede0ff;
+  --color-accent: #e31e24;
+  --color-accent-light: #ff6b6b;
+  --color-accent-lighter: #ffd6d6;
 
   --color-status-available: #22c55e;
   --color-status-occupied: #ef4444;
@@ -27,6 +27,7 @@
   --color-cust-red: #e31e24;
   --color-cust-red-dark: #b8151a;
   --color-cust-yellow: #fbbf24;
+  
 }
 
 .no-scrollbar {
@@ -41,4 +42,17 @@
 body {
   background-color: var(--color-surface);
   font-family: 'Inter', sans-serif;
+}
+
+/* ── Rounded corners untuk area Customer/Public ── */
+.bg-cust-elevated,
+.bg-cust-bg,
+.bg-cust-red,
+.bg-cust-red-dark,
+.border-cust-border,
+button,
+input,
+textarea,
+select {
+  border-radius: 0.5rem;
 }

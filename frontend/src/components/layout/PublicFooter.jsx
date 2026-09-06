@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function PublicFooter() {
   return (
-    <footer className="bg-cust-elevated border-t border-cust-border mt-20">
+    <footer className="bg-cust-elevated border-t border-cust-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 grid grid-cols-1 sm:grid-cols-3 gap-14">
         <div>
           <div className="flex items-center gap-3 mb-6">
