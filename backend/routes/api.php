@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\CustomerDashboardController;
 use App\Http\Controllers\Api\CafeDashboardController;
+use App\Http\Controllers\Api\RatingController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -25,6 +26,9 @@ Route::get('/public/devices', [DeviceController::class, 'index']);
 Route::get('/public/devices/{device}', [DeviceController::class, 'show']);
 Route::get('/public/games', [GameController::class, 'index']);
 Route::get('/public/games/{game}', [GameController::class, 'show']);
+Route::get('/public/products', [ProductController::class, 'index']);
+Route::get('/public/devices/{device}/ratings', [RatingController::class, 'index']);
+Route::get('/public/reviews', [RatingController::class, 'recent']);
 
 // ── Wajib login (semua role) ──
 Route::middleware('auth:sanctum')->group(function () {
@@ -59,10 +63,14 @@ Route::middleware('auth:sanctum')->group(function () {
     // Order
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{order}', [OrderController::class, 'show']);
+    Route::post('/orders', [OrderController::class, 'store']);
 
     // Transaction
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+
+    Route::post('/devices/{device}/ratings', [RatingController::class, 'store']);
+    
 
     // ── Khusus OWNER & ADMIN ──
     Route::middleware('role:OWNER,ADMIN')->group(function () {
@@ -106,7 +114,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // ── Khusus OWNER, ADMIN, STAFF_CAFE ──
     Route::middleware('role:OWNER,ADMIN,STAFF_CAFE')->group(function () {
-        Route::post('/orders', [OrderController::class, 'store']);
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
         Route::get('/cafe-dashboard', [CafeDashboardController::class, 'index']);
 

@@ -12,15 +12,17 @@ class DeviceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-        'code' => $this->code,
-        'device_type' => new DeviceTypeResource($this->whenLoaded('deviceType')),
-        'price_per_hour' => $this->price_per_hour,
-        'status' => $this->status,
-        'photo' => $this->photo ? Storage::url($this->photo) : null,
-        'description' => $this->description,
-        'games' => GameResource::collection($this->whenLoaded('games')),
-        'today_bookings_count' => $this->today_bookings_count ?? 0,   // ← baru
-        'created_at' => $this->created_at,
+            'code' => $this->code,
+            'device_type' => new DeviceTypeResource($this->whenLoaded('deviceType')),
+            'price_per_hour' => $this->price_per_hour,
+            'status' => $this->status,
+            'photo' => $this->photo ? Storage::url($this->photo) : null,
+            'description' => $this->description,
+            'games' => GameResource::collection($this->whenLoaded('games')),
+            'today_bookings_count' => $this->today_bookings_count ?? 0,
+            'rating_avg' => $this->ratings_avg_rating !== null ? round((float) $this->ratings_avg_rating, 1) : null,
+            'ratings_count' => $this->ratings_count ?? 0,
+            'created_at' => $this->created_at,
         ];
-    }
+    }   
 }

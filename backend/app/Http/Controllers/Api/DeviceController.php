@@ -21,7 +21,9 @@ class DeviceController extends Controller
                     $q->where('booking_date', now()->toDateString())
                         ->whereIn('status', ['pending', 'confirmed']);
                 }
-            ]);
+            ])
+            ->withAvg('ratings', 'rating')
+            ->withCount('ratings');
 
         if ($request->filled('type')) {
             $query->whereHas('deviceType', fn($q) => $q->where('name', $request->type));
@@ -46,6 +48,8 @@ class DeviceController extends Controller
                     ->whereIn('status', ['pending', 'confirmed']);
             }
         ]);
+        $device->loadAvg('ratings', 'rating');
+        $device->loadCount('ratings');
 
         return new DeviceResource($device->load(['deviceType', 'games']));
     }

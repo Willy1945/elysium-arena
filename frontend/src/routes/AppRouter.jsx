@@ -23,6 +23,7 @@ import BrowseGamesPage from '../features/public/BrowseGamesPage';
 import PublicGameDetailPage from '../features/public/GameDetailPage';
 import CafeDashboardPage from '../features/cafe/CafeDashboardPage';
 import CustomerBookingPage from '../features/customer/CustomerBookingPage';
+import FoodMenuPage from '../features/public/FoodMenuPage';
 
 export default function AppRouter() {
   return (
@@ -183,6 +184,7 @@ export default function AppRouter() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/browse-games" element={<BrowseGamesPage />} />
         <Route path="/browse-games/:id" element={<PublicGameDetailPage />} />
+        <Route path="/menu" element={<FoodMenuPage />} />
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
         <Route path="/" element={<Navigate to="/login" replace />} />

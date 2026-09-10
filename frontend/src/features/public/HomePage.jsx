@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Gamepad2, Monitor, DollarSign, ThumbsUp, ShieldCheck, ArrowRight, Cpu, ChevronLeft, ChevronRight, UserPlus, CalendarCheck, Joystick } from 'lucide-react';
 import PublicLayout from '../../components/layout/PublicLayout';
 import { publicService } from '../../api/publicService';
-import { resolveImageUrl } from '../../utils/format';
+import { Gamepad2, Monitor, DollarSign, ThumbsUp, ShieldCheck, ArrowRight, Cpu, ChevronLeft, ChevronRight, UserPlus, CalendarCheck, Joystick, MapPin, Phone, Clock, Quote } from 'lucide-react';
+import StarRating from '../../components/common/StarRating';
+import { formatRupiah, resolveImageUrl, timeAgo } from '../../utils/format';
 
 const STATUS_LABEL = {
   available: { label: 'Tersedia', dot: 'bg-green-500' },
@@ -18,18 +19,17 @@ export default function HomePage() {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [reviews, setReviews] = useState({ overall_average: 0, overall_count: 0, reviews: [] });
+
   useEffect(() => {
-    Promise.all([publicService.getDevices(), publicService.getGames()])
-      .then(([devicesRes, gamesRes]) => {
+    Promise.all([publicService.getDevices(), publicService.getGames(), publicService.getRecentReviews(9)])
+      .then(([devicesRes, gamesRes, reviewsRes]) => {
         setDevices(devicesRes.data.data);
         setGames(gamesRes.data.data);
+        setReviews(reviewsRes.data);
       })
-      .catch((err) => {
-        console.error('Gagal memuat data publik:', err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .catch((err) => console.error('Gagal memuat data publik:', err))
+      .finally(() => setLoading(false));
   }, []);
 
   const scrollGames = (direction) => {
@@ -80,7 +80,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 3 FITUR ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-12">
           <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Kenapa Elysium Arena</p>
           <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Semua yang Kamu Butuhkan</h2>
@@ -104,7 +104,7 @@ export default function HomePage() {
       </section>
 
       {/* ── KATEGORI DEVICE ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-12">
           <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Pilih Sesuai Selera</p>
           <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Kategori Gaming Station</h2>
@@ -138,7 +138,7 @@ export default function HomePage() {
       </section>
 
       {/* ── KATEGORI & STATUS DEVICE LIVE ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-10 flex-wrap gap-3">
           <div>
             <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Status Real-time</p>
@@ -162,7 +162,7 @@ export default function HomePage() {
                 <Link
                   key={device.id}
                   to="/browse-devices"
-                  className={`relative bg-cust-elevated border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-60'
+                  className={`relative border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-60'
                     }`}
                 >
                   <div className="p-5">
@@ -208,7 +208,7 @@ export default function HomePage() {
         style={{ backgroundImage: "url('/images/gaming-hall.jpg')" }}
       >
         <div className="absolute inset-0 bg-cust-bg/85" />
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12">
           <div className="text-center mb-10">
             <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Katalog Game</p>
             <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase mb-3">
@@ -291,7 +291,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CARA KERJA ── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-14">
           <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Gampang Banget</p>
           <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Cara Kerja</h2>
@@ -321,13 +321,115 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── LOKASI & KONTAK ── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div className="text-center mb-10">
+          <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Kunjungi Kami</p>
+          <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Lokasi & Kontak</h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Info */}
+          <div className="bg-cust-elevated border border-cust-border p-7 flex flex-col gap-6">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-full bg-cust-red flex items-center justify-center shrink-0">
+                <MapPin size={18} className="text-white" />
+              </div>
+              <div>
+                <p className="text-cust-text-primary font-bold text-sm mb-1">Alamat</p>
+                <p className="text-cust-text-secondary text-sm leading-relaxed">
+                  Jl. Mayor Abdurahman No.209, Kotakaler, Kec. Sumedang Utara,<br />
+                  Kabupaten Sumedang, Jawa Barat 45323
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-full bg-cust-red flex items-center justify-center shrink-0">
+                <Phone size={18} className="text-white" />
+              </div>
+              <div>
+                <p className="text-cust-text-primary font-bold text-sm mb-1">Kontak</p>
+                <p className="text-cust-text-secondary text-sm">+62 812-3456-7890 (WhatsApp)</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-full bg-cust-red flex items-center justify-center shrink-0">
+                <Clock size={18} className="text-white" />
+              </div>
+              <div>
+                <p className="text-cust-text-primary font-bold text-sm mb-1">Jam Operasional</p>
+                <p className="text-cust-text-secondary text-sm">Setiap Hari, 10:00 - 22:00 WIB</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Map */}
+          <div className="bg-cust-elevated border border-cust-border overflow-hidden min-h-[300px]">
+            <iframe
+              title="Lokasi Elysium Arena"
+              src="https://www.google.com/maps?q=Jl.+Mayor+Abdurahman+No.209,+Kotakaler,+Kec.+Sumedang+Utara,+Kabupaten+Sumedang,+Jawa+Barat+45323&output=embed"
+              className="w-full h-full min-h-[300px] border-0 grayscale invert-[0.9] contrast-[0.9]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
+            {/* ── ULASAN PEMAIN ── */}
+      {reviews.reviews.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+              <p className="text-cust-red font-bold text-sm uppercase tracking-widest mb-2">Kata Mereka</p>
+              <h2 className="text-cust-text-primary font-black text-3xl sm:text-4xl uppercase">Ulasan Pemain</h2>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-cust-text-primary font-black text-4xl">{reviews.overall_average}</span>
+              <div>
+                <StarRating value={reviews.overall_average} size={15} />
+                <p className="text-cust-text-secondary text-xs mt-0.5">Dari {reviews.overall_count} ulasan</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
+            {reviews.reviews.map((r) => (
+              <div key={r.id} className="break-inside-avoid bg-cust-elevated border border-cust-border p-6 relative">
+                <Quote size={40} className="absolute top-4 right-4 text-cust-border" strokeWidth={1.5} />
+                <StarRating value={r.rating} size={13} />
+                {r.comment && (
+                  <p className="text-cust-text-primary text-sm leading-relaxed my-4 relative z-10">{r.comment}</p>
+                )}
+                <div className="flex items-center justify-between mt-5 pt-4 border-t border-cust-border">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-cust-red/15 text-cust-red flex items-center justify-center text-xs font-bold shrink-0">
+                      {r.user_name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-cust-text-primary text-xs font-bold">{r.user_name}</p>
+                      <p className="text-cust-text-secondary text-[10px]">{timeAgo(r.created_at)}</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase text-cust-text-secondary border border-cust-border px-2 py-1 shrink-0">
+                    {r.device_code}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ── CTA AKHIR ── */}
       <section
         className="relative overflow-hidden bg-fixed bg-center bg-cover"
         style={{ backgroundImage: "url('/images/gaming-hall.jpg')" }}
       >
         <div className="absolute inset-0 bg-cust-bg/85" />
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-24 text-center">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-14 text-center">
           <h2 className="text-cust-text-primary font-black text-3xl sm:text-5xl uppercase leading-tight mb-5">
             Siap Main <span className="text-cust-red">Sekarang?</span>
           </h2>

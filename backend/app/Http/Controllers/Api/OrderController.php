@@ -21,7 +21,7 @@ class OrderController extends Controller
         $query = Order::with(['user', 'session.device', 'items.product']);
 
         $user = $request->user();
-        if (! in_array($user->role?->name, ['OWNER', 'ADMIN', 'STAFF_CAFE'])) {
+        if (!in_array($user->role?->name, ['OWNER', 'ADMIN', 'STAFF_CAFE'])) {
             $query->where('user_id', $user->id);
         }
 
@@ -39,8 +39,26 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
+        $actor = $request->user();
+        $data = $request->validated();
+
+        $isStaff = in_array($actor->role?->name, ['OWNER', 'ADMIN', 'STAFF_CAFE']);
+
+        if (!$isStaff) {
+            // Customer cuma boleh order atas nama dirinya sendiri
+            $data['user_id'] = $actor->id;
+
+            // Kalau menyertakan session_id, pastikan itu session miliknya sendiri & masih aktif
+            if (!empty($data['session_id'])) {
+                $session = \App\Models\GamingSession::find($data['session_id']);
+                if (!$session || $session->user_id !== $actor->id || $session->status !== 'active') {
+                    return response()->json(['message' => 'Session tidak valid.'], 422);
+                }
+            }
+        }
+
         try {
-            $order = $this->orderService->create($request->validated(), $request->user()->id);
+            $order = $this->orderService->create($data, $actor->id);
         } catch (ValidationException $e) {
             return response()->json(['message' => $e->getMessage() ?: 'Gagal membuat order.', 'errors' => $e->errors()], 422);
         }

@@ -90,3 +90,12 @@ export const PAYMENT_METHOD_LABEL = {
   qris: 'QRIS',
   transfer: 'Transfer Bank',
 };
+
+export function timeAgo(dateString) {
+  const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+  if (diff < 60) return 'Baru saja';
+  if (diff < 3600) return `${Math.floor(diff / 60)} menit lalu`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} jam lalu`;
+  if (diff < 2592000) return `${Math.floor(diff / 86400)} hari lalu`;
+  return new Date(dateString).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}

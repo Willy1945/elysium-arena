@@ -6,6 +6,10 @@ import { useAuth } from '../../context/AuthContext';
 import { customerDashboardService } from '../../api/customerDashboardService';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import { formatRupiah, BOOKING_STATUS_CONFIG, ORDER_STATUS_CONFIG } from '../../utils/format';
+import { Star } from 'lucide-react';
+import RatingFormModal from './RatingFormModal';
+import { ratingService } from '../../api/ratingService';
+import { useToast } from '../../context/ToastContext';
 
 function ActiveSessionCard({ session }) {
   const { formatted, isExpired } = useSessionTimer(session.end_time, session.status);
@@ -40,8 +44,11 @@ function ActiveSessionCard({ session }) {
 
 export default function CustomerDashboardPage() {
   const { user } = useAuth();
+  const toast = useToast();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [ratingTarget, setRatingTarget] = useState(null);
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   useEffect(() => {
     customerDashboardService.getSummary().then(({ data }) => {
@@ -59,6 +66,19 @@ export default function CustomerDashboardPage() {
       </PublicLayout>
     );
   }
+
+  const handleRatingSubmit = async (payload) => {
+    setSubmittingRating(true);
+    try {
+      await ratingService.submit(ratingTarget.deviceId, payload);
+      toast.success('Terima kasih atas rating-nya!');
+      setRatingTarget(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal mengirim rating.');
+    } finally {
+      setSubmittingRating(false);
+    }
+  };
 
   return (
     <PublicLayout>
@@ -177,25 +197,36 @@ export default function CustomerDashboardPage() {
                 <h2 className="text-cust-text-primary font-black uppercase text-base">Riwayat Transaksi</h2>
               </div>
 
-              {data.recent_transactions.length === 0 ? (
-                <p className="text-cust-text-secondary text-sm">Belum ada riwayat transaksi.</p>
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {data.recent_transactions.map((t) => (
-                    <div key={t.id} className="flex items-center justify-between bg-cust-bg border border-cust-border p-4">
-                      <div>
-                        <p className="text-cust-text-primary font-bold text-sm">{t.transaction_code}</p>
-                        <p className="text-cust-text-secondary text-xs mt-0.5">{t.session?.device_code || 'Take-away'}</p>
-                      </div>
-                      <p className="text-cust-text-primary font-bold text-sm">{formatRupiah(t.total_amount)}</p>
-                    </div>
-                  ))}
+              {data.recent_transactions.map((t) => (
+                <div key={t.id} className="flex items-center justify-between bg-cust-bg border border-cust-border p-4">
+                  <div>
+                    <p className="text-cust-text-primary font-bold text-sm">{t.transaction_code}</p>
+                    <p className="text-cust-text-secondary text-xs mt-0.5">{t.session?.device_code || 'Take-away'}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <p className="text-cust-text-primary font-bold text-sm">{formatRupiah(t.total_amount)}</p>
+                    {t.session?.device_id && (
+                      <button
+                        onClick={() => setRatingTarget({ deviceId: t.session.device_id, deviceCode: t.session.device_code })}
+                        className="flex items-center gap-1 text-cust-red text-xs font-bold uppercase border border-cust-red/30 px-2.5 py-1.5 hover:bg-cust-red/10 transition"
+                      >
+                        <Star size={11} /> Rating
+                      </button>
+                    )}
+                  </div>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
       </div>
+      <RatingFormModal
+        open={!!ratingTarget}
+        onClose={() => setRatingTarget(null)}
+        onSubmit={handleRatingSubmit}
+        deviceCode={ratingTarget?.deviceCode}
+        loading={submittingRating}
+      />
     </PublicLayout>
   );
 }

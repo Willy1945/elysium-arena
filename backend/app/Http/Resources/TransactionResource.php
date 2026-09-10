@@ -12,13 +12,14 @@ class TransactionResource extends JsonResource
         return [
             'id' => $this->id,
             'transaction_code' => $this->transaction_code,
-            'is_archived' => ! is_null($this->archived_at),
+            'is_archived' => !is_null($this->archived_at),
             'user' => [
                 'id' => $this->user?->id,
                 'name' => $this->user?->name,
             ],
             'session' => $this->session_id ? [
                 'id' => $this->session?->id,
+                'device_id' => $this->session?->device_id,
                 'device_code' => $this->session?->device?->code,
                 'duration' => $this->session?->duration,
             ] : null,

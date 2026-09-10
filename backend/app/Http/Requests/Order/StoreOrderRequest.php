@@ -13,8 +13,10 @@ class StoreOrderRequest extends FormRequest
 
     public function rules(): array
     {
+        $isStaff = in_array($this->user()->role?->name, ['OWNER', 'ADMIN', 'STAFF_CAFE']);
+
         return [
-            'user_id' => ['required', 'exists:users,id'],
+            'user_id' => [$isStaff ? 'required' : 'nullable', 'exists:users,id'],
             'session_id' => ['nullable', 'exists:sessions,id'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],

@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { label: 'Beranda', path: '/' },
   { label: 'Device', path: '/browse-devices' },
   { label: 'Game', path: '/browse-games' },
+  { label: 'Menu', path: '/menu' },
 ];
 
 export default function PublicNavbar() {

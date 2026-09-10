@@ -5,6 +5,8 @@ import PublicLayout from '../../components/layout/PublicLayout';
 import { publicService } from '../../api/publicService';
 import { useAuth } from '../../context/AuthContext';
 import { resolveImageUrl } from '../../utils/format';
+import StarRating from '../../components/common/StarRating';
+import DeviceRatingsPanel from './DeviceRatingsPanel';
 
 const STATUS_LABEL = {
   available: { label: 'Tersedia', dot: 'bg-green-500' },
@@ -21,6 +23,7 @@ export default function BrowseDevicesPage() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState(null);
+  const [expandedRatingId, setExpandedRatingId] = useState(null);
 
   const fetchDevices = useCallback(async () => {
     setLoading(true);
@@ -89,11 +92,10 @@ export default function BrowseDevicesPage() {
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`flex items-center gap-2 px-5 py-3 text-sm font-bold uppercase transition ${
-                    active
-                      ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
-                      : 'bg-cust-bg border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
-                  }`}
+                  className={`flex items-center gap-2 px-5 py-3 text-sm font-bold uppercase transition ${active
+                    ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
+                    : 'bg-cust-bg border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
+                    }`}
                 >
                   <Icon size={15} />
                   {f}
@@ -135,9 +137,8 @@ export default function BrowseDevicesPage() {
               return (
                 <div
                   key={device.id}
-                  className={`bg-cust-elevated border overflow-hidden transition-all duration-300 ${
-                    isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-70'
-                  }`}
+                  className={`bg-cust-elevated border overflow-hidden transition-all duration-300 ${isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-70'
+                    }`}
                 >
                   {/* Foto */}
                   <div className="h-44 bg-cust-bg relative overflow-hidden">
@@ -155,16 +156,24 @@ export default function BrowseDevicesPage() {
                     <span className="absolute top-3 left-3 text-[10px] font-bold uppercase text-white bg-black/70 backdrop-blur-sm px-2.5 py-1">
                       {device.device_type?.name}
                     </span>
-                    <span className={`absolute top-3 right-3 flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 ${
-                      isAvailable ? 'bg-green-500/20 text-green-400 backdrop-blur-sm' : 'bg-black/70 text-cust-text-secondary backdrop-blur-sm'
-                    }`}>
+                    <span className={`absolute top-3 right-3 flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 ${isAvailable ? 'bg-green-500/20 text-green-400 backdrop-blur-sm' : 'bg-black/70 text-cust-text-secondary backdrop-blur-sm'
+                      }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                       {status.label}
                     </span>
                   </div>
 
                   <div className="p-5">
-                    <h3 className="text-cust-text-primary font-black uppercase text-lg mb-3">{device.code}</h3>
+                    <h3 className="text-cust-text-primary font-black uppercase text-lg mb-1">{device.code}</h3>
+                    {device.ratings_count > 0 && (
+                      <button
+                        onClick={() => setExpandedRatingId((prev) => (prev === device.id ? null : device.id))}
+                        className="flex items-center gap-1.5 mb-3"
+                      >
+                        <StarRating value={device.rating_avg} size={12} />
+                        <span className="text-cust-text-secondary text-xs">{device.rating_avg} ({device.ratings_count})</span>
+                      </button>
+                    )}
 
                     {/* Toggle Game List */}
                     <button
@@ -186,6 +195,12 @@ export default function BrowseDevicesPage() {
                             {game.name}
                           </div>
                         ))}
+                      </div>
+                    )}
+
+                    {expandedRatingId === device.id && (
+                      <div className="bg-cust-bg border border-cust-border p-4 mb-4">
+                        <DeviceRatingsPanel deviceId={device.id} />
                       </div>
                     )}
 

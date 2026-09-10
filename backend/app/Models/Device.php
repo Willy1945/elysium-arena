@@ -49,4 +49,9 @@ class Device extends Model
     {
         return $query->where('status', 'available');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(DeviceRating::class);
+    }
 }
