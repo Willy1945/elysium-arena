@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\CustomerDashboardController;
 use App\Http\Controllers\Api\CafeDashboardController;
 use App\Http\Controllers\Api\RatingController;
+use App\Http\Controllers\Api\OccupancyController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -29,12 +30,15 @@ Route::get('/public/games/{game}', [GameController::class, 'show']);
 Route::get('/public/products', [ProductController::class, 'index']);
 Route::get('/public/devices/{device}/ratings', [RatingController::class, 'index']);
 Route::get('/public/reviews', [RatingController::class, 'recent']);
+Route::get('/public/occupancy-stats', [OccupancyController::class, 'stats']);
 
 // ── Wajib login (semua role) ──
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/profile', [AuthController::class, 'updateProfile']);
+    Route::post('/profile', [AuthController::class, 'updateProfile']);
     Route::get('/my-dashboard', [CustomerDashboardController::class, 'index']);
 
     // Device & Game Catalog
@@ -70,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
 
     Route::post('/devices/{device}/ratings', [RatingController::class, 'store']);
-    
+
 
     // ── Khusus OWNER & ADMIN ──
     Route::middleware('role:OWNER,ADMIN')->group(function () {

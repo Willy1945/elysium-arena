@@ -8,5 +8,6 @@ export const publicService = {
   getCategories: () => axiosClient.get('/public/categories'),
   getProducts: (params) => axiosClient.get('/public/products', { params }),   
   getDeviceRatings: (deviceId) => axiosClient.get(`/public/devices/${deviceId}/ratings`),
-  getRecentReviews: (limit = 9) => axiosClient.get('/public/reviews', { params: { limit } }),   // ← baru
+  getRecentReviews: (limit = 9) => axiosClient.get('/public/reviews', { params: { limit } }),
+  getOccupancyStats: () => axiosClient.get('/public/occupancy-stats'),  
 };

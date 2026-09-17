@@ -24,6 +24,7 @@ import PublicGameDetailPage from '../features/public/GameDetailPage';
 import CafeDashboardPage from '../features/cafe/CafeDashboardPage';
 import CustomerBookingPage from '../features/customer/CustomerBookingPage';
 import FoodMenuPage from '../features/public/FoodMenuPage';
+import ProfilePage from '../features/customer/ProfilePage';
 
 export default function AppRouter() {
   return (
@@ -175,6 +176,15 @@ export default function AppRouter() {
           element={
             <ProtectedRoute allowedRoles={['CUSTOMER']}>
               <CustomerBookingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

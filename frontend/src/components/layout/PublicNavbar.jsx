@@ -52,9 +52,8 @@ export default function PublicNavbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`text-base font-bold uppercase tracking-wide transition ${
-                    active ? 'text-cust-red' : 'text-cust-text-secondary hover:text-cust-text-primary'
-                  }`}
+                  className={`text-base font-bold uppercase tracking-wide transition ${active ? 'text-cust-red' : 'text-cust-text-secondary hover:text-cust-text-primary'
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -88,6 +87,13 @@ export default function PublicNavbar() {
                       className="flex items-center gap-3 px-4 py-3 text-cust-text-secondary hover:bg-cust-bg hover:text-cust-text-primary text-sm font-medium transition"
                     >
                       <CalendarCheck size={16} /> Dashboard Saya
+                    </Link>
+                    <Link
+                      to="/profile"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-cust-text-secondary hover:bg-cust-bg hover:text-cust-text-primary text-sm font-medium transition"
+                    >
+                      <User size={16} /> Edit Profil
                     </Link>
                     <button
                       onClick={handleLogout}
@@ -134,6 +140,9 @@ export default function PublicNavbar() {
                 </div>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-left text-cust-text-primary text-base font-bold uppercase flex items-center gap-2">
                   <CalendarCheck size={16} /> Dashboard Saya
+                </Link>
+                <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-left text-cust-text-primary text-base font-bold uppercase flex items-center gap-2">
+                  <User size={16} /> Edit Profil
                 </Link>
                 <button onClick={handleLogout} className="text-left text-cust-red text-base font-bold uppercase flex items-center gap-2">
                   <LogOut size={16} /> Logout

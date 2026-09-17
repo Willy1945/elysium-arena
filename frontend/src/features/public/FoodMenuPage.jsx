@@ -105,7 +105,7 @@ export default function FoodMenuPage() {
       {/* ── HEADER ── */}
       <section
         className="relative overflow-hidden min-h-[380px] flex items-center"
-        style={{ backgroundImage: "url('/images/gaming-hall.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}
+        style={{ backgroundImage: "url('images/kitchen.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
         <div className="absolute inset-0 bg-cust-bg/75" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center w-full">

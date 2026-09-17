@@ -3,48 +3,56 @@ import { authService } from '../api/authService';
 
 const AuthContext = createContext(null);
 
+function normalizeUser(rawUser) {
+  if (!rawUser) return null;
+  return {
+    ...rawUser,
+    role: rawUser.role?.name || rawUser.role,
+  };
+}
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setRawUser] = useState(() => {
+    const stored = localStorage.getItem('user');
+    return stored ? normalizeUser(JSON.parse(stored)) : null;
+  });
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-
-    if (token && storedUser) {
-      setUser(JSON.parse(storedUser));
+  // Setiap kali user diubah dari manapun, WAJIB lewat sini — role selalu dinormalisasi otomatis
+  const setUser = (rawUser) => {
+    const normalized = normalizeUser(rawUser);
+    if (normalized) {
+      localStorage.setItem('user', JSON.stringify(normalized));
+    } else {
+      localStorage.removeItem('user');
     }
-    setLoading(false);
-  }, []);
+    setRawUser(normalized);
+  };
 
   const login = async (credentials) => {
     const { data } = await authService.login(credentials);
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
     setUser(data.user);
-    return data.user;
+    return normalizeUser(data.user);
   };
 
   const register = async (payload) => {
     const { data } = await authService.register(payload);
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
     setUser(data.user);
-    return data.user;
+    return normalizeUser(data.user);
   };
 
   const logout = async () => {
     try {
       await authService.logout();
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setUser(null);
+    } catch (e) {
     }
+    localStorage.removeItem('token');
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
