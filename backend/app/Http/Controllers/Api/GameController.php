@@ -14,14 +14,14 @@ class GameController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Game::query();
+        $query = Game::withCount('devices');
 
         if ($request->filled('platform')) {
             $query->whereJsonContains('platforms', $request->platform);
         }
 
         return GameResource::collection($query->orderBy('name')->get());
-    }
+    } 
 
     public function show(Game $game)
     {

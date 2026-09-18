@@ -17,17 +17,17 @@ const STATUS_LABEL = {
 
 const CATEGORY_META = {
   PS5: {
-    photo: '/images/ps5-category.jpg',
+    photo: '/images/ps5.png',
     title: 'PlayStation 5',
     desc: 'Grafis next-gen, loading super cepat, DualSense haptic feedback. Pengalaman imersif di layar 4K HDR 120Hz.',
   },
   PS4: {
-    photo: '/images/ps4-category.jpg',
+    photo: '/images/ps4.png',
     title: 'PlayStation 4',
     desc: 'Koleksi game klasik lengkap, harga lebih hemat per jam. Ideal untuk sesi santai multiplayer co-op.',
   },
   PC: {
-    photo: '/images/pc-category.jpg',
+    photo: '/images/pc2.jpg',
     title: 'PC Gaming',
     desc: 'Spek tinggi untuk game kompetitif dan open-world berat, monitor refresh rate tinggi, periferal terawat.',
   },

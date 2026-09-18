@@ -17,6 +17,7 @@ class GameResource extends JsonResource
             'cover_image' => $this->cover_image ? Storage::url($this->cover_image) : null,
             'description' => $this->description,
             'devices' => DeviceResource::collection($this->whenLoaded('devices')),
+            'devices_count' => $this->devices_count ?? 0,
         ];
     }
 }

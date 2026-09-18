@@ -23,7 +23,12 @@ class DeviceController extends Controller
                 }
             ])
             ->withAvg('ratings', 'rating')
-            ->withCount('ratings');
+            ->withCount('ratings')
+            ->with([
+                'sessions' => function ($q) {
+                    $q->where('status', 'active')->latest()->limit(1);
+                }
+            ]);
 
         if ($request->filled('type')) {
             $query->whereHas('deviceType', fn($q) => $q->where('name', $request->type));
@@ -50,6 +55,7 @@ class DeviceController extends Controller
         ]);
         $device->loadAvg('ratings', 'rating');
         $device->loadCount('ratings');
+        $device->load(['sessions' => fn($q) => $q->where('status', 'active')->latest()->limit(1)]);
 
         return new DeviceResource($device->load(['deviceType', 'games']));
     }
