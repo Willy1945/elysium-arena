@@ -25,6 +25,8 @@ import CafeDashboardPage from '../features/cafe/CafeDashboardPage';
 import CustomerBookingPage from '../features/customer/CustomerBookingPage';
 import FoodMenuPage from '../features/public/FoodMenuPage';
 import ProfilePage from '../features/customer/ProfilePage';
+import FeedbackPage from '../features/customer/FeedbackPage';
+import FeedbackManagePage from '../features/feedback/FeedbackManagePage';
 
 export default function AppRouter() {
   return (
@@ -185,6 +187,22 @@ export default function AppRouter() {
           element={
             <ProtectedRoute allowedRoles={['CUSTOMER']}>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+              <FeedbackPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/feedback"
+          element={
+            <ProtectedRoute allowedRoles={['OWNER', 'ADMIN']}>
+              <FeedbackManagePage />
             </ProtectedRoute>
           }
         />

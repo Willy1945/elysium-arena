@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Gamepad2, Menu, X, ChevronDown, User, LogOut, CalendarCheck } from 'lucide-react';
+import { Gamepad2, Menu, X, ChevronDown, User, LogOut, CalendarCheck, MessageSquarePlus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const NAV_LINKS = [
@@ -95,6 +95,13 @@ export default function PublicNavbar() {
                     >
                       <User size={16} /> Edit Profil
                     </Link>
+                    <Link
+                      to="/feedback"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-cust-text-secondary hover:bg-cust-bg hover:text-cust-text-primary text-sm font-medium transition"
+                    >
+                      <MessageSquarePlus size={16} /> Kirim Masukan
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-3 px-4 py-3 text-cust-red hover:bg-cust-bg text-sm font-medium transition"
@@ -143,6 +150,9 @@ export default function PublicNavbar() {
                 </Link>
                 <Link to="/profile" onClick={() => setMobileOpen(false)} className="text-left text-cust-text-primary text-base font-bold uppercase flex items-center gap-2">
                   <User size={16} /> Edit Profil
+                </Link>
+                <Link to="/feedback" onClick={() => setMobileOpen(false)} className="text-left text-cust-text-primary text-base font-bold uppercase flex items-center gap-2">
+                  <MessageSquarePlus size={16} /> Kirim Masukan
                 </Link>
                 <button onClick={handleLogout} className="text-left text-cust-red text-base font-bold uppercase flex items-center gap-2">
                   <LogOut size={16} /> Logout

@@ -21,11 +21,14 @@ class GameController extends Controller
         }
 
         return GameResource::collection($query->orderBy('name')->get());
-    } 
+    }
 
     public function show(Game $game)
     {
-        return new GameResource($game->load('devices.deviceType'));
+        return new GameResource($game->load([
+            'devices.deviceType',
+            'devices.sessions' => fn($q) => $q->where('status', 'active')->latest()->limit(1),
+        ]));
     }
 
     public function store(StoreGameRequest $request)

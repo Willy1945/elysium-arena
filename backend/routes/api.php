@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\CustomerDashboardController;
 use App\Http\Controllers\Api\CafeDashboardController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\OccupancyController;
+use App\Http\Controllers\Api\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -75,6 +76,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/devices/{device}/ratings', [RatingController::class, 'store']);
 
+    Route::get('/feedback', [FeedbackController::class, 'index']);
+    Route::post('/feedback', [FeedbackController::class, 'store']);
+
 
     // ── Khusus OWNER & ADMIN ──
     Route::middleware('role:OWNER,ADMIN')->group(function () {
@@ -106,6 +110,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/transactions/{transaction}/unarchive', [TransactionController::class, 'unarchive']);
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
+
+        Route::patch('/feedback/{feedback}', [FeedbackController::class, 'updateStatus']);
 
         // ── Khusus OWNER ──
         Route::middleware('role:OWNER')->group(function () {

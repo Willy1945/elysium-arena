@@ -22,6 +22,12 @@ export default function FoodMenuPage() {
 
   const [activeSessions, setActiveSessions] = useState([]);
   const [selectedSessionId, setSelectedSessionId] = useState('');
+
+  useEffect(() => {
+    if (activeSessions.length === 1) {
+      setSelectedSessionId(String(activeSessions[0].id));
+    }
+  }, [activeSessions]);
   const [cart, setCart] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -179,11 +185,10 @@ export default function FoodMenuPage() {
                     <button
                       key={f}
                       onClick={() => setActiveCategory(f)}
-                      className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold uppercase transition ${
-                        active
+                      className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold uppercase transition ${active
                           ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
                           : 'bg-cust-elevated border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
-                      }`}
+                        }`}
                     >
                       {f === 'All' ? 'Semua Menu' : f}
                       <span className={`font-mono-tech text-[10px] ${active ? 'opacity-70' : 'opacity-50'}`}>{count}</span>
@@ -278,6 +283,11 @@ export default function FoodMenuPage() {
                       <option key={s.id} value={s.id}>{s.device?.code}</option>
                     ))}
                   </select>
+                  {!selectedSessionId && (
+                    <p className="text-yellow-500 text-xs mt-2">
+                      ⚠️ Kamu sedang main aktif. Pilih station kamu di atas supaya pesanan ini digabung ke billing sesi bermain, bukan jadi tagihan terpisah.
+                    </p>
+                  )}
                 </div>
               )}
 

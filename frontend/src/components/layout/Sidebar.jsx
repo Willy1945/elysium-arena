@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   Gamepad2, LayoutDashboard, CalendarCheck, Joystick,
-  UtensilsCrossed, ShoppingBag, Package, Receipt, BarChart3, Settings,
+  UtensilsCrossed, ShoppingBag, Package, Receipt, BarChart3, Settings, MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Timer } from 'lucide-react';
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { label: 'Transactions', icon: Receipt, path: '/admin/transactions', roles: ['OWNER', 'ADMIN'] },
   { label: 'Reports', icon: BarChart3, path: '/admin/reports', roles: ['OWNER'] },
   { label: 'Sessions', icon: Timer, path: '/admin/sessions', roles: ['OWNER', 'ADMIN'] },
+  { label: 'Feedback', icon: MessageSquare, path: '/admin/feedback', roles: ['OWNER', 'ADMIN'] },
   { label: 'Settings', icon: Settings, path: '/admin/settings', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
 ];
 
