@@ -255,7 +255,7 @@ export default function HomePage() {
       </section>
 
       {/* ── LIVE MONITORING (GAMING STATION) ── */}
-      <section className="bg-cust-elevated/40">
+      <section>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
             <div>
@@ -360,7 +360,7 @@ export default function HomePage() {
                         const isBusiest = h.hour === occupancy.busiest?.hour;
                         const isQuietest = h.hour === occupancy.quietest?.hour;
                         return (
-                          <div key={h.hour} className="flex-1 flex flex-col items-center gap-1.5">
+                          <div key={h.hour} className="flex-1 flex flex-col items-center justify-end h-full">
                             <div
                               className={`w-full rounded-sm transition-all ${isBusiest ? 'bg-cust-red' : isQuietest ? 'bg-cust-elevated' : 'bg-amber-500/60'
                                 }`}

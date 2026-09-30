@@ -16,6 +16,7 @@ export const deviceService = {
     updateStatus: (id, status) => axiosClient.patch(`/devices/${id}/status`, { status }),
     syncGames: (id, gameIds) => axiosClient.post(`/devices/${id}/games`, { game_ids: gameIds }),
     remove: (id) => axiosClient.delete(`/devices/${id}`),
+    generateClientToken: (id) => axiosClient.post(`/devices/${id}/client-token`),
 };
 
 export const deviceTypeService = {

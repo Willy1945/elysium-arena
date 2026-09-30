@@ -27,6 +27,7 @@ import FoodMenuPage from '../features/public/FoodMenuPage';
 import ProfilePage from '../features/customer/ProfilePage';
 import FeedbackPage from '../features/customer/FeedbackPage';
 import FeedbackManagePage from '../features/feedback/FeedbackManagePage';
+import RewardsPage from '../features/customer/RewardsPage';
 
 export default function AppRouter() {
   return (
@@ -216,6 +217,7 @@ export default function AppRouter() {
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
         <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/rewards" element={<ProtectedRoute allowedRoles={['CUSTOMER']}><RewardsPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
 

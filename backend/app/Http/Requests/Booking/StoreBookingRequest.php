@@ -28,6 +28,7 @@ class StoreBookingRequest extends FormRequest
                     }
                 },
             ],
+            'reward_id' => ['nullable', 'exists:loyalty_rewards,id'],
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Device;
+use App\Models\LoyaltyReward;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -72,7 +73,26 @@ class BookingService
             $end = $start->copy()->addMinutes($data['duration']);
             $totalPrice = ($data['duration'] / 60) * $device->price_per_hour;
 
-            return Booking::create([
+            // ── Reward: Gratis 1 Jam ──
+            $reward = null;
+            if (! empty($data['reward_id'])) {
+                $reward = LoyaltyReward::where('id', $data['reward_id'])
+                    ->where('user_id', $userId)
+                    ->where('status', 'available')
+                    ->where('type', 'free_hour')
+                    ->first();
+
+                if (! $reward) {
+                    throw ValidationException::withMessages([
+                        'reward_id' => 'Reward tidak valid atau sudah terpakai.',
+                    ]);
+                }
+
+                $discount = min($device->price_per_hour, $totalPrice);
+                $totalPrice -= $discount;
+            }
+
+            $booking = Booking::create([
                 'booking_code' => 'BK-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5)),
                 'user_id' => $userId,
                 'device_id' => $device->id,
@@ -83,6 +103,16 @@ class BookingService
                 'total_price' => $totalPrice,
                 'status' => 'pending',
             ]);
+
+            if ($reward) {
+                $reward->update([
+                    'status' => 'redeemed',
+                    'redeemed_booking_id' => $booking->id,
+                    'redeemed_at' => now(),
+                ]);
+            }
+
+            return $booking;
         });
     }
 }

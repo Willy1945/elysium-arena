@@ -22,6 +22,7 @@ class StoreProductRequest extends FormRequest
             'image' => ['nullable', 'image', 'max:2048'],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
+            'is_reward_item' => ['sometimes', 'boolean'],
         ];
     }
 }

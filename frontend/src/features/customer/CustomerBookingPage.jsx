@@ -6,6 +6,7 @@ import { useToast } from '../../context/ToastContext';
 import { deviceService } from '../../api/deviceService';
 import { bookingService } from '../../api/bookingService';
 import { formatRupiah, resolveImageUrl, addHoursToTime, isSlotAvailable } from '../../utils/format';
+import { rewardService } from '../../api/rewardService';
 
 const OPERATING_HOURS = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
 const DURATION_OPTIONS = [1, 2, 3, 4, 5, 6];
@@ -38,6 +39,16 @@ export default function CustomerBookingPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const [availableHourReward, setAvailableHourReward] = useState(null);
+  const [useReward, setUseReward] = useState(false);
+
+  useEffect(() => {
+    rewardService.getMyRewards().then(({ data }) => {
+      const reward = data.rewards.find((r) => r.status === 'available' && r.type === 'free_hour');
+      setAvailableHourReward(reward || null);
+    });
+  }, []);
 
   useEffect(() => {
     deviceService.getById(deviceId).then(({ data }) => {
@@ -81,6 +92,7 @@ export default function CustomerBookingPage() {
         booking_date: date,
         start_time: startTime,
         duration: durationHours * 60,
+        reward_id: useReward && availableHourReward ? availableHourReward.id : null,
       });
       toast.success(`Booking ${data.data.booking_code} berhasil dibuat!`);
       navigate('/dashboard');
@@ -147,9 +159,8 @@ export default function CustomerBookingPage() {
                   <div>
                     <div className="flex items-start justify-between mb-2">
                       <h2 className="text-cust-text-primary font-black text-xl uppercase">{device.code}</h2>
-                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 border ${
-                        device.status === 'available' ? 'border-green-500/30 text-green-500 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
-                      }`}>
+                      <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2.5 py-1 border ${device.status === 'available' ? 'border-green-500/30 text-green-500 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
+                        }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                         {status.label}
                       </span>
@@ -225,13 +236,12 @@ export default function CustomerBookingPage() {
                               type="button"
                               disabled={!available}
                               onClick={() => setStartTime(slot)}
-                              className={`flex items-center justify-center gap-1 py-2.5 text-xs font-bold border transition ${
-                                selected
-                                  ? 'bg-cust-red border-cust-red text-white'
-                                  : available
-                                    ? 'bg-cust-bg border-cust-border text-cust-text-primary hover:border-cust-red'
-                                    : 'bg-cust-bg border-cust-border text-cust-text-secondary/40 cursor-not-allowed'
-                              }`}
+                              className={`flex items-center justify-center gap-1 py-2.5 text-xs font-bold border transition ${selected
+                                ? 'bg-cust-red border-cust-red text-white'
+                                : available
+                                  ? 'bg-cust-bg border-cust-border text-cust-text-primary hover:border-cust-red'
+                                  : 'bg-cust-bg border-cust-border text-cust-text-secondary/40 cursor-not-allowed'
+                                }`}
                             >
                               {!available && <Lock size={10} />}
                               {slot}
@@ -283,6 +293,13 @@ export default function CustomerBookingPage() {
                 </div>
 
                 {error && <p className="text-cust-red text-xs mb-4">{error}</p>}
+
+                {availableHourReward && (
+                  <label className="flex items-center gap-2 text-sm text-cust-text-primary mb-4 bg-cust-bg p-3 border border-green-500/30">
+                    <input type="checkbox" checked={useReward} onChange={(e) => setUseReward(e.target.checked)} />
+                    Pakai reward: Gratis 1 Jam Main
+                  </label>
+                )}
 
                 <button
                   onClick={handleSubmit}

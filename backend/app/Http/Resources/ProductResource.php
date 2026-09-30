@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'is_active' => (bool) $this->is_active,
             'created_at' => $this->created_at,
+            'is_reward_item' => $this->is_reward_item,
         ];
     }
 }

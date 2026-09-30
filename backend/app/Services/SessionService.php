@@ -30,11 +30,11 @@ class SessionService
             if ($bookingId) {
                 $booking = Booking::where('id', $bookingId)->lockForUpdate()->first();
 
-                if (! $booking || $booking->device_id !== $device->id) {
+                if (!$booking || $booking->device_id !== $device->id) {
                     throw ValidationException::withMessages(['booking_id' => 'Booking tidak valid untuk device ini.']);
                 }
 
-                if (! in_array($booking->status, ['pending', 'confirmed'])) {
+                if (!in_array($booking->status, ['pending', 'confirmed'])) {
                     throw ValidationException::withMessages(['booking_id' => 'Booking ini tidak bisa dimulai (status: ' . $booking->status . ').']);
                 }
 
@@ -105,7 +105,30 @@ class SessionService
                 $session->booking()->update(['status' => 'completed']);
             }
 
+            $this->checkLoyaltyMilestone($session);
+
             return $session->fresh();
         });
+    }
+
+    private function checkLoyaltyMilestone(GamingSession $session): void
+    {
+        $completedCount = GamingSession::where('user_id', $session->user_id)
+            ->where('status', 'completed')
+            ->count();
+
+        if ($completedCount > 0 && $completedCount % 10 === 0) {
+            $alreadyExists = \App\Models\LoyaltyReward::where('user_id', $session->user_id)
+                ->where('milestone', $completedCount)
+                ->exists();
+
+            if (!$alreadyExists) {
+                \App\Models\LoyaltyReward::create([
+                    'user_id' => $session->user_id,
+                    'milestone' => $completedCount,
+                    'status' => 'pending_choice',
+                ]);
+            }
+        }
     }
 }

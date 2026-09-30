@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\InventoryLog;
+use App\Models\LoyaltyReward;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -36,6 +37,34 @@ class OrderService
                 $totalPrice += $product->price * $item['quantity'];
             }
 
+            // ── Reward: Gratis Makanan ──
+            $reward = null;
+            $rewardProduct = null;
+            if (! empty($data['reward_id'])) {
+                $reward = LoyaltyReward::where('id', $data['reward_id'])
+                    ->where('user_id', $actorId)
+                    ->where('status', 'available')
+                    ->where('type', 'free_food')
+                    ->first();
+
+                if (! $reward) {
+                    throw ValidationException::withMessages([
+                        'reward_id' => 'Reward tidak valid atau sudah terpakai.',
+                    ]);
+                }
+
+                $rewardProduct = Product::where('is_reward_item', true)
+                    ->where('is_active', true)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $rewardProduct || $rewardProduct->stock < 1) {
+                    throw ValidationException::withMessages([
+                        'reward_id' => 'Item reward sedang tidak tersedia.',
+                    ]);
+                }
+            }
+
             $order = Order::create([
                 'order_code' => 'ORD-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5)),
                 'user_id' => $data['user_id'],
@@ -64,6 +93,33 @@ class OrderService
                     'quantity' => $item['quantity'],
                     'type' => 'out',
                     'reason' => 'Order ' . $order->order_code,
+                ]);
+            }
+
+            // ── Tambahkan item reward gratis ke order (kalau ada) ──
+            if ($reward && $rewardProduct) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $rewardProduct->id,
+                    'quantity' => 1,
+                    'price' => 0,
+                    'subtotal' => 0,
+                ]);
+
+                $rewardProduct->decrement('stock', 1);
+
+                InventoryLog::create([
+                    'product_id' => $rewardProduct->id,
+                    'user_id' => $actorId,
+                    'quantity' => 1,
+                    'type' => 'out',
+                    'reason' => 'Reward Gratis - Order ' . $order->order_code,
+                ]);
+
+                $reward->update([
+                    'status' => 'redeemed',
+                    'redeemed_order_id' => $order->id,
+                    'redeemed_at' => now(),
                 ]);
             }
 

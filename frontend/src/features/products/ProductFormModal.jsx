@@ -135,6 +135,16 @@ export default function ProductFormModal({ open, onClose, onSubmit, categories, 
           Produk aktif (tampil di menu)
         </label>
 
+        <label className="flex items-center gap-2 text-sm text-text-secondary mb-4">
+          <input
+            type="checkbox"
+            checked={form.is_reward_item || false}
+            onChange={(e) => setForm({ ...form, is_reward_item: e.target.checked })}
+            className="rounded"
+          />
+          Jadikan item ini sebagai hadiah reward loyalitas
+        </label>
+
         <button
           type="submit"
           disabled={loading}

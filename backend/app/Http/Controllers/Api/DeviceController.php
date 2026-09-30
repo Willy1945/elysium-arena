@@ -132,4 +132,16 @@ class DeviceController extends Controller
 
         return response()->json(['message' => 'Device berhasil dihapus.']);
     }
+
+    public function regenerateClientToken(Device $device)
+    {
+        $token = $device->regenerateClientToken();
+
+        // Token cuma ditampilkan SEKALI di sini, saat digenerate.
+        // Setelahnya tidak pernah muncul lagi di response manapun (lihat $hidden di model).
+        return response()->json([
+            'message' => 'Token berhasil dibuat.',
+            'client_token' => $token,
+        ]);
+    }
 }

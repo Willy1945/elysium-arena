@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, KeyRound, Copy, Check } from 'lucide-react';
+import { deviceService } from '../../api/deviceService';
 
 export default function DeviceFormModal({ open, onClose, onSubmit, deviceTypes, games, initialData, loading }) {
   const [form, setForm] = useState({
@@ -11,6 +12,9 @@ export default function DeviceFormModal({ open, onClose, onSubmit, deviceTypes, 
     game_ids: [],
   });
   const [photoFile, setPhotoFile] = useState(null);
+  const [tokenState, setTokenState] = useState({ loading: false, value: null, error: null, copied: false });
+  const selectedType = deviceTypes.find((t) => t.id === Number(form.device_type_id));
+  const isPc = selectedType?.name === 'PC';
 
   useEffect(() => {
     if (initialData) {
@@ -26,6 +30,7 @@ export default function DeviceFormModal({ open, onClose, onSubmit, deviceTypes, 
       setForm({ device_type_id: '', code: '', price_per_hour: '', status: 'available', description: '', game_ids: [] });
     }
     setPhotoFile(null);
+    setTokenState({ loading: false, value: null, error: null, copied: false });
   }, [initialData, open]);
 
   if (!open) return null;
@@ -51,6 +56,34 @@ export default function DeviceFormModal({ open, onClose, onSubmit, deviceTypes, 
     });
     if (photoFile) formData.append('photo', photoFile);
     onSubmit(formData);
+  };
+
+  const handleGenerateToken = async () => {
+    if (!initialData) return;
+    const confirmed = window.confirm(
+      'Membuat token baru akan membuat token lama (kalau sudah ada) tidak berlaku lagi. PC yang sudah pakai token lama harus di-update config.json-nya. Lanjutkan?'
+    );
+    if (!confirmed) return;
+
+    setTokenState({ loading: true, value: null, error: null, copied: false });
+    try {
+      const res = await deviceService.generateClientToken(initialData.id);
+      setTokenState({ loading: false, value: res.data.client_token, error: null, copied: false });
+    } catch (err) {
+      setTokenState({
+        loading: false,
+        value: null,
+        error: err.response?.data?.message || 'Gagal membuat token.',
+        copied: false,
+      });
+    }
+  };
+
+  const handleCopyToken = () => {
+    if (!tokenState.value) return;
+    navigator.clipboard.writeText(tokenState.value);
+    setTokenState((prev) => ({ ...prev, copied: true }));
+    setTimeout(() => setTokenState((prev) => ({ ...prev, copied: false })), 2000);
   };
 
   return (
@@ -141,6 +174,55 @@ export default function DeviceFormModal({ open, onClose, onSubmit, deviceTypes, 
             className="w-full text-sm text-text-secondary"
           />
         </div>
+
+        {initialData && isPc && (
+          <div className="mb-6 border border-border rounded-lg p-3 bg-surface-inset/50">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <label className="flex items-center gap-1.5 text-text-secondary text-xs">
+                <KeyRound size={13} /> Token Smart Lock (untuk PC client)
+              </label>
+              <button
+                type="button"
+                onClick={handleGenerateToken}
+                disabled={tokenState.loading}
+                className="text-accent text-xs font-medium hover:underline disabled:opacity-50"
+              >
+                {tokenState.loading ? 'Membuat...' : 'Generate Token'}
+              </button>
+            </div>
+
+            {tokenState.error && (
+              <p className="text-red-400 text-xs mt-1">{tokenState.error}</p>
+            )}
+
+            {tokenState.value && (
+              <div className="mt-2">
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 bg-surface-elevated border border-border rounded px-2 py-1.5 text-[11px] text-text-primary break-all select-all">
+                    {tokenState.value}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={handleCopyToken}
+                    className="shrink-0 text-text-secondary hover:text-text-primary"
+                    title="Copy token"
+                  >
+                    {tokenState.copied ? <Check size={15} className="text-green-400" /> : <Copy size={15} />}
+                  </button>
+                </div>
+                <p className="text-amber-400 text-[11px] mt-1.5">
+                  Simpan sekarang, token ini tidak akan ditampilkan lagi setelah modal ditutup. Tempel ke config.json di PC device ini.
+                </p>
+              </div>
+            )}
+
+            {!tokenState.value && !tokenState.error && (
+              <p className="text-text-secondary text-[11px] mt-1">
+                Klik "Generate Token" untuk membuat/mengganti token yang dipakai aplikasi smart lock di PC ini.
+              </p>
+            )}
+          </div>
+        )}
 
         {(() => {
           const selectedType = deviceTypes.find((t) => t.id === Number(form.device_type_id));

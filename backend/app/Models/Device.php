@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Device extends Model
 {
@@ -16,6 +17,12 @@ class Device extends Model
         'status',
         'photo',
         'description',
+    ];
+
+    // client_token sengaja TIDAK masuk $fillable dan disembunyikan dari response biasa,
+    // supaya cuma bisa diganti lewat method regenerateClientToken() di bawah.
+    protected $hidden = [
+        'client_token',
     ];
 
     // ── Relationships ──
@@ -44,14 +51,24 @@ class Device extends Model
         return $this->hasMany(Maintenance::class);
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(DeviceRating::class);
+    }
+
     // ── Scope untuk query cepat ──
     public function scopeAvailable($query)
     {
         return $query->where('status', 'available');
     }
 
-    public function ratings()
+    // Generate token baru buat PC client (dipanggil dari tombol "Generate Token" di admin)
+    public function regenerateClientToken(): string
     {
-        return $this->hasMany(DeviceRating::class);
+        $token = Str::random(48);
+        $this->client_token = $token;
+        $this->save();
+
+        return $token;
     }
 }

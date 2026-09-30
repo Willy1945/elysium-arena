@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\CafeDashboardController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\OccupancyController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\LoyaltyRewardController;
+use App\Http\Controllers\Api\DeviceClientController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -32,6 +34,11 @@ Route::get('/public/products', [ProductController::class, 'index']);
 Route::get('/public/devices/{device}/ratings', [RatingController::class, 'index']);
 Route::get('/public/reviews', [RatingController::class, 'recent']);
 Route::get('/public/occupancy-stats', [OccupancyController::class, 'stats']);
+
+// ── PC Client (Smart Lock): autentikasi pakai token device, bukan login user ──
+Route::middleware('device.client')->group(function () {
+    Route::get('/client/status', [DeviceClientController::class, 'status']);
+});
 
 // ── Wajib login (semua role) ──
 Route::middleware('auth:sanctum')->group(function () {
@@ -79,6 +86,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/feedback', [FeedbackController::class, 'index']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
 
+    Route::get('/my-rewards', [LoyaltyRewardController::class, 'index']);
+    Route::post('/rewards/{reward}/choose', [LoyaltyRewardController::class, 'choose']);
+
 
     // ── Khusus OWNER & ADMIN ──
     Route::middleware('role:OWNER,ADMIN')->group(function () {
@@ -87,6 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/devices/{device}/status', [DeviceController::class, 'updateStatus']);
         Route::post('/devices/{device}/games', [DeviceController::class, 'syncGames']);
         Route::delete('/devices/{device}', [DeviceController::class, 'destroy']);
+        Route::post('/devices/{device}/client-token', [DeviceController::class, 'regenerateClientToken']);
 
         Route::post('/games', [GameController::class, 'store']);
         Route::put('/games/{game}', [GameController::class, 'update']);
@@ -112,6 +123,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index']);
 
         Route::patch('/feedback/{feedback}', [FeedbackController::class, 'updateStatus']);
+
+        Route::get('/admin/loyalty-rewards', [LoyaltyRewardController::class, 'adminIndex']);
 
         // ── Khusus OWNER ──
         Route::middleware('role:OWNER')->group(function () {

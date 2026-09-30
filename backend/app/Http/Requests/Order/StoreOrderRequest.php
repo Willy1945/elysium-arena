@@ -21,6 +21,7 @@ class StoreOrderRequest extends FormRequest
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'exists:products,id'],
             'items.*.quantity' => ['required', 'integer', 'min:1'],
+            'reward_id' => ['nullable', 'exists:loyalty_rewards,id'],
         ];
     }
 }
