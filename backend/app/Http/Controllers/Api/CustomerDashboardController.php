@@ -9,6 +9,7 @@ use App\Http\Resources\SessionResource;
 use App\Http\Resources\TransactionResource;
 use App\Models\Booking;
 use App\Models\GamingSession;
+use App\Models\DeviceRating;
 use App\Models\Order;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -53,12 +54,16 @@ class CustomerDashboardController extends Controller
             ->limit(5)
             ->get();
 
+        $hasCompletedSession = GamingSession::where('user_id', $userId)->where('status', 'completed')->exists();
+        $hasRatedArena = DeviceRating::where('user_id', $userId)->exists();
+
         return response()->json([
             'active_session' => $activeSession ? new SessionResource($activeSession) : null,
             'upcoming_bookings' => BookingResource::collection($upcomingBookings),
             'active_orders' => OrderResource::collection($activeOrders),
             'pending_transactions' => TransactionResource::collection($pendingTransactions),
             'recent_transactions' => TransactionResource::collection($recentTransactions),
+            'can_rate_arena' => $hasCompletedSession && !$hasRatedArena,
         ]);
     }
 }

@@ -28,6 +28,7 @@ import ProfilePage from '../features/customer/ProfilePage';
 import FeedbackPage from '../features/customer/FeedbackPage';
 import FeedbackManagePage from '../features/feedback/FeedbackManagePage';
 import RewardsPage from '../features/customer/RewardsPage';
+import StaffPage from '../features/staff/StaffPage';
 
 export default function AppRouter() {
   return (
@@ -204,6 +205,14 @@ export default function AppRouter() {
           element={
             <ProtectedRoute allowedRoles={['OWNER', 'ADMIN']}>
               <FeedbackManagePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/staff"
+          element={
+            <ProtectedRoute allowedRoles={['OWNER']}>
+              <StaffPage />
             </ProtectedRoute>
           }
         />

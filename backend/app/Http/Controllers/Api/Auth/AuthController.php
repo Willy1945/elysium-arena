@@ -32,7 +32,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'role_id' => $customerRole->id,   // ← baris ini WAJIB ada
+            'role_id' => $customerRole->id,   
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -47,6 +47,12 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Email atau password salah.',
             ], 401);
+        }
+
+        if (!$user->is_active) {
+            return response()->json([
+                'message' => 'Akun Anda telah dinonaktifkan. Hubungi Owner untuk informasi lebih lanjut.',
+            ], 403);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -114,6 +120,6 @@ class AuthController extends Controller
 
         $user->update($data);
 
-        return response()->json(['user' => $user->fresh()]);
+        return response()->json(['user' => new UserResource($user->fresh()->load('role'))]);
     }
 }

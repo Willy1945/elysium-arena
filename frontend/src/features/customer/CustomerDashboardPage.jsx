@@ -89,7 +89,7 @@ export default function CustomerDashboardPage() {
   const handleRatingSubmit = async (payload) => {
     setSubmittingRating(true);
     try {
-      await ratingService.submit(ratingTarget.deviceId, payload);
+      await ratingService.submit(payload);
       toast.success('Terima kasih atas rating-nya!');
       setRatingTarget(null);
     } catch (err) {
@@ -115,9 +115,13 @@ export default function CustomerDashboardPage() {
       <div className="border-b border-cust-border bg-cust-elevated/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-cust-red flex items-center justify-center text-white font-black text-lg shrink-0">
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
+            {user?.avatar ? (
+              <img src={user.avatar} alt={user.name} className="w-12 h-12 rounded-full object-cover shrink-0" />
+            ) : (
+              <div className="w-12 h-12 rounded-full bg-cust-red flex items-center justify-center text-white font-black text-lg shrink-0">
+                {user?.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
             <div>
               <p className="text-cust-text-primary font-display font-black text-xl uppercase">Halo, {user?.name?.split(' ')[0]}</p>
               {data.active_session && (
@@ -159,24 +163,19 @@ export default function CustomerDashboardPage() {
             )}
 
             {/* Widget Rating */}
-            {data.recent_transactions?.some((t) => t.session?.device_id) && (
+            {data.can_rate_arena && (
               <div className="bg-cust-elevated border border-cust-border p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Star size={16} className="text-cust-red" />
-                  <h3 className="text-cust-text-primary font-black uppercase text-sm">Beri Rating Sesi Terakhir</h3>
+                  <h3 className="text-cust-text-primary font-black uppercase text-sm">Beri Rating Elysium Arena</h3>
                 </div>
-                <p className="text-cust-text-secondary text-xs mb-4">Bantu customer lain tahu kualitas station yang kamu mainkan.</p>
-                {(() => {
-                  const target = data.recent_transactions.find((t) => t.session?.device_id);
-                  return (
-                    <button
-                      onClick={() => setRatingTarget({ deviceId: target.session.device_id, deviceCode: target.session.device_code })}
-                      className="w-full flex items-center justify-center gap-2 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold uppercase text-xs py-3 transition"
-                    >
-                      Beri Rating — {target.session.device_code}
-                    </button>
-                  );
-                })()}
+                <p className="text-cust-text-secondary text-xs mb-4">Rating cuma bisa dikirim sekali, jadi pastikan sesuai pengalaman kamu main di sini.</p>
+                <button
+                  onClick={() => setRatingTarget(true)}
+                  className="w-full flex items-center justify-center gap-2 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold uppercase text-xs py-3 transition"
+                >
+                  Beri Rating Sekarang
+                </button>
               </div>
             )}
           </div>
@@ -310,7 +309,6 @@ export default function CustomerDashboardPage() {
         open={!!ratingTarget}
         onClose={() => setRatingTarget(null)}
         onSubmit={handleRatingSubmit}
-        deviceCode={ratingTarget?.deviceCode}
         loading={submittingRating}
       />
     </PublicLayout>

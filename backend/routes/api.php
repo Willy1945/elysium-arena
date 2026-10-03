@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\OccupancyController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\LoyaltyRewardController;
 use App\Http\Controllers\Api\DeviceClientController;
+use App\Http\Controllers\Api\StaffController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public: tanpa perlu login ──
@@ -31,7 +32,6 @@ Route::get('/public/devices/{device}', [DeviceController::class, 'show']);
 Route::get('/public/games', [GameController::class, 'index']);
 Route::get('/public/games/{game}', [GameController::class, 'show']);
 Route::get('/public/products', [ProductController::class, 'index']);
-Route::get('/public/devices/{device}/ratings', [RatingController::class, 'index']);
 Route::get('/public/reviews', [RatingController::class, 'recent']);
 Route::get('/public/occupancy-stats', [OccupancyController::class, 'stats']);
 
@@ -81,7 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
 
-    Route::post('/devices/{device}/ratings', [RatingController::class, 'store']);
+    Route::post('/ratings', [RatingController::class, 'store']);
 
     Route::get('/feedback', [FeedbackController::class, 'index']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
@@ -119,6 +119,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/transactions/{transaction}/pay', [TransactionController::class, 'pay']);
         Route::post('/transactions/{transaction}/archive', [TransactionController::class, 'archive']);
         Route::post('/transactions/{transaction}/unarchive', [TransactionController::class, 'unarchive']);
+        Route::post('/transactions/{transaction}/hide', [TransactionController::class, 'hide']);
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -128,6 +129,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // ── Khusus OWNER ──
         Route::middleware('role:OWNER')->group(function () {
+            Route::get('/staff', [StaffController::class, 'index']);
+            Route::post('/staff', [StaffController::class, 'store']);
+            Route::put('/staff/{staff}', [StaffController::class, 'update']);
+            Route::patch('/staff/{staff}/status', [StaffController::class, 'toggleStatus']);
             Route::get('/reports/revenue', [ReportController::class, 'revenue']);
             Route::get('/reports/gaming', [ReportController::class, 'gaming']);
             Route::get('/reports/food', [ReportController::class, 'food']);

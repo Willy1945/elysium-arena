@@ -34,9 +34,9 @@ class TransactionController extends Controller
         }
 
         if ($request->boolean('archived')) {
-            $query->whereNotNull('archived_at');
+            $query->whereNotNull('archived_at')->whereNull('hidden_at');
         } else {
-            $query->visible(); // default: sembunyikan yang sudah diarsipkan
+            $query->visible();
         }
 
         if ($request->filled('status')) {
@@ -51,9 +51,6 @@ class TransactionController extends Controller
         return new TransactionResource($transaction->load(['user', 'session.device', 'orders.items.product', 'payments']));
     }
 
-    /**
-     * Daftar session & order yang siap di-checkout (belum ada transaksi).
-     */
     public function checkoutable(Request $request)
     {
         $sessions = GamingSession::with(['user', 'device'])
@@ -126,5 +123,19 @@ class TransactionController extends Controller
         $transaction->update(['archived_at' => null]);
 
         return response()->json(['message' => 'Transaksi berhasil dikembalikan dari arsip.']);
+    }
+
+
+    public function hide(Transaction $transaction)
+    {
+        if (!$transaction->archived_at) {
+            return response()->json([
+                'message' => 'Hanya transaksi yang sudah diarsipkan yang bisa disembunyikan dari tampilan.',
+            ], 422);
+        }
+
+        $transaction->update(['hidden_at' => now()]);
+
+        return response()->json(['message' => 'Transaksi berhasil disembunyikan dari tampilan.']);
     }
 }

@@ -9,12 +9,7 @@ class DeviceRating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['device_id', 'user_id', 'rating', 'comment'];
-
-    public function device()
-    {
-        return $this->belongsTo(Device::class);
-    }
+    protected $fillable = ['user_id', 'rating', 'comment'];
 
     public function user()
     {

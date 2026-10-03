@@ -129,11 +129,10 @@ export default function BrowseDevicesPage() {
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase transition ${
-                    active
+                  className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase transition ${active
                       ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
                       : 'bg-cust-elevated border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
-                  }`}
+                    }`}
                 >
                   <Icon size={14} />
                   {f === 'All' ? 'Semua Device' : f}
@@ -183,9 +182,8 @@ export default function BrowseDevicesPage() {
               return (
                 <div
                   key={device.id}
-                  className={`bg-cust-elevated border overflow-hidden transition ${
-                    isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-80'
-                  }`}
+                  className={`bg-cust-elevated border overflow-hidden transition ${isAvailable ? 'border-cust-border hover:border-cust-red' : 'border-cust-border opacity-80'
+                    }`}
                 >
                   {/* Foto */}
                   <div className={`relative h-48 bg-cust-bg overflow-hidden ${!isAvailable ? 'grayscale' : ''}`}>
@@ -200,9 +198,8 @@ export default function BrowseDevicesPage() {
 
                     <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
                       <span className="font-mono-tech bg-black/80 backdrop-blur-sm text-cust-text-primary text-[10px] font-bold px-2.5 py-1">{device.code}</span>
-                      <span className={`flex items-center gap-1.5 backdrop-blur-sm text-[10px] font-bold uppercase px-2.5 py-1 ${
-                        isAvailable ? 'bg-green-500/20 text-green-400' : 'bg-black/80 text-cust-text-secondary'
-                      }`}>
+                      <span className={`flex items-center gap-1.5 backdrop-blur-sm text-[10px] font-bold uppercase px-2.5 py-1 ${isAvailable ? 'bg-green-500/20 text-green-400' : 'bg-black/80 text-cust-text-secondary'
+                        }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                         {status.label}
                       </span>
@@ -299,17 +296,15 @@ export default function BrowseDevicesPage() {
             </div>
             <div>
               <p className="text-cust-text-primary font-black uppercase text-base mb-1">Butuh Reservasi Khusus / Grup?</p>
-              <p className="text-cust-text-secondary text-sm">Hubungi operator kami via WhatsApp untuk booking grup atau kebutuhan lainnya.</p>
+              <p className="text-cust-text-secondary text-sm">Kirim pesan ke admin untuk booking grup atau kebutuhan lainnya.</p>
             </div>
           </div>
-          <a
-            href="https://wa.me/6281234567890"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/feedback"
             className="shrink-0 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold text-sm px-6 py-3.5 transition whitespace-nowrap"
           >
-            WhatsApp Admin: +62 812-3456-7890
-          </a>
+            Kirim Pesan ke Admin
+          </Link>
         </div>
       </section>
     </PublicLayout>

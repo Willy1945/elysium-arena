@@ -113,11 +113,10 @@ export default function BrowseGamesPage() {
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase transition ${
-                    active
+                  className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase transition ${active
                       ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
                       : 'bg-cust-elevated border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
-                  }`}
+                    }`}
                 >
                   <Icon size={14} />
                   {f === 'All' ? 'Semua Game' : f}
@@ -216,17 +215,15 @@ export default function BrowseGamesPage() {
             </div>
             <div>
               <p className="text-cust-text-primary font-black uppercase text-base mb-1">Game Favoritmu Belum Ada?</p>
-              <p className="text-cust-text-secondary text-sm">Kirim request judul game lewat WhatsApp, kami usahakan tambahkan.</p>
+              <p className="text-cust-text-secondary text-sm">Kirim request judul game lewat pesan ke admin, kami usahakan tambahkan.</p>
             </div>
           </div>
-          <a
-            href="https://wa.me/6281234567890"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/feedback"
             className="shrink-0 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold text-sm px-6 py-3.5 transition whitespace-nowrap"
           >
-            WhatsApp Admin: +62 812-3456-7890
-          </a>
+            Kirim Pesan ke Admin
+          </Link>
         </div>
       </section>
     </PublicLayout>

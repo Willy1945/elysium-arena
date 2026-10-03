@@ -51,11 +51,6 @@ class Device extends Model
         return $this->hasMany(Maintenance::class);
     }
 
-    public function ratings()
-    {
-        return $this->hasMany(DeviceRating::class);
-    }
-
     // ── Scope untuk query cepat ──
     public function scopeAvailable($query)
     {

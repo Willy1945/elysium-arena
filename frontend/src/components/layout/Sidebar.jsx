@@ -14,12 +14,11 @@ const NAV_ITEMS = [
   { label: 'Bookings', icon: CalendarCheck, path: '/admin/bookings', roles: ['OWNER', 'ADMIN'] },
   { label: 'Food & Beverage', icon: UtensilsCrossed, path: '/admin/products', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
   { label: 'Orders', icon: ShoppingBag, path: '/admin/orders', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
-  { label: 'Inventory', icon: Package, path: '/admin/inventory', roles: ['OWNER', 'ADMIN'] },
   { label: 'Transactions', icon: Receipt, path: '/admin/transactions', roles: ['OWNER', 'ADMIN'] },
   { label: 'Reports', icon: BarChart3, path: '/admin/reports', roles: ['OWNER'] },
   { label: 'Sessions', icon: Timer, path: '/admin/sessions', roles: ['OWNER', 'ADMIN'] },
   { label: 'Feedback', icon: MessageSquare, path: '/admin/feedback', roles: ['OWNER', 'ADMIN'] },
-  { label: 'Settings', icon: Settings, path: '/admin/settings', roles: ['OWNER', 'ADMIN', 'STAFF_CAFE'] },
+    { label: 'Kelola Staff', icon: Settings, path: '/admin/staff', roles: ['OWNER'] },
 ];
 
 export default function Sidebar() {

@@ -18,6 +18,7 @@ class Transaction extends Model
         'total_amount',
         'status',
         'archived_at',
+        'hidden_at',
     ];
 
     // ── Relationships ──
@@ -42,6 +43,6 @@ class Transaction extends Model
     }
     public function scopeVisible($query)
     {
-        return $query->whereNull('archived_at');
+        return $query->whereNull('archived_at')->whereNull('hidden_at');
     }
 }

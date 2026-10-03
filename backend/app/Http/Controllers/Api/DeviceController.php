@@ -22,8 +22,6 @@ class DeviceController extends Controller
                         ->whereIn('status', ['pending', 'confirmed']);
                 }
             ])
-            ->withAvg('ratings', 'rating')
-            ->withCount('ratings')
             ->with([
                 'sessions' => function ($q) {
                     $q->where('status', 'active')->latest()->limit(1);
@@ -53,8 +51,7 @@ class DeviceController extends Controller
                     ->whereIn('status', ['pending', 'confirmed']);
             }
         ]);
-        $device->loadAvg('ratings', 'rating');
-        $device->loadCount('ratings');
+
         $device->load(['sessions' => fn($q) => $q->where('status', 'active')->latest()->limit(1)]);
 
         return new DeviceResource($device->load(['deviceType', 'games']));
@@ -137,8 +134,6 @@ class DeviceController extends Controller
     {
         $token = $device->regenerateClientToken();
 
-        // Token cuma ditampilkan SEKALI di sini, saat digenerate.
-        // Setelahnya tidak pernah muncul lagi di response manapun (lihat $hidden di model).
         return response()->json([
             'message' => 'Token berhasil dibuat.',
             'client_token' => $token,

@@ -152,6 +152,8 @@ export default function TransactionsPage() {
     const [deletingTransaction, setDeletingTransaction] = useState(null);
     const [showArchived, setShowArchived] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [hidingTransaction, setHidingTransaction] = useState(null);
+    const [hiding, setHiding] = useState(false);
 
     const fetchTransactions = useCallback(async () => {
         setLoading(true);
@@ -193,6 +195,21 @@ export default function TransactionsPage() {
             fetchTransactions();
         } catch (err) {
             toast.error(err.response?.data?.message || 'Gagal mengembalikan transaksi.');
+        }
+    };
+
+
+    const handleHide = async () => {
+        setHiding(true);
+        try {
+            await transactionService.hide(hidingTransaction.id);
+            toast.success('Transaksi berhasil disembunyikan dari tampilan.');
+            setHidingTransaction(null);
+            fetchTransactions();
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Gagal menyembunyikan transaksi.');
+        } finally {
+            setHiding(false);
         }
     };
 
@@ -289,13 +306,22 @@ export default function TransactionsPage() {
                                                     </button>
                                                 )}
                                                 {t.is_archived && (
-                                                    <button
-                                                        onClick={() => handleUnarchive(t)}
-                                                        title="Kembalikan dari Arsip"
-                                                        className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border border-border text-accent-light hover:bg-accent/10 transition"
-                                                    >
-                                                        <ArchiveRestore size={12} />
-                                                    </button>
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleUnarchive(t)}
+                                                            title="Kembalikan dari Arsip"
+                                                            className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border border-border text-accent-light hover:bg-accent/10 transition"
+                                                        >
+                                                            <ArchiveRestore size={12} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setHidingTransaction(t)}
+                                                            title="Hapus dari Tampilan"
+                                                            className="flex items-center gap-1 text-xs px-2.5 py-1 rounded border border-border text-status-occupied hover:bg-status-occupied/10 transition"
+                                                        >
+                                                            <Trash2 size={12} />
+                                                        </button>
+                                                    </>
                                                 )}
                                             </div>
                                         </td>
@@ -315,6 +341,16 @@ export default function TransactionsPage() {
                 onConfirm={handleArchive}
                 onCancel={() => setDeletingTransaction(null)}
                 loading={deleting}
+            />
+            <ConfirmDialog
+                open={!!hidingTransaction}
+                title="Hapus dari Tampilan?"
+                message={`${hidingTransaction?.transaction_code} akan hilang dari daftar arsip dan tidak bisa dimunculkan lagi lewat tampilan ini. Datanya tetap aman di database dan tetap terhitung penuh di laporan pendapatan.`}
+                onConfirm={handleHide}
+                onCancel={() => setHidingTransaction(null)}
+                loading={hiding}
+                confirmLabel="Hapus dari Tampilan"
+                confirmingLabel="Menyembunyikan..."
             />
         </DashboardLayout>
     );

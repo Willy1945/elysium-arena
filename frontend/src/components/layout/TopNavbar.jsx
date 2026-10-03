@@ -1,4 +1,4 @@
-import { Search, Bell, HelpCircle, LogOut } from 'lucide-react';
+import { Search, Bell, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -48,9 +48,6 @@ export default function TopNavbar({ onSearch }) {
       <div className="flex items-center gap-4">
         <button className="p-1 text-text-secondary hover:text-text-primary transition">
           <Bell size={20} />
-        </button>
-        <button className="p-1 text-text-secondary hover:text-text-primary transition">
-          <HelpCircle size={20} />
         </button>
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-[#37333e] border border-border flex items-center justify-center text-text-primary text-xs font-semibold">

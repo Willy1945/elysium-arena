@@ -9,4 +9,5 @@ export const transactionService = {
   pay: (id, method) => axiosClient.post(`/transactions/${id}/pay`, { method }),
   archive: (id) => axiosClient.post(`/transactions/${id}/archive`),
   unarchive: (id) => axiosClient.post(`/transactions/${id}/unarchive`),
+  hide: (id) => axiosClient.post(`/transactions/${id}/hide`),
 };

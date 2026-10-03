@@ -6,6 +6,7 @@ import StarRating from '../../components/common/StarRating';
 import CountUp from '../../components/common/CountUp';
 import Reveal from '../../components/common/Reveal';
 import { publicService } from '../../api/publicService';
+import { useAuth } from '../../context/AuthContext';
 import { resolveImageUrl, timeAgo } from '../../utils/format';
 
 const STATUS_LABEL = {
@@ -34,6 +35,7 @@ const CATEGORY_META = {
 };
 
 export default function HomePage() {
+  const { user } = useAuth();
   const gameScrollRef = useRef(null);
   const [devices, setDevices] = useState([]);
   const [games, setGames] = useState([]);
@@ -608,8 +610,6 @@ export default function HomePage() {
                             </p>
 
                             <p className="text-cust-text-secondary text-[10px] mt-1 uppercase tracking-wider">
-                              {reviews.reviews[0].device_code || 'DEVICE'}{' '}
-                              •{' '}
                               {timeAgo(reviews.reviews[0].created_at)}
                             </p>
                           </div>
@@ -660,10 +660,6 @@ export default function HomePage() {
                             {r.user_name}
                           </p>
 
-                          <span className="text-[9px] text-cust-text-secondary uppercase tracking-wider shrink-0">
-                            {r.device_code || 'DEVICE'}
-                          </span>
-
                         </div>
                       </div>
                     </div>
@@ -692,10 +688,10 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             <Link
-              to="/register"
+              to={user ? '/browse-devices' : '/register'}
               className="flex items-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white font-bold text-sm px-8 py-4 transition btn-press"
             >
-              Daftar & Booking <ArrowRight size={16} />
+              {user ? 'Booking Sekarang' : 'Daftar & Booking'} <ArrowRight size={16} />
             </Link>
             <Link
               to="/browse-devices"

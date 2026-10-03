@@ -20,8 +20,6 @@ class DeviceResource extends JsonResource
             'description' => $this->description,
             'games' => GameResource::collection($this->whenLoaded('games')),
             'today_bookings_count' => $this->today_bookings_count ?? 0,
-            'rating_avg' => $this->ratings_avg_rating !== null ? round((float) $this->ratings_avg_rating, 1) : null,
-            'ratings_count' => $this->ratings_count ?? 0,
             'created_at' => $this->created_at,
             'estimated_free_at' => $this->status === 'occupied' && $this->sessions->isNotEmpty()
                 ? $this->sessions->first()->end_time

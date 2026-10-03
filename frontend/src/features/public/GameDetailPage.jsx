@@ -157,9 +157,8 @@ export default function GameDetailPage() {
                               <p className="font-mono-tech text-cust-text-secondary text-[11px]">{device.device_type?.name}</p>
                             </div>
                           </div>
-                          <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2 py-1 border ${
-                            isAvailable ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
-                          }`}>
+                          <span className={`flex items-center gap-1.5 text-[10px] font-bold uppercase px-2 py-1 border ${isAvailable ? 'border-green-500/30 text-green-400 bg-green-500/10' : 'border-cust-border text-cust-text-secondary bg-cust-bg'
+                            }`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
                             {status.label}
                           </span>
@@ -181,9 +180,8 @@ export default function GameDetailPage() {
                           )}
                           <Link
                             to="/browse-devices"
-                            className={`flex items-center gap-1 text-xs font-bold uppercase px-4 py-2.5 transition ${
-                              isAvailable ? 'bg-cust-red hover:bg-cust-red-dark text-white' : 'bg-cust-border text-cust-text-secondary pointer-events-none'
-                            }`}
+                            className={`flex items-center gap-1 text-xs font-bold uppercase px-4 py-2.5 transition ${isAvailable ? 'bg-cust-red hover:bg-cust-red-dark text-white' : 'bg-cust-border text-cust-text-secondary pointer-events-none'
+                              }`}
                           >
                             Pilih Device <ArrowRight size={12} />
                           </Link>
@@ -205,17 +203,15 @@ export default function GameDetailPage() {
             </div>
             <div>
               <p className="text-cust-text-primary font-black uppercase text-base mb-1">Mau Game Ini Ditambahkan ke Device Lain?</p>
-              <p className="text-cust-text-secondary text-sm">Kirim request lewat WhatsApp, kami usahakan bantu.</p>
+              <p className="text-cust-text-secondary text-sm">Kirim request lewat pesan ke admin, kami usahakan bantu.</p>
             </div>
           </div>
-          <a
-            href="https://wa.me/6281234567890"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/feedback"
             className="shrink-0 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold text-sm px-6 py-3.5 transition whitespace-nowrap"
           >
-            WhatsApp Admin: +62 812-3456-7890
-          </a>
+            Kirim Pesan ke Admin
+          </Link>
         </div>
       </div>
     </PublicLayout>

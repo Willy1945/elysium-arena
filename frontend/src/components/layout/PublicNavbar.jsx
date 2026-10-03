@@ -68,9 +68,13 @@ export default function PublicNavbar() {
                   onClick={() => setDropdownOpen((prev) => !prev)}
                   className="flex items-center gap-2.5 text-cust-text-primary hover:text-cust-red transition"
                 >
-                  <div className="w-9 h-9 rounded-full bg-cust-red flex items-center justify-center text-white font-bold text-sm">
-                    {user.name?.charAt(0).toUpperCase()}
-                  </div>
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-cust-red flex items-center justify-center text-white font-bold text-sm">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <span className="text-base font-bold">{user.name?.split(' ')[0]}</span>
                   <ChevronDown size={16} className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -143,9 +147,13 @@ export default function PublicNavbar() {
             {user ? (
               <>
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-cust-red flex items-center justify-center text-white font-bold text-xs">
-                    {user.name?.charAt(0).toUpperCase()}
-                  </div>
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-cust-red flex items-center justify-center text-white font-bold text-xs">
+                      {user.name?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <span className="text-cust-text-primary font-bold text-sm">{user.name}</span>
                 </div>
                 <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-left text-cust-text-primary text-base font-bold uppercase flex items-center gap-2">

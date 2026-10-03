@@ -186,8 +186,8 @@ export default function FoodMenuPage() {
                       key={f}
                       onClick={() => setActiveCategory(f)}
                       className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold uppercase transition ${active
-                          ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
-                          : 'bg-cust-elevated border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
+                        ? 'bg-cust-red text-white shadow-lg shadow-cust-red/20'
+                        : 'bg-cust-elevated border border-cust-border text-cust-text-secondary hover:border-cust-red hover:text-cust-text-primary'
                         }`}
                     >
                       {f === 'All' ? 'Semua Menu' : f}
@@ -350,17 +350,15 @@ export default function FoodMenuPage() {
             </div>
             <div>
               <p className="text-cust-text-primary font-black uppercase text-base mb-1">Butuh Pesanan untuk Grup Besar?</p>
-              <p className="text-cust-text-secondary text-sm">Hubungi operator kami via WhatsApp untuk pesanan rombongan atau kebutuhan khusus.</p>
+              <p className="text-cust-text-secondary text-sm">Kirim pesan ke admin untuk pesanan rombongan atau kebutuhan khusus.</p>
             </div>
           </div>
-          <a
-            href="https://wa.me/6281234567890"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/feedback"
             className="shrink-0 bg-cust-bg border border-cust-border hover:border-cust-red text-cust-text-primary font-bold text-sm px-6 py-3.5 transition whitespace-nowrap"
           >
-            WhatsApp Admin: +62 812-3456-7890
-          </a>
+            Kirim Pesan ke Admin
+          </Link>
         </div>
       </section>
     </PublicLayout>

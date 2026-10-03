@@ -1,4 +1,14 @@
-export default function ConfirmDialog({ open, title, message, onConfirm, onCancel, loading }) {
+export default function ConfirmDialog({
+  open,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  loading,
+  confirmLabel = 'Hapus',
+  confirmingLabel = 'Menghapus...',
+  danger = true,
+}) {
   if (!open) return null;
 
   return (
@@ -16,9 +26,11 @@ export default function ConfirmDialog({ open, title, message, onConfirm, onCance
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="px-4 py-2 rounded text-sm bg-status-occupied text-white hover:opacity-90 transition disabled:opacity-50"
+            className={`px-4 py-2 rounded text-sm text-white hover:opacity-90 transition disabled:opacity-50 ${
+              danger ? 'bg-status-occupied' : 'bg-accent'
+            }`}
           >
-            {loading ? 'Menghapus...' : 'Hapus'}
+            {loading ? confirmingLabel : confirmLabel}
           </button>
         </div>
       </div>

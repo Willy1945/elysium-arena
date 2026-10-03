@@ -4,30 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DeviceRatingResource;
-use App\Models\Device;
 use App\Models\DeviceRating;
 use Illuminate\Http\Request;
 
 class RatingController extends Controller
 {
-    public function index(Device $device)
-    {
-        $ratings = $device->ratings()->with('user')->orderByDesc('created_at')->get();
-
-        $distribution = [];
-        for ($i = 5; $i >= 1; $i--) {
-            $distribution[$i] = $ratings->where('rating', $i)->count();
-        }
-
-        return response()->json([
-            'average' => $ratings->isNotEmpty() ? round($ratings->avg('rating'), 1) : 0,
-            'count' => $ratings->count(),
-            'distribution' => $distribution,
-            'ratings' => DeviceRatingResource::collection($ratings),
-        ]);
-    }
-
-    public function store(Request $request, Device $device)
+    public function store(Request $request)
     {
         $request->validate([
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
@@ -36,21 +18,25 @@ class RatingController extends Controller
 
         $user = $request->user();
 
-        $hasPlayed = $user->sessions()
-            ->where('device_id', $device->id)
-            ->where('status', 'completed')
-            ->exists();
-
-        if (!$hasPlayed) {
+        if (DeviceRating::where('user_id', $user->id)->exists()) {
             return response()->json([
-                'message' => 'Kamu cuma bisa memberi rating setelah pernah bermain di device ini.',
+                'message' => 'Kamu sudah pernah memberi rating untuk Elysium Arena.',
             ], 422);
         }
 
-        $rating = DeviceRating::updateOrCreate(
-            ['device_id' => $device->id, 'user_id' => $user->id],
-            ['rating' => $request->rating, 'comment' => $request->comment]
-        );
+        $hasPlayed = $user->sessions()->where('status', 'completed')->exists();
+
+        if (!$hasPlayed) {
+            return response()->json([
+                'message' => 'Kamu cuma bisa memberi rating setelah pernah menyelesaikan sesi bermain.',
+            ], 422);
+        }
+
+        $rating = DeviceRating::create([
+            'user_id' => $user->id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
 
         return new DeviceRatingResource($rating->load('user'));
     }
@@ -59,11 +45,7 @@ class RatingController extends Controller
     {
         $limit = $request->get('limit', 9);
 
-        $ratings = DeviceRating::with(['user', 'device'])
-            ->orderByDesc('created_at')
-            ->limit($limit)
-            ->get();
-
+        $ratings = DeviceRating::with('user')->orderByDesc('created_at')->limit($limit)->get();
         $allRatings = DeviceRating::query();
 
         return response()->json([
@@ -74,7 +56,6 @@ class RatingController extends Controller
                 'rating' => $r->rating,
                 'comment' => $r->comment,
                 'user_name' => $r->user?->name,
-                'device_code' => $r->device?->code,
                 'created_at' => $r->created_at,
             ]),
         ]);
