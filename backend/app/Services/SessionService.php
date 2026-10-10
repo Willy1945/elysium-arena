@@ -75,10 +75,20 @@ class SessionService
             $device = $session->device;
             $newDuration = $session->duration + $additionalMinutes;
 
+            // Pengaman: Waktu baru tidak boleh mundur melebihi waktu sekarang
+            $newEndTime = Carbon::parse($session->end_time)->addMinutes($additionalMinutes);
+            if ($newEndTime->lte(now())) {
+                throw ValidationException::withMessages(['additional_minutes' => 'Tidak dapat mengurangi waktu melebihi durasi bermain yang sudah terpakai.']);
+            }
+
+            if ($newDuration < 15) {
+                throw ValidationException::withMessages(['additional_minutes' => 'Total durasi sesi minimal adalah 15 menit.']);
+            }
+
             $session->update([
-                'end_time' => Carbon::parse($session->end_time)->addMinutes($additionalMinutes),
+                'end_time' => $newEndTime,
                 'duration' => $newDuration,
-                'price' => ($newDuration / 60) * $device->price_per_hour,
+                'price' => max(0, ($newDuration / 60) * $device->price_per_hour),
             ]);
 
             return $session->fresh();

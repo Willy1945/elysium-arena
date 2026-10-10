@@ -1,4 +1,4 @@
-import { Gamepad2, Monitor, Clock, Plus, Square, AlertTriangle } from 'lucide-react';
+import { Gamepad2, Monitor, Clock, SlidersHorizontal, Square, AlertTriangle } from 'lucide-react';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import { formatRupiah } from '../../utils/format';
 
@@ -43,9 +43,9 @@ export default function SessionCard({ session, onExtend, onEnd, actingId }) {
         <button
           onClick={() => onExtend(session)}
           disabled={isActing}
-          className="flex-1 flex items-center justify-center gap-1.5 border border-border rounded-lg py-2 text-xs text-text-secondary hover:bg-surface-inset transition disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-1.5 border border-border rounded-lg py-2 text-xs text-text-secondary hover:bg-surface-inset hover:text-text-primary transition disabled:opacity-50"
         >
-          <Plus size={13} /> Tambah Waktu
+          <SlidersHorizontal size={13} /> Kelola Waktu
         </button>
         <button
           onClick={() => onEnd(session)}

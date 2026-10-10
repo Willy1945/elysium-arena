@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { label: 'Reports', icon: BarChart3, path: '/admin/reports', roles: ['OWNER'] },
   { label: 'Sessions', icon: Timer, path: '/admin/sessions', roles: ['OWNER', 'ADMIN'] },
   { label: 'Feedback', icon: MessageSquare, path: '/admin/feedback', roles: ['OWNER', 'ADMIN'] },
-    { label: 'Kelola Staff', icon: Settings, path: '/admin/staff', roles: ['OWNER'] },
+  { label: 'Kelola Staff', icon: Settings, path: '/admin/staff', roles: ['OWNER'] },
 ];
 
 export default function Sidebar() {

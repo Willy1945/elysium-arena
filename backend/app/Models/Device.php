@@ -19,13 +19,10 @@ class Device extends Model
         'description',
     ];
 
-    // client_token sengaja TIDAK masuk $fillable dan disembunyikan dari response biasa,
-    // supaya cuma bisa diganti lewat method regenerateClientToken() di bawah.
     protected $hidden = [
         'client_token',
     ];
 
-    // ── Relationships ──
     public function deviceType()
     {
         return $this->belongsTo(DeviceType::class);
@@ -51,13 +48,11 @@ class Device extends Model
         return $this->hasMany(Maintenance::class);
     }
 
-    // ── Scope untuk query cepat ──
     public function scopeAvailable($query)
     {
         return $query->where('status', 'available');
     }
 
-    // Generate token baru buat PC client (dipanggil dari tombol "Generate Token" di admin)
     public function regenerateClientToken(): string
     {
         $token = Str::random(48);

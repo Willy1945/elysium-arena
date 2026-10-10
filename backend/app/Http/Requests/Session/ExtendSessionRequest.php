@@ -14,7 +14,7 @@ class ExtendSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'additional_minutes' => ['required', 'integer', 'in:30,60,120'],
+            'additional_minutes' => ['required', 'integer', 'not_in:0'],
         ];
     }
 }

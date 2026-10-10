@@ -8,7 +8,7 @@ class StoreDeviceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // sudah dijaga role middleware di route
+        return true; 
     }
 
     public function rules(): array

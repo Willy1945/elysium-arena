@@ -34,16 +34,16 @@ export default function SessionsPage() {
     setActingId(extendTarget.id);
     try {
       await sessionService.extend(extendTarget.id, minutes);
-      toast.success('Waktu berhasil ditambahkan.');
+      toast.success(minutes > 0 ? 'Waktu berhasil ditambahkan.' : 'Waktu berhasil dikurangi.');
       setExtendTarget(null);
       fetchSessions();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Gagal menambah waktu.');
+      toast.error(err.response?.data?.message || 'Gagal mengubah durasi waktu.');
     } finally {
       setActingId(null);
     }
   };
-
+  
   const handleEndClick = (session) => {
     setEndTarget(session);
   };
