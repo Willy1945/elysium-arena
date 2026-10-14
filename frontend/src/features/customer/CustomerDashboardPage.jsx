@@ -1,33 +1,22 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Gamepad2,
-  CalendarCheck,
-  ShoppingBag,
-  Receipt,
-  ArrowRight,
-  Clock,
-  Plus,
-  Star,
-  Activity,
-  Zap,
-  Coffee,
-  CheckCircle2,
-  AlertTriangle,
-  Award,
-  ChevronRight,
-  Sparkles,
-  Layers,
+  Gamepad2, CalendarCheck, ShoppingBag, Receipt, ArrowRight,
+  Clock, Plus, Star, Coffee, CheckCircle2,
+  AlertTriangle, Award, Gift, MessageSquarePlus, User, ChevronRight, Activity, Coins,
+  Trash2
 } from 'lucide-react';
 import PublicLayout from '../../components/layout/PublicLayout';
 import { useAuth } from '../../context/AuthContext';
 import { customerDashboardService } from '../../api/customerDashboardService';
 import { ratingService } from '../../api/ratingService';
+import { transactionService } from '../../api/transactionService';
+import { bookingService } from '../../api/bookingService';
 import { useToast } from '../../context/ToastContext';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import RatingFormModal from './RatingFormModal';
-import { formatRupiah, BOOKING_STATUS_CONFIG, resolveImageUrl } from '../../utils/format';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
+import { formatRupiah, BOOKING_STATUS_CONFIG } from '../../utils/format';
 
 const ORDER_STEPS = ['pending', 'processing', 'ready'];
 const ORDER_STEP_LABEL = {
@@ -36,7 +25,7 @@ const ORDER_STEP_LABEL = {
   ready: 'Siap Diantar ke Meja',
 };
 
-// ── KARTU SESI AKTIF (TACTICAL BATTLE HUD) ──
+// ── KARTU SESI AKTIF (MINIMALIST PREMIUM HUD) ──
 function ActiveSessionCard({ session }) {
   const { formatted, isExpired } = useSessionTimer(session.end_time, session.status);
 
@@ -49,95 +38,87 @@ function ActiveSessionCard({ session }) {
   }, [session]);
 
   return (
-    <div className="relative rounded-3xl overflow-hidden border border-cust-red/40 bg-gradient-to-b from-[#15151c] to-[#0c0c10] shadow-[0_0_40px_rgba(227,30,36,0.2)]">
-      {/* Background Ambient Glow & Scanline */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-cust-red/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
-
-      {/* Header Bar HUD */}
-      <div className="relative z-10 px-6 py-4 bg-black/40 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
+    <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl relative overflow-hidden">
+      {/* Top Header */}
+      <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-800/80">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cust-red opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cust-red" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
-          <span className="font-mono-tech text-xs font-bold text-cust-red uppercase tracking-widest">
-            LIVE SESSION ACTIVE
+          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+            Sesi Sedang Berjalan
           </span>
         </div>
-        <span className="font-mono-tech text-xs px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white font-semibold">
-          STATION: {session.device?.code}
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
+          Station {session.device?.code}
         </span>
       </div>
 
-      <div className="relative z-10 p-6 sm:p-8">
-        <div className="flex items-start justify-between gap-4 mb-6">
-          <div>
-            <p className="text-[11px] font-mono-tech text-neutral-400 uppercase tracking-wider">
-              {session.device?.device_type?.name} RIG
-            </p>
-            <h2 className="font-display font-black text-white text-3xl sm:text-4xl uppercase tracking-tight mt-0.5">
-              {session.device?.code}
-            </h2>
-          </div>
-          <div className="text-right">
-            <p className="text-[10px] font-mono-tech text-neutral-400 uppercase">Status Smart Lock</p>
-            <span className="inline-flex items-center gap-1.5 font-mono-tech text-xs text-emerald-400 font-bold mt-0.5">
-              <CheckCircle2 size={13} /> UNLOCKED & RUNNING
-            </span>
-          </div>
-        </div>
-
-        {/* Big Live Countdown Display */}
-        <div className="p-6 rounded-2xl bg-[#09090c]/90 border border-white/10 text-center mb-6 shadow-inner relative overflow-hidden">
-          <p className="font-mono-tech text-[11px] text-neutral-400 uppercase tracking-widest mb-2 flex items-center justify-center gap-1.5">
-            <Clock size={13} className="text-cust-red" />
-            SISA WAKTU BERMAIN
+      {/* Device Info */}
+      <div className="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <p className="text-xs text-zinc-400">
+            {session.device?.device_type?.name} Rig
           </p>
-
-          <p
-            className={`font-display font-black text-5xl sm:text-6xl tracking-tight tabular-nums ${
-              isExpired ? 'text-cust-red animate-pulse' : 'text-white'
-            }`}
-          >
-            {formatted}
-          </p>
-
-          {/* Progress Bar Meter */}
-          <div className="mt-5 max-w-md mx-auto">
-            <div className="flex items-center justify-between text-[10px] font-mono-tech text-neutral-500 mb-1.5">
-              <span>WAKTU BERJALAN</span>
-              <span>{Math.round(progressPct)}%</span>
-            </div>
-            <div className="h-2 w-full bg-black/60 rounded-full overflow-hidden border border-white/5 p-0.5">
-              <motion.div
-                className="h-full bg-gradient-to-r from-cust-red to-orange-500 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${progressPct}%` }}
-                transition={{ duration: 0.6 }}
-              />
-            </div>
-          </div>
+          <h2 className="font-display font-black text-white text-3xl sm:text-4xl uppercase tracking-tight mt-0.5">
+            {session.device?.code}
+          </h2>
         </div>
-
-        {/* Session Fee Strip */}
-        <div className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/5 mb-6">
-          <span className="text-xs font-mono-tech text-neutral-400 uppercase">Tarif Sesi Ini</span>
-          <span className="font-display font-black text-xl text-white">
-            {formatRupiah(session.price)}
+        <div className="text-right">
+          <p className="text-[11px] text-zinc-500 uppercase">Smart Lock Terminal</p>
+          <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-0.5">
+            <CheckCircle2 size={13} /> Terbuka & Aktif
           </span>
         </div>
-
-        {/* Quick Order F&B CTA */}
-        <Link
-          to="/menu"
-          className="w-full group flex items-center justify-center gap-2.5 py-4 rounded-xl bg-gradient-to-r from-cust-red to-[#b8151a] hover:from-[#f02830] hover:to-cust-red text-white font-display font-black uppercase text-sm tracking-wider shadow-[0_0_25px_rgba(227,30,36,0.35)] hover:shadow-[0_0_35px_rgba(227,30,36,0.55)] transition-all cursor-pointer active:scale-[0.98]"
-        >
-          <Coffee size={17} className="text-amber-300" />
-          <span>PESAN MAKANAN / KOPI KE MEJA INI</span>
-          <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-        </Link>
       </div>
+
+      {/* Countdown Timer Display */}
+      <div className="p-6 rounded-2xl bg-[#09090c] border border-zinc-800 text-center mb-6">
+        <p className="text-xs text-zinc-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+          <Clock size={14} className="text-cust-red" />
+          Sisa Waktu Bermain
+        </p>
+
+        <p
+          className={`font-display font-black text-5xl sm:text-6xl tracking-tight tabular-nums ${
+            isExpired ? 'text-cust-red animate-pulse' : 'text-white'
+          }`}
+        >
+          {formatted}
+        </p>
+
+        {/* Meter Bar */}
+        <div className="mt-4 max-w-sm mx-auto">
+          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1.5">
+            <span>Durasi Berjalan</span>
+            <span>{Math.round(progressPct)}%</span>
+          </div>
+          <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+            <div
+              className="h-full bg-cust-red rounded-full transition-all duration-300"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Price & Order CTA */}
+      <div className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 mb-5">
+        <span className="text-xs text-zinc-400">Tarif Sesi Ini</span>
+        <span className="font-display font-black text-xl text-white">
+          {formatRupiah(session.price)}
+        </span>
+      </div>
+
+      <Link
+        to="/menu"
+        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-sm"
+      >
+        <Coffee size={15} />
+        <span>Pesan Makanan / Kopi ke Meja Ini</span>
+        <ArrowRight size={14} />
+      </Link>
     </div>
   );
 }
@@ -149,6 +130,22 @@ export default function CustomerDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [ratingTarget, setRatingTarget] = useState(null);
   const [submittingRating, setSubmittingRating] = useState(false);
+  const [deletingRating, setDeletingRating] = useState(false);
+  const [deletingTrxId, setDeletingTrxId] = useState(null);
+  const [confirmClearAllTrx, setConfirmClearAllTrx] = useState(false);
+  const [cancellingBookingId, setCancellingBookingId] = useState(null);
+  const [deletingBookingId, setDeletingBookingId] = useState(null);
+  const [confirmClearAllBookings, setConfirmClearAllBookings] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const reloadDashboard = async () => {
+    try {
+      const { data: updated } = await customerDashboardService.getSummary();
+      setData(updated);
+    } catch (err) {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     customerDashboardService
@@ -168,9 +165,7 @@ export default function CustomerDashboardPage() {
       await ratingService.submit(payload);
       toast.success('Terima kasih atas rating & ulasanmu!');
       setRatingTarget(null);
-      // Reload summary agar widget rating hilang setelah dinilai
-      const updated = await customerDashboardService.getSummary();
-      setData(updated.data);
+      reloadDashboard();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Gagal mengirim rating.');
     } finally {
@@ -178,12 +173,99 @@ export default function CustomerDashboardPage() {
     }
   };
 
+  const handleDeleteRating = async () => {
+    setActionLoading(true);
+    try {
+      await ratingService.deleteMyRating();
+      toast.success('Ulasan kamu berhasil dihapus.');
+      setDeletingRating(false);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal menghapus ulasan.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteTransaction = async () => {
+    if (!deletingTrxId) return;
+    setActionLoading(true);
+    try {
+      await transactionService.hideFromCustomer(deletingTrxId);
+      toast.success('Transaksi dihapus dari riwayat.');
+      setDeletingTrxId(null);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal menghapus riwayat transaksi.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleClearAllTransactions = async () => {
+    setActionLoading(true);
+    try {
+      await transactionService.clearCustomerHistory();
+      toast.success('Semua riwayat transaksi berhasil dibersihkan.');
+      setConfirmClearAllTrx(false);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal membersihkan riwayat transaksi.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCancelBooking = async () => {
+    if (!cancellingBookingId) return;
+    setActionLoading(true);
+    try {
+      await bookingService.updateStatus(cancellingBookingId, 'cancelled');
+      toast.success('Jadwal booking berhasil dibatalkan.');
+      setCancellingBookingId(null);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal membatalkan booking.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteBooking = async () => {
+    if (!deletingBookingId) return;
+    setActionLoading(true);
+    try {
+      await bookingService.remove(deletingBookingId);
+      toast.success('Riwayat booking berhasil dihapus.');
+      setDeletingBookingId(null);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal menghapus riwayat booking.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleClearAllBookings = async () => {
+    setActionLoading(true);
+    try {
+      await bookingService.clearHistory();
+      toast.success('Semua riwayat booking berhasil dibersihkan.');
+      setConfirmClearAllBookings(false);
+      reloadDashboard();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Gagal membersihkan riwayat booking.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   if (loading || !data) {
     return (
       <PublicLayout>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-28 text-center font-mono-tech text-neutral-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-28 text-center text-zinc-500">
           <Activity className="animate-spin text-cust-red mx-auto mb-3" size={32} />
-          <p className="text-xs uppercase tracking-widest">MEMUAT DOSSIER CUSTOMER...</p>
+          <p className="text-xs uppercase tracking-wider">Memuat Dashboard Pelanggan...</p>
         </div>
       </PublicLayout>
     );
@@ -191,65 +273,78 @@ export default function CustomerDashboardPage() {
 
   return (
     <PublicLayout>
-      {/* ── PLAYER DOSSIER HEADER ── */}
-      <section className="relative overflow-hidden border-b border-[#1f1f26] bg-[#09090c]">
-        {/* Ambient Top Glow */}
-        <div className="absolute top-0 left-1/3 w-96 h-40 bg-cust-red/10 rounded-full blur-3xl pointer-events-none" />
-
+      {/* ── PLAYER HEADER BANNER ── */}
+      <section className="bg-[#09090b] border-b border-zinc-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             
-            {/* Player Info Left */}
-            <div className="flex items-center gap-5">
-              <div className="relative">
+            {/* User Profile Info */}
+            <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
+              <div className="relative shrink-0">
                 {user?.avatar ? (
                   <img
                     src={user.avatar}
                     alt={user.name}
-                    className="w-16 h-16 rounded-2xl object-cover border-2 border-cust-red/50 shadow-[0_0_20px_rgba(227,30,36,0.3)]"
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-zinc-700 shadow-sm"
                   />
                 ) : (
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1a1a22] to-[#0c0c10] border border-white/10 flex items-center justify-center text-white font-display font-black text-2xl shadow-xl">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white font-display font-black text-xl sm:text-2xl">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#09090c]" />
+                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#09090b]" />
               </div>
 
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-mono-tech text-[10px] font-bold text-cust-red tracking-[0.2em] uppercase">
-                    PLAYER DOSSIER
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                  <span className="text-[10px] sm:text-[11px] font-bold text-cust-red uppercase tracking-wider">
+                    Member Elysium
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono-tech font-bold">
-                    MEMBER
+                  <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                    Aktif
                   </span>
+                  <Link
+                    to="/rewards"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-[10px] sm:text-[11px] font-bold font-mono transition"
+                    title="Klik untuk membuka katalog reward loyalitas"
+                  >
+                    <Coins size={11} className="text-amber-400" />
+                    <span>{new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} PTS</span>
+                  </Link>
                 </div>
-                <h1 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
+                <h1 className="font-display font-black text-xl sm:text-3xl text-white uppercase tracking-tight truncate">
                   {user?.name}
                 </h1>
-                <p className="text-neutral-400 text-xs font-mono-tech mt-0.5">
+                <p className="text-zinc-400 text-xs mt-0.5 truncate">
                   {user?.email}
                 </p>
               </div>
             </div>
 
-            {/* Quick Actions Right */}
-            <div className="flex flex-wrap items-center gap-3">
+            {/* Quick Action Buttons */}
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <Link
+                to="/rewards"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold uppercase tracking-wider text-xs transition shadow-sm"
+              >
+                <Coins size={14} className="text-amber-400" />
+                <span>{new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} Koin</span>
+              </Link>
+
               <Link
                 to="/browse-devices"
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-display font-bold uppercase tracking-wider text-xs shadow-[0_0_20px_rgba(227,30,36,0.35)] transition-all active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold uppercase tracking-wider text-xs shadow-sm transition"
               >
-                <Plus size={15} />
-                <span>Pesan Station Baru</span>
+                <Plus size={14} />
+                <span>Pesan Station</span>
               </Link>
 
               <Link
                 to="/menu"
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#14141a] hover:bg-[#1c1c24] border border-[#272733] text-neutral-200 hover:text-white font-display font-bold uppercase tracking-wider text-xs transition-all active:scale-95"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 font-semibold uppercase tracking-wider text-xs transition"
               >
-                <ShoppingBag size={15} className="text-amber-400" />
-                <span>Beli Makanan / Minuman</span>
+                <ShoppingBag size={14} className="text-amber-400" />
+                <span>Order Kafe</span>
               </Link>
             </div>
 
@@ -257,91 +352,182 @@ export default function CustomerDashboardPage() {
         </div>
       </section>
 
-      {/* ── MAIN DASHBOARD GRID ── */}
+      {/* ── QUICK NAVIGATION STRIP ── */}
+      <section className="bg-[#0c0c10] border-b border-zinc-800/60 py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-6 overflow-x-auto no-scrollbar text-xs">
+            <Link
+              to="/rewards"
+              className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold transition whitespace-nowrap py-1"
+            >
+              <Coins size={14} />
+              <span>Reward Loyalitas ({new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} Koin)</span>
+            </Link>
+            <span className="text-zinc-700">/</span>
+            <Link
+              to="/feedback"
+              className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition whitespace-nowrap py-1"
+            >
+              <MessageSquarePlus size={14} className="text-amber-400" />
+              <span>Kirim Masukan & Request Game</span>
+            </Link>
+            <span className="text-zinc-700">/</span>
+            <Link
+              to="/profile"
+              className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition whitespace-nowrap py-1"
+            >
+              <User size={14} className="text-emerald-400" />
+              <span>Edit Profil & Password</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MAIN DASHBOARD CONTENT ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* ── LEFT COLUMN (Active Session & Rating) ── */}
+          {/* ── LEFT COLUMN: Sesi Aktif & Rating ── */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             {data.active_session ? (
               <ActiveSessionCard session={data.active_session} />
             ) : (
-              <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c10] p-8 sm:p-10 text-center relative overflow-hidden shadow-xl">
-                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-neutral-500 mx-auto mb-4">
-                  <Gamepad2 size={32} />
+              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-8 sm:p-10 text-center shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mx-auto mb-4">
+                  <Gamepad2 size={28} />
                 </div>
                 <h3 className="font-display font-black text-white text-2xl uppercase mb-1">
-                  TIDAK ADA SESI AKTIF
+                  Tidak Ada Sesi Aktif
                 </h3>
-                <p className="text-neutral-400 text-xs sm:text-sm max-w-xs mx-auto mb-6 leading-relaxed">
+                <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mx-auto mb-6 leading-relaxed">
                   Stasiun siap ditempati. Pilih PlayStation 5 atau PC Gaming spek tinggi untuk mulai bermain.
                 </p>
                 <Link
                   to="/browse-devices"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-display font-black uppercase text-xs tracking-wider shadow-[0_0_20px_rgba(227,30,36,0.35)] transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold uppercase text-xs tracking-wider transition shadow-sm"
                 >
-                  <span>PILIH & BOOKING STATION</span>
+                  <span>Pilih & Booking Station</span>
                   <ArrowRight size={14} />
                 </Link>
               </div>
             )}
 
-            {/* Widget Beri Rating Arena */}
+            {/* 1. Ulasan yang Pernah Dikirim Customer (Bisa Dihapus) */}
+            {data.my_rating && (
+              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 shadow-xl relative overflow-hidden">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-800/80">
+                  <div className="flex items-center gap-2">
+                    <Star size={16} className="text-amber-400 fill-amber-400" />
+                    <h3 className="font-display font-bold text-white text-base uppercase tracking-wide">
+                      Ulasan Kamu
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setDeletingRating(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-zinc-400 hover:text-red-400 bg-zinc-900/80 hover:bg-red-950/30 border border-zinc-800 hover:border-red-500/40 text-xs font-semibold transition cursor-pointer"
+                    title="Hapus Ulasan Ini"
+                  >
+                    <Trash2 size={13} />
+                    <span>Hapus</span>
+                  </button>
+                </div>
+
+                {/* Stars and Date */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star
+                        key={s}
+                        size={15}
+                        className={
+                          s <= data.my_rating.rating
+                            ? 'text-amber-400 fill-amber-400'
+                            : 'text-zinc-700'
+                        }
+                      />
+                    ))}
+                    <span className="text-amber-400 text-xs font-bold font-mono ml-1.5">
+                      {data.my_rating.rating}.0
+                    </span>
+                  </div>
+                  {data.my_rating.created_at && (
+                    <span className="text-[11px] text-zinc-500 font-mono">
+                      {new Date(data.my_rating.created_at).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </span>
+                  )}
+                </div>
+
+                {/* Comment Text */}
+                {data.my_rating.comment ? (
+                  <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed italic bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/70">
+                    "{data.my_rating.comment}"
+                  </p>
+                ) : (
+                  <p className="text-zinc-500 text-xs italic">Tanpa ulasan teks tambahan.</p>
+                )}
+              </div>
+            )}
+
+            {/* 2. Beri Rating Arena Baru (Muncul jika belum ada ulasan & sudah main) */}
             {data.can_rate_arena && (
-              <div className="rounded-3xl border border-amber-500/25 bg-gradient-to-br from-[#14120f] to-[#0c0c10] p-6 relative overflow-hidden shadow-xl">
-                <div className="flex items-center gap-2.5 mb-2">
-                  <Star size={18} className="text-amber-400 fill-amber-400" />
+              <div className="rounded-3xl border border-amber-500/30 bg-[#121216] p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Star size={16} className="text-amber-400 fill-amber-400" />
                   <h3 className="font-display font-black text-white text-lg uppercase tracking-wide">
-                    ULASAN ELYSIUM ARENA
+                    Ulasan Elysium Arena
                   </h3>
                 </div>
-                <p className="text-neutral-400 text-xs leading-relaxed mb-5">
+                <p className="text-zinc-400 text-xs leading-relaxed mb-4">
                   Bagikan kepuasanmu bermain di sini untuk membantu kami menjaga kualitas perangkat & layanan.
                 </p>
                 <button
                   onClick={() => setRatingTarget(true)}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-wider transition cursor-pointer"
                 >
                   <Star size={14} />
-                  <span>BERI RATING SEKARANG</span>
+                  <span>Beri Rating Sekarang</span>
                 </button>
               </div>
             )}
           </div>
 
-          {/* ── RIGHT COLUMN (Pending, Bookings, Orders, Transactions) ── */}
+          {/* ── RIGHT COLUMN: Tagihan, Booking, F&B, Transaksi ── */}
           <div className="lg:col-span-7 flex flex-col gap-6">
             
             {/* 1. Tagihan Menunggu Pembayaran */}
             {data.pending_transactions.length > 0 && (
-              <div className="rounded-3xl border border-amber-500/40 bg-gradient-to-b from-[#181308] to-[#0d0d0a] p-6 sm:p-7 shadow-2xl relative overflow-hidden">
+              <div className="rounded-3xl border border-amber-500/40 bg-[#14120f] p-6 sm:p-7 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2.5">
-                    <AlertTriangle size={18} className="text-amber-400 animate-pulse" />
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle size={18} className="text-amber-400" />
                     <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
-                      TAGIHAN MENUNGGU PEMBAYARAN
+                      Tagihan Menunggu Pembayaran
                     </h2>
                   </div>
-                  <span className="text-[10px] font-mono-tech text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded font-bold">
-                    {data.pending_transactions.length} PENDING
+                  <span className="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold">
+                    {data.pending_transactions.length} Pending
                   </span>
                 </div>
 
-                <div className="flex flex-col gap-3">
+                <div className="space-y-3">
                   {data.pending_transactions.map((t) => (
                     <div
                       key={t.id}
-                      className="flex items-center justify-between bg-black/50 border border-white/10 rounded-2xl p-4"
+                      className="flex items-center justify-between bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4"
                     >
                       <div>
-                        <p className="font-mono-tech text-neutral-400 text-[10px] uppercase">
+                        <p className="text-zinc-500 text-[10px] font-mono-tech uppercase">
                           {t.transaction_code}
                         </p>
                         <p className="text-white font-bold text-sm mt-0.5">
-                          {t.session?.device_code ? `Sesi ${t.session.device_code}` : 'Pesanan F&B Take-away'}
+                          {t.session?.device_code ? `Sesi ${t.session.device_code}` : 'Pesanan F&B'}
                         </p>
-                        <p className="text-[11px] font-mono-tech text-amber-400/90 mt-0.5">
-                          Selesaikan pembayaran di kasir
+                        <p className="text-[11px] text-amber-400 mt-0.5">
+                          Selesaikan pembayaran di kasir atau scan QRIS
                         </p>
                       </div>
                       <div className="text-right">
@@ -356,27 +542,27 @@ export default function CustomerDashboardPage() {
             )}
 
             {/* 2. Booking Mendatang */}
-            <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c10] p-6 sm:p-7 shadow-xl">
+            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5">
                   <CalendarCheck size={18} className="text-cust-red" />
                   <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
-                    BOOKING MENDATANG
+                    Jadwal Booking Mendatang
                   </h2>
                 </div>
                 <Link
                   to="/browse-devices"
-                  className="text-cust-red hover:text-white font-mono-tech text-xs font-bold uppercase flex items-center gap-1 transition-colors"
+                  className="text-cust-red hover:text-white text-xs font-bold uppercase flex items-center gap-1 transition"
                 >
-                  <span>JADWALKAN BARU</span>
+                  <span>Pesan Baru</span>
                   <ArrowRight size={12} />
                 </Link>
               </div>
 
               {data.upcoming_bookings.length === 0 ? (
-                <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                  <p className="text-neutral-400 text-xs font-mono-tech">
-                    TIDAK ADA JADWAL BOOKING MENDATANG
+                <div className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-center">
+                  <p className="text-zinc-500 text-xs">
+                    Belum ada jadwal booking yang akan datang.
                   </p>
                 </div>
               ) : (
@@ -386,27 +572,38 @@ export default function CustomerDashboardPage() {
                     return (
                       <div
                         key={b.id}
-                        className="bg-black/40 border border-white/10 rounded-2xl p-4.5 flex flex-col justify-between hover:border-cust-red/40 transition-colors"
+                        className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 flex flex-col justify-between hover:border-zinc-700 transition"
                       >
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="font-mono-tech text-neutral-400 text-[10px] uppercase">
-                            {b.booking_code}
-                          </span>
-                          <span className="text-[10px] font-mono-tech font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            {status.label}
-                          </span>
-                        </div>
                         <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase">
+                              {b.booking_code}
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">
+                              {status.label}
+                            </span>
+                          </div>
                           <p className="text-white font-display font-black text-xl uppercase mb-1">
                             {b.device?.code}
                           </p>
-                          <div className="flex items-center gap-1.5 text-neutral-400 text-xs font-mono-tech">
+                          <div className="flex items-center gap-1.5 text-zinc-400 text-xs mb-3">
                             <Clock size={12} className="text-cust-red" />
                             <span>
                               {b.booking_date} · {b.start_time} - {b.end_time}
                             </span>
                           </div>
                         </div>
+                        {['pending', 'confirmed'].includes(b.status) && (
+                          <div className="pt-2 border-t border-zinc-800/80 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={() => setCancellingBookingId(b.id)}
+                              className="text-[11px] text-zinc-500 hover:text-red-400 transition cursor-pointer"
+                            >
+                              Batalkan Jadwal
+                            </button>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -414,34 +611,97 @@ export default function CustomerDashboardPage() {
               )}
             </div>
 
+            {/* 2b. Riwayat Booking Lampau (Selesai & Dibatalkan) */}
+            {data.booking_history?.length > 0 && (
+              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2.5">
+                    <CalendarCheck size={18} className="text-zinc-500" />
+                    <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                      Riwayat Booking Lampau
+                    </h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmClearAllBookings(true)}
+                    className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-red-400 hover:bg-red-950/20 px-3 py-1.5 rounded-xl border border-transparent hover:border-red-500/30 transition cursor-pointer"
+                    title="Bersihkan semua riwayat booking yang telah selesai atau dibatalkan"
+                  >
+                    <Trash2 size={13} />
+                    <span>Bersihkan Semua</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {data.booking_history.map((b) => {
+                    const isCompleted = b.status === 'completed';
+                    return (
+                      <div
+                        key={b.id}
+                        className="group flex items-center justify-between bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-xl px-4 py-3 transition"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase">
+                              {b.booking_code}
+                            </span>
+                            <span
+                              className={`text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded border ${
+                                isCompleted
+                                  ? 'bg-emerald-950/50 text-emerald-400 border-emerald-500/30'
+                                  : 'bg-zinc-800 text-zinc-400 border-zinc-700'
+                              }`}
+                            >
+                              {isCompleted ? 'Selesai' : 'Dibatalkan'}
+                            </span>
+                          </div>
+                          <p className="text-white font-bold text-xs mt-1">
+                            {b.device?.code} · {b.booking_date} ({b.start_time} - {b.end_time})
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setDeletingBookingId(b.id)}
+                          className="opacity-60 group-hover:opacity-100 p-2 text-zinc-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition cursor-pointer"
+                          title="Hapus riwayat booking ini"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* 3. Status Pesanan F&B Aktif */}
             {data.active_orders.length > 0 && (
-              <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c10] p-6 sm:p-7 shadow-xl">
+              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
                 <div className="flex items-center gap-2.5 mb-5">
                   <ShoppingBag size={18} className="text-amber-400" />
                   <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
-                    STATUS RUNNER F&B
+                    Pesanan Kafe Sedang Berjalan
                   </h2>
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="space-y-4">
                   {data.active_orders.map((o) => {
                     const currentIdx = ORDER_STEPS.indexOf(o.status);
                     return (
                       <div
                         key={o.id}
-                        className="bg-black/40 border border-white/10 rounded-2xl p-5"
+                        className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-mono-tech text-amber-400 text-xs font-bold uppercase">
-                            ORDER: {o.order_code}
+                          <span className="text-amber-400 text-xs font-bold uppercase">
+                            Order #{o.order_code}
                           </span>
-                          <span className="text-xs font-mono-tech text-neutral-400">
+                          <span className="text-xs font-semibold text-white">
                             {formatRupiah(o.total_price)}
                           </span>
                         </div>
 
-                        <p className="text-neutral-300 text-xs mb-4">
+                        <p className="text-zinc-300 text-xs mb-4">
                           {o.items.map((item) => `${item.product.name} ×${item.quantity}`).join(', ')}
                         </p>
 
@@ -452,13 +712,13 @@ export default function CustomerDashboardPage() {
                               <div
                                 className={`h-1.5 rounded-full ${
                                   idx <= currentIdx
-                                    ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                                    : 'bg-white/10'
+                                    ? 'bg-amber-400'
+                                    : 'bg-zinc-800'
                                 }`}
                               />
                               <span
-                                className={`text-[10px] font-mono-tech uppercase ${
-                                  idx <= currentIdx ? 'text-amber-400 font-bold' : 'text-neutral-500'
+                                className={`text-[10px] uppercase ${
+                                  idx <= currentIdx ? 'text-amber-400 font-bold' : 'text-zinc-600'
                                 }`}
                               >
                                 {ORDER_STEP_LABEL[step]}
@@ -473,39 +733,60 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 4. Riwayat Transaksi Terakhir */}
-            <div className="rounded-3xl border border-white/[0.08] bg-[#0c0c10] p-6 sm:p-7 shadow-xl">
-              <div className="flex items-center gap-2.5 mb-5">
-                <Receipt size={18} className="text-neutral-400" />
-                <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
-                  RIWAYAT LOG TRANSAKSI
-                </h2>
+            {/* 4. Riwayat Transaksi */}
+            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5">
+                  <Receipt size={18} className="text-zinc-400" />
+                  <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                    Riwayat Transaksi Terakhir
+                  </h2>
+                </div>
+                {data.recent_transactions.length > 0 && (
+                  <button
+                    onClick={() => setConfirmClearAllTrx(true)}
+                    className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-red-400 hover:bg-red-950/20 px-3 py-1.5 rounded-xl border border-transparent hover:border-red-500/30 transition cursor-pointer"
+                    title="Bersihkan semua riwayat transaksi dari akun Anda"
+                  >
+                    <Trash2 size={13} />
+                    <span>Bersihkan Semua</span>
+                  </button>
+                )}
               </div>
 
               {data.recent_transactions.length === 0 ? (
-                <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 text-center">
-                  <p className="text-neutral-400 text-xs font-mono-tech">
-                    BELUM ADA TRANSAKSI TERCATAT
+                <div className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-center">
+                  <p className="text-zinc-500 text-xs">
+                    Belum ada catatan riwayat transaksi.
                   </p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-2.5">
+                <div className="space-y-2">
                   {data.recent_transactions.map((t) => (
                     <div
                       key={t.id}
-                      className="flex items-center justify-between bg-black/40 border border-white/5 hover:border-white/15 rounded-xl px-4 py-3 transition-colors"
+                      className="group flex items-center justify-between bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-xl px-4 py-3 transition"
                     >
                       <div>
-                        <p className="font-mono-tech text-neutral-400 text-[10px] uppercase">
+                        <p className="text-zinc-500 font-mono-tech text-[10px] uppercase">
                           {t.transaction_code}
                         </p>
                         <p className="text-white font-medium text-xs sm:text-sm mt-0.5">
                           {t.session?.device_code ? `Sesi ${t.session.device_code}` : 'Pesanan F&B'}
                         </p>
                       </div>
-                      <p className="font-display font-bold text-white text-base">
-                        {formatRupiah(t.total_amount)}
-                      </p>
+                      <div className="flex items-center gap-3">
+                        <p className="font-display font-bold text-white text-base">
+                          {formatRupiah(t.total_amount)}
+                        </p>
+                        <button
+                          onClick={() => setDeletingTrxId(t.id)}
+                          title="Hapus transaksi ini dari riwayat"
+                          className="opacity-70 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition cursor-pointer"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -523,6 +804,78 @@ export default function CustomerDashboardPage() {
         onClose={() => setRatingTarget(null)}
         onSubmit={handleRatingSubmit}
         loading={submittingRating}
+      />
+
+      {/* Dialog Konfirmasi Hapus Ulasan */}
+      <ConfirmDialog
+        open={deletingRating}
+        title="Hapus Ulasan Anda?"
+        message="Yakin ingin menghapus ulasan Elysium Arena yang pernah Anda kirim? Anda dapat memberikan ulasan baru kapan saja setelah ini."
+        confirmText="Ya, Hapus Ulasan"
+        cancelText="Batal"
+        onConfirm={handleDeleteRating}
+        onCancel={() => setDeletingRating(false)}
+        loading={actionLoading}
+      />
+
+      {/* Dialog Konfirmasi Hapus Satu Transaksi */}
+      <ConfirmDialog
+        open={!!deletingTrxId}
+        title="Hapus Riwayat Transaksi?"
+        message="Item transaksi ini akan dihapus dari riwayat akun Anda agar tidak menumpuk."
+        confirmText="Hapus dari Riwayat"
+        cancelText="Batal"
+        onConfirm={handleDeleteTransaction}
+        onCancel={() => setDeletingTrxId(null)}
+        loading={actionLoading}
+      />
+
+      {/* Dialog Konfirmasi Bersihkan Semua Riwayat Transaksi */}
+      <ConfirmDialog
+        open={confirmClearAllTrx}
+        title="Bersihkan Semua Riwayat Transaksi?"
+        message="Yakin ingin membersihkan seluruh daftar riwayat transaksi dari akun Anda? Riwayat yang dibersihkan tidak akan ditampilkan lagi di dashboard."
+        confirmText="Ya, Bersihkan Semua"
+        cancelText="Batal"
+        onConfirm={handleClearAllTransactions}
+        onCancel={() => setConfirmClearAllTrx(false)}
+        loading={actionLoading}
+      />
+
+      {/* Dialog Konfirmasi Batalkan Jadwal Booking */}
+      <ConfirmDialog
+        open={!!cancellingBookingId}
+        title="Batalkan Jadwal Booking?"
+        message="Apakah Anda yakin ingin membatalkan jadwal sewa station ini? Slot waktu akan dibuka kembali untuk pemain lain."
+        confirmText="Ya, Batalkan Jadwal"
+        cancelText="Kembali"
+        onConfirm={handleCancelBooking}
+        onCancel={() => setCancellingBookingId(null)}
+        loading={actionLoading}
+      />
+
+      {/* Dialog Konfirmasi Hapus Satu Riwayat Booking */}
+      <ConfirmDialog
+        open={!!deletingBookingId}
+        title="Hapus Riwayat Booking?"
+        message="Riwayat booking ini akan dihapus dari daftar akun Anda."
+        confirmText="Hapus dari Riwayat"
+        cancelText="Batal"
+        onConfirm={handleDeleteBooking}
+        onCancel={() => setDeletingBookingId(null)}
+        loading={actionLoading}
+      />
+
+      {/* Dialog Konfirmasi Bersihkan Semua Riwayat Booking */}
+      <ConfirmDialog
+        open={confirmClearAllBookings}
+        title="Bersihkan Semua Riwayat Booking?"
+        message="Yakin ingin membersihkan semua riwayat booking lampau yang telah selesai atau dibatalkan dari akun Anda?"
+        confirmText="Ya, Bersihkan Semua"
+        cancelText="Batal"
+        onConfirm={handleClearAllBookings}
+        onCancel={() => setConfirmClearAllBookings(false)}
+        loading={actionLoading}
       />
     </PublicLayout>
   );

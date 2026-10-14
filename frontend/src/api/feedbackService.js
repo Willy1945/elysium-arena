@@ -4,4 +4,5 @@ export const feedbackService = {
   getAll: (params) => axiosClient.get('/feedback', { params }),
   create: (payload) => axiosClient.post('/feedback', payload),
   updateStatus: (id, payload) => axiosClient.patch(`/feedback/${id}`, payload),
+  remove: (id) => axiosClient.delete(`/feedback/${id}`),
 };

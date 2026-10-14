@@ -50,20 +50,38 @@ class CustomerDashboardController extends Controller
         $recentTransactions = Transaction::with(['session.device'])
             ->where('user_id', $userId)
             ->where('status', 'paid')
+            ->whereNull('customer_hidden_at')
             ->orderByDesc('created_at')
-            ->limit(5)
+            ->limit(10)
+            ->get();
+
+        $bookingHistory = Booking::with(['device.deviceType'])
+            ->where('user_id', $userId)
+            ->whereIn('status', ['completed', 'cancelled'])
+            ->orderByDesc('booking_date')
+            ->orderByDesc('start_time')
+            ->limit(10)
             ->get();
 
         $hasCompletedSession = GamingSession::where('user_id', $userId)->where('status', 'completed')->exists();
-        $hasRatedArena = DeviceRating::where('user_id', $userId)->exists();
+        $myRating = DeviceRating::where('user_id', $userId)->first();
 
         return response()->json([
+            'loyalty_points' => (int) ($request->user()->loyalty_points ?? 0),
+            'available_rewards_count' => $request->user()->loyaltyRewards()->where('status', 'available')->count(),
             'active_session' => $activeSession ? new SessionResource($activeSession) : null,
             'upcoming_bookings' => BookingResource::collection($upcomingBookings),
+            'booking_history' => BookingResource::collection($bookingHistory),
             'active_orders' => OrderResource::collection($activeOrders),
             'pending_transactions' => TransactionResource::collection($pendingTransactions),
             'recent_transactions' => TransactionResource::collection($recentTransactions),
-            'can_rate_arena' => $hasCompletedSession && !$hasRatedArena,
+            'can_rate_arena' => $hasCompletedSession && !$myRating,
+            'my_rating' => $myRating ? [
+                'id' => $myRating->id,
+                'rating' => (int) $myRating->rating,
+                'comment' => $myRating->comment,
+                'created_at' => $myRating->created_at?->toISOString(),
+            ] : null,
         ]);
     }
 }

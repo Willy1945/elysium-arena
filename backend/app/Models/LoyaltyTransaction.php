@@ -5,22 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InventoryLog extends Model
+class LoyaltyTransaction extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
         'user_id',
-        'quantity',
         'type',
-        'reason',
+        'amount',
+        'description',
+        'reference_id',
     ];
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+    protected $casts = [
+        'amount' => 'integer',
+    ];
 
     public function user()
     {

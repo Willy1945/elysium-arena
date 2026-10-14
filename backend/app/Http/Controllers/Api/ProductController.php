@@ -3,21 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\AdjustStockRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Services\InventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
-    public function __construct(protected InventoryService $inventoryService)
-    {
-    }
 
     public function index(Request $request)
     {
@@ -73,23 +68,6 @@ class ProductController extends Controller
         }
 
         $product->update($data);
-
-        return new ProductResource($product->load('category'));
-    }
-
-    public function adjustStock(AdjustStockRequest $request, Product $product)
-    {
-        try {
-            $product = $this->inventoryService->adjustStock(
-                $product,
-                $request->type,
-                $request->quantity,
-                $request->reason,
-                $request->user()->id
-            );
-        } catch (ValidationException $e) {
-            return response()->json(['message' => $e->getMessage() ?: 'Gagal menyesuaikan stok.', 'errors' => $e->errors()], 422);
-        }
 
         return new ProductResource($product->load('category'));
     }

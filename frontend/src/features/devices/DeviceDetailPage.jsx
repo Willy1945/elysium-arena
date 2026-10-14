@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Gamepad2, Monitor, Pencil, Trash2, Joystick, History } from 'lucide-react';
+import { ArrowLeft, Gamepad2, Monitor, Pencil, Trash2, Joystick, History, Clock } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Badge from '../../components/common/Badge';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
@@ -46,7 +46,7 @@ export default function DeviceDetailPage() {
     setSaving(true);
     try {
       await deviceService.update(id, formData);
-      toast.success('Perubahan berhasil disimpan.');
+      toast.success('Perubahan stasiun berhasil disimpan.');
       setEditOpen(false);
       fetchDevice();
     } catch (err) {
@@ -60,7 +60,7 @@ export default function DeviceDetailPage() {
     setSaving(true);
     try {
       await deviceService.remove(id);
-      toast.success('Device berhasil dihapus.');
+      toast.success('Stasiun berhasil dihapus.');
       navigate('/admin/devices');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Gagal menghapus device.');
@@ -76,7 +76,9 @@ export default function DeviceDetailPage() {
   if (loading) {
     return (
       <DashboardLayout>
-        <p className="text-text-secondary text-sm">Memuat data...</p>
+        <div className="py-20 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
+          Memuat data stasiun...
+        </div>
       </DashboardLayout>
     );
   }
@@ -84,7 +86,9 @@ export default function DeviceDetailPage() {
   if (!device) {
     return (
       <DashboardLayout>
-        <p className="text-text-secondary text-sm">Device tidak ditemukan.</p>
+        <div className="py-20 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
+          Stasiun tidak ditemukan.
+        </div>
       </DashboardLayout>
     );
   }
@@ -94,51 +98,63 @@ export default function DeviceDetailPage() {
 
   return (
     <DashboardLayout>
-      <Link to="/admin/devices" className="inline-flex items-center gap-1.5 text-text-secondary hover:text-text-primary text-sm mb-4 transition">
-        <ArrowLeft size={16} /> Kembali ke Devices
-      </Link>
+      {/* ── TOP NAV LINK ── */}
+      <div className="mb-6">
+        <Link
+          to="/admin/devices"
+          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-xs font-semibold uppercase tracking-wider transition"
+        >
+          <ArrowLeft size={14} /> Kembali ke Manajemen Stasiun
+        </Link>
+      </div>
 
       <div className="flex flex-col lg:flex-row items-start gap-6">
-        {/* ── Kolom Kiri: fixed width ── */}
-        <div className="w-full lg:w-72 shrink-0 flex flex-col gap-4">
-          <div className="bg-surface-elevated border border-border rounded-xl overflow-hidden">
-            <div className="h-44 bg-surface-inset">
+        {/* ── Kolom Kiri: Sidebar Stasiun ── */}
+        <div className="w-full lg:w-80 shrink-0 flex flex-col gap-5">
+          <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+            <div className="relative h-48 bg-zinc-900 overflow-hidden">
               {device.photo ? (
                 <img src={resolveImageUrl(device.photo)} alt={device.code} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <TypeIcon size={40} className="text-text-secondary opacity-30" />
+                <div className="w-full h-full flex items-center justify-center bg-zinc-900">
+                  <TypeIcon size={44} className="text-zinc-700" />
                 </div>
               )}
+              <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-[10px] text-zinc-300 border border-zinc-800 font-mono-tech font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                {device.device_type?.name}
+              </div>
             </div>
-            <div className="p-3 flex gap-2">
+            <div className="p-4 flex gap-2.5">
               <button
                 onClick={() => setEditOpen(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 border border-border rounded-lg py-2 text-xs text-text-secondary hover:bg-surface-inset transition"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 hover:text-white rounded-xl py-2.5 text-xs font-semibold transition"
               >
-                <Pencil size={13} /> Edit
+                <Pencil size={13} /> Edit Rig
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 border border-status-occupied/30 rounded-lg py-2 text-xs text-status-occupied hover:bg-status-occupied/10 transition"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-rose-900/40 text-rose-400 hover:bg-rose-950/20 rounded-xl py-2.5 text-xs font-semibold transition"
               >
                 <Trash2 size={13} /> Hapus
               </button>
             </div>
           </div>
 
-          <div className="bg-surface-elevated border border-border rounded-xl p-4">
-            <p className="text-text-secondary text-xs mb-2.5">Ubah Status Cepat</p>
+          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-5 shadow-xl">
+            <h3 className="text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-3 font-mono-tech">
+              Ubah Status Cepat
+            </h3>
             <div className="grid grid-cols-2 gap-2">
               {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
                 <button
                   key={key}
                   onClick={() => handleStatusChange(key)}
                   disabled={device.status === key}
-                  className={`text-xs py-2 rounded-lg border transition ${device.status === key
-                    ? 'border-accent bg-accent/10 text-accent-light cursor-default'
-                    : 'border-border text-text-secondary hover:bg-surface-inset'
-                    }`}
+                  className={`text-xs py-2.5 px-3 rounded-xl border font-semibold transition ${
+                    device.status === key
+                      ? 'border-cust-red bg-cust-red/20 text-white shadow-md shadow-cust-red/10 cursor-default'
+                      : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  }`}
                 >
                   {cfg.label}
                 </button>
@@ -147,95 +163,110 @@ export default function DeviceDetailPage() {
           </div>
         </div>
 
-        {/* ── Kolom Kanan: mengisi sisa ruang, responsif ── */}
+        {/* ── Kolom Kanan: Detail & Metrik ── */}
         <div className="flex-1 w-full flex flex-col gap-6">
-          <div className="bg-surface-elevated border border-border rounded-xl p-6">
-            <div className="flex items-start justify-between mb-4">
+          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+            <div className="flex items-start justify-between mb-6">
               <div>
-                <h1 className="text-text-primary text-2xl font-bold">{device.code}</h1>
-                <p className="text-text-secondary text-sm">{device.device_type?.name}</p>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-[11px] font-mono-tech font-bold uppercase tracking-wider mb-2">
+                  <TypeIcon size={13} />
+                  <span>{device.device_type?.name} RIG STATION</span>
+                </div>
+                <h1 className="text-white text-3xl font-black font-display uppercase tracking-tight">
+                  {device.code}
+                </h1>
               </div>
               <Badge colorVar={status.color}>{status.label}</Badge>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-              <div className="bg-surface-inset rounded-lg p-3">
-                <p className="text-text-secondary text-xs mb-1">Harga per Jam</p>
-                <p className="text-text-primary font-bold text-lg">{formatRupiah(device.price_per_hour)}</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-6">
+              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Tarif Sewa</p>
+                <p className="text-white font-bold text-lg font-mono-tech">{formatRupiah(device.price_per_hour)}/jam</p>
               </div>
-              <div className="bg-surface-inset rounded-lg p-3">
-                <p className="text-text-secondary text-xs mb-1">Total Game</p>
-                <p className="text-text-primary font-bold text-lg">{device.games?.length || 0} Game</p>
+              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Game Terinstal</p>
+                <p className="text-white font-bold text-lg font-mono-tech">{device.games?.length || 0} Judul</p>
               </div>
-              <div className="bg-surface-inset rounded-lg p-3">
-                <p className="text-text-secondary text-xs mb-1">Booking Hari Ini</p>
-                <p className="text-text-primary font-bold text-lg">{device.today_bookings_count || 0}</p>
+              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Booking Hari Ini</p>
+                <p className="text-white font-bold text-lg font-mono-tech">{device.today_bookings_count || 0} Sesi</p>
               </div>
-              <div className="bg-surface-inset rounded-lg p-3">
-                <p className="text-text-secondary text-xs mb-1">Total Riwayat</p>
-                <p className="text-text-primary font-bold text-lg">{recentBookings.length}</p>
+              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Total Riwayat</p>
+                <p className="text-white font-bold text-lg font-mono-tech">{recentBookings.length} Log</p>
               </div>
             </div>
 
             {device.description && (
-              <div>
-                <p className="text-text-secondary text-xs mb-1">Deskripsi</p>
-                <p className="text-text-primary text-sm">{device.description}</p>
+              <div className="pt-4 border-t border-zinc-800/80">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Spesifikasi & Keterangan</p>
+                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">{device.description}</p>
               </div>
             )}
           </div>
 
-
-          <div className="bg-surface-elevated border border-border rounded-xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-text-primary font-semibold">Game Tersedia</h2>
-              <span className="bg-surface-inset text-text-secondary text-xs px-2 py-1 rounded">
-                {device.games?.length || 0} Titles
+          {/* Installed Games Section */}
+          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80 mb-5">
+              <div className="flex items-center gap-2">
+                <Joystick size={16} className="text-cust-red" />
+                <h2 className="text-white font-bold text-sm uppercase tracking-wider font-display">
+                  Game Terinstal di Stasiun
+                </h2>
+              </div>
+              <span className="font-mono-tech text-xs font-semibold px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300">
+                {device.games?.length || 0} Judul
               </span>
             </div>
 
             {device.games?.length === 0 ? (
-              <p className="text-text-secondary text-sm">Belum ada game yang ditambahkan ke device ini.</p>
+              <p className="text-zinc-500 text-xs text-center py-8">Belum ada game yang ditautkan ke stasiun ini.</p>
             ) : (
-              <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                 {device.games?.map((game) => (
-                  <Link key={game.id} to={`/admin/games/${game.id}`} className="group">
-                    <div className="aspect-[3/4] rounded-lg overflow-hidden bg-surface-inset group-hover:ring-2 group-hover:ring-accent/50 group-hover:-translate-y-1 transition-all">
+                  <Link key={game.id} to={`/admin/games/${game.id}`} className="group flex flex-col">
+                    <div className="aspect-[3/4] rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 group-hover:border-zinc-700 group-hover:-translate-y-1 transition duration-200">
                       {game.cover_image ? (
                         <img src={resolveImageUrl(game.cover_image)} alt={game.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Joystick size={24} className="text-text-secondary opacity-30" />
+                        <div className="w-full h-full flex items-center justify-center bg-zinc-900">
+                          <Joystick size={22} className="text-zinc-700" />
                         </div>
                       )}
                     </div>
-                    <p className="text-text-primary text-xs mt-1.5 line-clamp-1">{game.name}</p>
+                    <p className="text-zinc-300 text-[11px] mt-1.5 font-medium line-clamp-1 group-hover:text-cust-red transition">
+                      {game.name}
+                    </p>
                   </Link>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="bg-surface-elevated border border-border rounded-xl p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <History size={18} className="text-text-secondary" />
-              <h2 className="text-text-primary font-semibold">Riwayat Booking Terakhir</h2>
+          {/* Recent Booking History */}
+          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+            <div className="flex items-center gap-2 pb-4 border-b border-zinc-800/80 mb-5">
+              <History size={16} className="text-cust-red" />
+              <h2 className="text-white font-bold text-sm uppercase tracking-wider font-display">
+                Riwayat Booking Terakhir
+              </h2>
             </div>
 
             {recentBookings.length === 0 ? (
-              <p className="text-text-secondary text-sm">Belum ada riwayat booking untuk device ini.</p>
+              <p className="text-zinc-500 text-xs text-center py-8">Belum ada catatan reservasi untuk stasiun ini.</p>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 {recentBookings.map((b) => {
-                  const bStatus = BOOKING_STATUS_CONFIG[b.status] || { label: b.status, color: 'status-maintenance' };
+                  const bStatus = BOOKING_STATUS_CONFIG[b.status] || { label: b.status, color: 'neutral' };
                   return (
-                    <div key={b.id} className="flex items-center justify-between bg-surface-inset border border-border/50 rounded-lg p-3">
+                    <div key={b.id} className="flex items-center justify-between bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3.5">
                       <div>
-                        <p className="text-text-primary text-sm font-medium">{b.user?.name}</p>
-                        <p className="text-text-secondary text-xs">{b.booking_date} · {b.start_time} - {b.end_time}</p>
+                        <p className="text-white text-xs font-semibold">{b.user?.name}</p>
+                        <p className="text-zinc-400 text-[11px] font-mono-tech mt-0.5">{b.booking_date} · {b.start_time} - {b.end_time}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-text-primary text-sm font-medium">{formatRupiah(b.total_price)}</span>
+                        <span className="text-white text-xs font-bold font-mono-tech">{formatRupiah(b.total_price)}</span>
                         <Badge colorVar={bStatus.color}>{bStatus.label}</Badge>
                       </div>
                     </div>
@@ -259,7 +290,7 @@ export default function DeviceDetailPage() {
 
       <ConfirmDialog
         open={deleteOpen}
-        title="Hapus Device?"
+        title="Hapus Stasiun?"
         message={`Yakin ingin menghapus ${device.code}? Tindakan ini tidak bisa dibatalkan.`}
         onConfirm={handleDelete}
         onCancel={() => setDeleteOpen(false)}

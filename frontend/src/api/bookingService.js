@@ -7,5 +7,6 @@ export const bookingService = {
     axiosClient.get(`/devices/${deviceId}/availability`, { params: { date } }),
   create: (payload) => axiosClient.post('/bookings', payload),
   updateStatus: (id, status) => axiosClient.patch(`/bookings/${id}/status`, { status }),
-  remove: (id) => axiosClient.delete(`/bookings/${id}`),   // ← baru
+  remove: (id) => axiosClient.delete(`/bookings/${id}`),
+  clearHistory: () => axiosClient.delete('/bookings/clear-history'),
 };

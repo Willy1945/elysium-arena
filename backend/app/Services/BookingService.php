@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Booking;
 use App\Models\Device;
+use App\Models\GamingSession;
 use App\Models\LoyaltyReward;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class BookingService
         $start = Carbon::parse("$date $startTime");
         $end = $start->copy()->addMinutes($durationMinutes);
 
+        // 1. Cek bentrok dengan booking lain
         $conflict = Booking::where('device_id', $deviceId)
             ->where('booking_date', $date)
             ->whereIn('status', ['pending', 'confirmed'])
@@ -28,7 +30,26 @@ class BookingService
             ->where('end_time', '>', $start->format('H:i:s'))
             ->exists();
 
-        return ! $conflict;
+        if ($conflict) {
+            return false;
+        }
+
+        // 2. Cek bentrok dengan active session yang sedang berlangsung hari ini
+        if ($date === now()->toDateString()) {
+            $activeSession = GamingSession::where('device_id', $deviceId)
+                ->where('status', 'active')
+                ->first();
+
+            if ($activeSession) {
+                $sessionStart = Carbon::parse($activeSession->start_time);
+                $sessionEnd = Carbon::parse($activeSession->end_time);
+                if ($sessionEnd->gt($start) && $sessionStart->lt($end)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -36,7 +57,7 @@ class BookingService
      */
     public function getBookedSlots(int $deviceId, string $date): array
     {
-        return Booking::where('device_id', $deviceId)
+        $slots = Booking::where('device_id', $deviceId)
             ->where('booking_date', $date)
             ->whereIn('status', ['pending', 'confirmed'])
             ->orderBy('start_time')
@@ -46,6 +67,22 @@ class BookingService
                 'end_time' => substr($b->end_time, 0, 5),
             ])
             ->toArray();
+
+        // Jika mengecek ketersediaan hari ini, tambahkan sesi bermain yang sedang aktif sebagai slot terisi
+        if ($date === now()->toDateString()) {
+            $activeSession = GamingSession::where('device_id', $deviceId)
+                ->where('status', 'active')
+                ->first();
+
+            if ($activeSession) {
+                $slots[] = [
+                    'start_time' => Carbon::parse($activeSession->start_time)->format('H:i'),
+                    'end_time' => Carbon::parse($activeSession->end_time)->format('H:i'),
+                ];
+            }
+        }
+
+        return $slots;
     }
 
     /**
@@ -73,13 +110,13 @@ class BookingService
             $end = $start->copy()->addMinutes($data['duration']);
             $totalPrice = ($data['duration'] / 60) * $device->price_per_hour;
 
-            // ── Reward: Gratis 1 Jam ──
+            // ── Reward: Gratis Jam Main (1 Jam atau 2 Jam) ──
             $reward = null;
             if (! empty($data['reward_id'])) {
                 $reward = LoyaltyReward::where('id', $data['reward_id'])
                     ->where('user_id', $userId)
                     ->where('status', 'available')
-                    ->where('type', 'free_hour')
+                    ->whereIn('type', ['free_hour', 'free_2_hours'])
                     ->first();
 
                 if (! $reward) {
@@ -88,7 +125,8 @@ class BookingService
                     ]);
                 }
 
-                $discount = min($device->price_per_hour, $totalPrice);
+                $freeHours = ($reward->type === 'free_2_hours') ? 2 : 1;
+                $discount = min($device->price_per_hour * $freeHours, $totalPrice);
                 $totalPrice -= $discount;
             }
 

@@ -59,4 +59,18 @@ class FeedbackController extends Controller
 
         return new FeedbackResource($feedback->load('user'));
     }
+
+    public function destroy(Request $request, Feedback $feedback)
+    {
+        $user = $request->user();
+        $isStaff = in_array($user->role?->name, ['OWNER', 'ADMIN']);
+
+        if (!$isStaff && $feedback->user_id !== $user->id) {
+            return response()->json(['message' => 'Anda tidak berhak menghapus masukan ini.'], 403);
+        }
+
+        $feedback->delete();
+
+        return response()->json(['message' => 'Masukan berhasil dihapus.']);
+    }
 }

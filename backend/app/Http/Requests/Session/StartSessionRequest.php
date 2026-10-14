@@ -16,7 +16,8 @@ class StartSessionRequest extends FormRequest
         return [
             'device_id' => ['required', 'exists:devices,id'],
             'booking_id' => ['nullable', 'exists:bookings,id'],
-            'user_id' => ['required_without:booking_id', 'nullable', 'exists:users,id'],
+            'user_id' => ['nullable', 'exists:users,id'],
+            'guest_name' => ['nullable', 'string', 'max:100'],
             'duration' => [
                 'required',
                 'integer',

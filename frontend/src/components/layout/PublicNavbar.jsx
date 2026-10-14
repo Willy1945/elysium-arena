@@ -74,7 +74,7 @@ export default function PublicNavbar() {
               className="relative"
             >
               <img
-                src="/images/logo.png"
+                src="/images/logo-elysium.png"
                 alt="Elysium Arena"
                 className="h-11 w-auto transition-transform duration-300"
               />
@@ -254,7 +254,7 @@ export default function PublicNavbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden overflow-hidden bg-[#0c0c0e]/95 backdrop-blur-2xl border-b border-white/[0.08] px-5 py-5 shadow-2xl"
+            className="md:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto bg-[#0c0c0e]/95 backdrop-blur-2xl border-b border-white/[0.08] px-5 py-5 shadow-2xl"
           >
             <div className="flex flex-col gap-2">
               {NAV_LINKS.map((link) => {

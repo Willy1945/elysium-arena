@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\InventoryLog;
 use App\Models\LoyaltyReward;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -86,14 +85,6 @@ class OrderService
                 ]);
 
                 $product->decrement('stock', $item['quantity']);
-
-                InventoryLog::create([
-                    'product_id' => $product->id,
-                    'user_id' => $actorId,
-                    'quantity' => $item['quantity'],
-                    'type' => 'out',
-                    'reason' => 'Order ' . $order->order_code,
-                ]);
             }
 
             // ── Tambahkan item reward gratis ke order (kalau ada) ──
@@ -107,14 +98,6 @@ class OrderService
                 ]);
 
                 $rewardProduct->decrement('stock', 1);
-
-                InventoryLog::create([
-                    'product_id' => $rewardProduct->id,
-                    'user_id' => $actorId,
-                    'quantity' => 1,
-                    'type' => 'out',
-                    'reason' => 'Reward Gratis - Order ' . $order->order_code,
-                ]);
 
                 $reward->update([
                     'status' => 'redeemed',
@@ -137,14 +120,6 @@ class OrderService
                 foreach ($order->items as $item) {
                     $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
                     $product->increment('stock', $item->quantity);
-
-                    InventoryLog::create([
-                        'product_id' => $product->id,
-                        'user_id' => $actorId,
-                        'quantity' => $item->quantity,
-                        'type' => 'in',
-                        'reason' => 'Pembatalan Order ' . $order->order_code,
-                    ]);
                 }
             }
 

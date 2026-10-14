@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Plus, Tag, X } from 'lucide-react';
+import { Plus, Tag, X, UtensilsCrossed, PackageOpen, Layers } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import ProductCard from './ProductCard';
 import ProductFormModal from './ProductFormModal';
-import AdjustStockModal from './AdjustStockModal';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { productService } from '../../api/productService';
 import { categoryService } from '../../api/categoryService';
@@ -45,30 +44,60 @@ function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-surface-elevated border border-border rounded-lg p-6 max-w-sm w-full">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-text-primary font-semibold text-lg">Kelola Kategori</h3>
-          <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={20} /></button>
+    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl">
+        <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80 mb-5">
+          <div>
+            <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-semibold">
+              Kategori Menu
+            </span>
+            <h3 className="text-white font-black text-xl font-display uppercase tracking-tight">
+              Kelola Kategori
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+          >
+            <X size={18} />
+          </button>
         </div>
 
-        <form onSubmit={handleAdd} className="flex gap-2 mb-4">
+        <form onSubmit={handleAdd} className="flex gap-2 mb-5">
           <input
-            placeholder="Nama kategori baru"
+            placeholder="Nama kategori baru..."
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="flex-1 bg-surface-inset border border-border rounded px-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-accent"
+            className="flex-1 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-cust-red transition"
           />
-          <button type="submit" disabled={saving} className="bg-accent text-white text-sm px-3 rounded disabled:opacity-50">Tambah</button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 rounded-xl transition disabled:opacity-50"
+          >
+            Tambah
+          </button>
         </form>
 
-        <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
-          {categories.map((c) => (
-            <div key={c.id} className="flex items-center justify-between bg-surface-inset rounded px-3 py-2">
-              <span className="text-text-primary text-sm">{c.name}</span>
-              <button onClick={() => handleDelete(c.id)} className="text-status-occupied text-xs hover:underline">Hapus</button>
-            </div>
-          ))}
+        <div className="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
+          {categories.length === 0 ? (
+            <p className="text-zinc-500 text-xs text-center py-4">Belum ada kategori.</p>
+          ) : (
+            categories.map((c) => (
+              <div
+                key={c.id}
+                className="flex items-center justify-between bg-zinc-900/60 border border-zinc-800/80 rounded-xl px-3.5 py-2.5 hover:border-zinc-700 transition"
+              >
+                <span className="text-white text-xs sm:text-sm font-medium">{c.name}</span>
+                <button
+                  onClick={() => handleDelete(c.id)}
+                  className="text-rose-400 hover:text-rose-300 text-xs font-semibold hover:underline"
+                >
+                  Hapus
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -87,7 +116,6 @@ export default function ProductsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [deletingProduct, setDeletingProduct] = useState(null);
-  const [adjustingProduct, setAdjustingProduct] = useState(null);
   const [categoriesModalOpen, setCategoriesModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -150,74 +178,82 @@ export default function ProductsPage() {
     }
   };
 
-  const handleAdjustStock = async (payload) => {
-    setSaving(true);
-    try {
-      await productService.adjustStock(adjustingProduct.id, payload);
-      toast.success('Stok berhasil disesuaikan.');
-      setAdjustingProduct(null);
-      fetchProducts();
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Gagal menyesuaikan stok.');
-    } finally {
-      setSaving(false);
-    }
-  };
-
   const filters = ['All', ...categories.map((c) => c.name)];
 
   return (
     <DashboardLayout onSearch={setSearch}>
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+      {/* ── HEADER ── */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-text-primary text-2xl font-semibold">Food & Beverage</h2>
-          <p className="text-text-secondary text-sm">Kelola menu, harga, dan stok produk.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex gap-2 flex-wrap">
-            {filters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition ${activeFilter === f ? 'bg-accent text-accent-lighter' : 'border border-border text-text-secondary hover:bg-surface-elevated'
-                  }`}
-              >
-                {f}
-              </button>
-            ))}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+            <UtensilsCrossed size={14} />
+            <span>Katalog Kafe & Inventaris</span>
           </div>
+          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+            Menu & Inventaris Makanan
+          </h1>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+            Kelola katalog menu makanan/minuman, penyesuaian harga, serta monitoring stok berkala.
+          </p>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
           {user.role !== 'STAFF_CAFE' && (
             <button
               onClick={() => setCategoriesModalOpen(true)}
-              className="flex items-center gap-1 border border-border text-text-secondary text-sm px-3 py-2 rounded-lg hover:bg-surface-elevated transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 text-xs sm:text-sm font-semibold transition"
             >
-              <Tag size={14} /> Kategori
+              <Tag size={15} /> Kelola Kategori
             </button>
           )}
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-1 bg-accent hover:opacity-90 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+            className="inline-flex items-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition shadow-lg shadow-cust-red/10"
           >
-            <Plus size={16} /> Tambah Produk
+            <Plus size={16} /> Tambah Menu
           </button>
         </div>
       </div>
 
+      {/* ── FILTER BAR ── */}
+      <div className="mb-6 flex overflow-x-auto pb-2 scrollbar-none">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 flex gap-1">
+          {filters.map((f) => (
+            <button
+              key={f}
+              onClick={() => setActiveFilter(f)}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                activeFilter === f
+                  ? 'bg-cust-red text-white'
+                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+              }`}
+            >
+              {f === 'All' ? 'Semua Menu' : f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── PRODUCT GRID ── */}
       {loading ? (
-        <p className="text-text-secondary text-sm">Memuat data...</p>
+        <div className="py-20 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
+          Memuat katalog menu...
+        </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-16 border border-dashed border-border rounded-lg">
-          <p className="text-text-secondary text-sm">Belum ada produk. Tambahkan produk pertama kamu.</p>
+        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
+          <PackageOpen size={40} className="mx-auto text-zinc-600 mb-3" />
+          <p className="text-white font-semibold text-sm">Belum ada produk dalam kategori ini.</p>
+          <p className="text-zinc-500 text-xs mt-1">Tambahkan menu pertama kamu untuk mulai berjualan.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
           {products.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
               onEdit={handleOpenEdit}
               onDelete={setDeletingProduct}
-              onAdjustStock={setAdjustingProduct}
             />
           ))}
         </div>
@@ -232,18 +268,10 @@ export default function ProductsPage() {
         loading={saving}
       />
 
-      <AdjustStockModal
-        open={!!adjustingProduct}
-        onClose={() => setAdjustingProduct(null)}
-        onSubmit={handleAdjustStock}
-        product={adjustingProduct}
-        loading={saving}
-      />
-
       <ConfirmDialog
         open={!!deletingProduct}
         title="Hapus Produk?"
-        message={`Yakin ingin menghapus ${deletingProduct?.name}?`}
+        message={`Yakin ingin menghapus ${deletingProduct?.name}? Data pesanan masa lalu akan tetap tercatat.`}
         onConfirm={handleDelete}
         onCancel={() => setDeletingProduct(null)}
         loading={saving}

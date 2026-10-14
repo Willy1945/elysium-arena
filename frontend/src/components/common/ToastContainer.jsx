@@ -10,14 +10,14 @@ export default function ToastContainer({ toasts, onRemove }) {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm w-full">
+    <div className="fixed top-4 right-4 left-4 sm:left-auto z-[100] flex flex-col gap-2 sm:max-w-sm pointer-events-none">
       {toasts.map((t) => {
         const config = TOAST_CONFIG[t.type] || TOAST_CONFIG.info;
         const Icon = config.icon;
         return (
           <div
             key={t.id}
-            className="flex items-start gap-2.5 bg-surface-elevated border border-border rounded-lg p-3.5 shadow-lg"
+            className="flex items-start gap-2.5 bg-[#121216] border border-zinc-800 rounded-xl p-3.5 shadow-2xl pointer-events-auto backdrop-blur-md"
             style={{ borderLeftWidth: 3, borderLeftColor: `var(--color-${config.colorVar})` }}
           >
             <Icon size={18} style={{ color: `var(--color-${config.colorVar})` }} className="shrink-0 mt-0.5" />

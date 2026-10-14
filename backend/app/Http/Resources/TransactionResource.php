@@ -15,8 +15,10 @@ class TransactionResource extends JsonResource
             'is_archived' => !is_null($this->archived_at),
             'user' => [
                 'id' => $this->user?->id,
-                'name' => $this->user?->name,
+                'name' => $this->user?->name ?: ($this->guest_name ?: 'Tamu (Walk-In)'),
             ],
+            'guest_name' => $this->guest_name,
+            'is_guest' => is_null($this->user_id),
             'session' => $this->session_id ? [
                 'id' => $this->session?->id,
                 'device_id' => $this->session?->device_id,

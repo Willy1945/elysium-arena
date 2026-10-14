@@ -9,6 +9,5 @@ export const productService = {
     formData.append('_method', 'PUT');
     return axiosClient.post(`/products/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
   },
-  adjustStock: (id, payload) => axiosClient.post(`/products/${id}/adjust-stock`, payload),
   remove: (id) => axiosClient.delete(`/products/${id}`),
 };

@@ -29,6 +29,8 @@ import FeedbackPage from '../features/customer/FeedbackPage';
 import FeedbackManagePage from '../features/feedback/FeedbackManagePage';
 import RewardsPage from '../features/customer/RewardsPage';
 import StaffPage from '../features/staff/StaffPage';
+import TermsPage from '../features/public/TermsPage';
+import PrivacyPage from '../features/public/PrivacyPage';
 
 export default function AppRouter() {
   return (
@@ -223,10 +225,12 @@ export default function AppRouter() {
         <Route path="/browse-games" element={<BrowseGamesPage />} />
         <Route path="/browse-games/:id" element={<PublicGameDetailPage />} />
         <Route path="/menu" element={<FoodMenuPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
 
         <Route path="/unauthorized" element={<div className="text-white p-8">403 - Tidak ada akses</div>} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/rewards" element={<ProtectedRoute allowedRoles={['CUSTOMER']}><RewardsPage /></ProtectedRoute>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
 

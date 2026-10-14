@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Gamepad2 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import GameCard from './GameCard';
 import GameFormModal from './GameFormModal';
@@ -48,10 +48,10 @@ export default function GamesPage() {
     try {
       if (editingGame) {
         await gameService.update(editingGame.id, formData);
-        toast.success('Game berhasil diperbarui.');
+        toast.success('Informasi game berhasil diperbarui.');
       } else {
         await gameService.create(formData);
-        toast.success('Game berhasil ditambahkan.');
+        toast.success('Game baru berhasil ditambahkan.');
       }
       setModalOpen(false);
       fetchGames();
@@ -66,7 +66,7 @@ export default function GamesPage() {
     setSaving(true);
     try {
       await gameService.remove(deletingGame.id);
-      toast.success('Game berhasil dihapus.');
+      toast.success('Game berhasil dihapus dari katalog.');
       setDeletingGame(null);
       fetchGames();
     } catch (err) {
@@ -78,45 +78,67 @@ export default function GamesPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex items-center justify-between mb-6">
+      {/* ── HEADER ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-text-primary text-2xl font-semibold">Game Catalog</h2>
-          <p className="text-text-secondary text-sm">Kelola daftar game yang tersedia per platform.</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+            <Gamepad2 size={14} />
+            <span>Katalog Game Arena</span>
+          </div>
+          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+            Game Vault & Library
+          </h1>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+            Kelola judul game yang terinstal di PlayStation 5, PS4, dan PC stasiun arena.
+          </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex gap-2">
+
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 flex gap-1">
             {['All', 'PS5', 'PS4', 'PC'].map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition ${activeFilter === f
-                  ? 'bg-accent text-accent-lighter'
-                  : 'border border-border text-text-secondary hover:bg-surface-elevated'
-                  }`}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  activeFilter === f
+                    ? 'bg-cust-red text-white'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                }`}
               >
-                {f}
+                {f === 'All' ? 'Semua Platform' : f}
               </button>
             ))}
           </div>
+
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-1 bg-accent hover:opacity-90 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+            className="inline-flex items-center justify-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-lg shadow-cust-red/10 shrink-0"
           >
             <Plus size={16} /> Tambah Game
           </button>
         </div>
       </div>
 
+      {/* ── GAMES GRID ── */}
       {loading ? (
-        <p className="text-text-secondary text-sm">Memuat data...</p>
+        <div className="py-20 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
+          Memuat daftar game...
+        </div>
       ) : games.length === 0 ? (
-        <div className="text-center py-16 border border-dashed border-border rounded-lg">
-          <p className="text-text-secondary text-sm">Belum ada game. Tambahkan game pertama kamu.</p>
+        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
+          <Gamepad2 size={40} className="mx-auto text-zinc-600 mb-3" />
+          <p className="text-white font-semibold text-sm">Tidak ada game pada filter ini.</p>
+          <p className="text-zinc-500 text-xs mt-1">Tambahkan game baru untuk mengisi katalog.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
           {games.map((game) => (
-            <GameCard key={game.id} game={game} onEdit={handleOpenEdit} onDelete={setDeletingGame} />
+            <GameCard
+              key={game.id}
+              game={game}
+              onEdit={handleOpenEdit}
+              onDelete={setDeletingGame}
+            />
           ))}
         </div>
       )}
@@ -132,7 +154,7 @@ export default function GamesPage() {
       <ConfirmDialog
         open={!!deletingGame}
         title="Hapus Game?"
-        message={`Yakin ingin menghapus ${deletingGame?.name}?`}
+        message={`Yakin ingin menghapus ${deletingGame?.name} dari daftar katalog?`}
         onConfirm={handleDelete}
         onCancel={() => setDeletingGame(null)}
         loading={saving}

@@ -79,8 +79,8 @@ export default function BrowseGamesPage() {
             </span>
           </div>
 
-          <h1 className="font-display font-black text-white text-5xl sm:text-6xl lg:text-[76px] uppercase tracking-tight mb-4 leading-none">
-            KATALOG <span className="text-transparent bg-clip-text bg-gradient-to-r from-cust-red via-red-500 to-amber-500">GAME</span>
+          <h1 className="font-display font-black text-white text-4xl sm:text-6xl lg:text-[76px] uppercase tracking-tight mb-4 leading-none">
+            KATALOG <span className="text-cust-red">GAME</span>
           </h1>
 
           <p className="text-cust-text-secondary text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
@@ -91,50 +91,54 @@ export default function BrowseGamesPage() {
 
       {/* ── TELEMETRY STRIP ── */}
       <section className="border-b border-white/[0.06] bg-[#0c0c0f]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0">
-              <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
-                <Layers size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
+                <Layers size={20} className="sm:hidden" />
+                <Layers size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Total Koleksi</p>
-                <p className="font-display font-black text-white text-2xl">{games.length} Judul</p>
-                <p className="text-[11px] font-mono-tech text-white/60">Semua Platform</p>
+                <p className="font-display font-black text-white text-xl sm:text-2xl truncate">{games.length} Judul</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-white/60 truncate">Semua Platform</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
-                <Gamepad2 size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-blue-950/20 border border-blue-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
+                <Gamepad2 size={20} className="sm:hidden" />
+                <Gamepad2 size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">PlayStation 5</p>
-                <p className="font-display font-black text-blue-400 text-2xl">{typeCounts.PS5} Game</p>
-                <p className="text-[11px] font-mono-tech text-blue-400/80">Next-Gen AAA Titles</p>
+                <p className="font-display font-black text-blue-400 text-xl sm:text-2xl truncate">{typeCounts.PS5} Game</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-blue-400/80 truncate">Next-Gen AAA</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                <Cpu size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <Cpu size={20} className="sm:hidden" />
+                <Cpu size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">PC Gaming</p>
-                <p className="font-display font-black text-emerald-400 text-2xl">{typeCounts.PC} Game</p>
-                <p className="text-[11px] font-mono-tech text-emerald-500/80">Esports & Competitives</p>
+                <p className="font-display font-black text-emerald-400 text-xl sm:text-2xl truncate">{typeCounts.PC} Game</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-emerald-500/80 truncate">Esports & High-FPS</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
-                <Gamepad2 size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-sky-950/20 border border-sky-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0">
+                <Gamepad2 size={20} className="sm:hidden" />
+                <Gamepad2 size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">PlayStation 4</p>
-                <p className="font-display font-black text-sky-400 text-2xl">{typeCounts.PS4} Game</p>
-                <p className="text-[11px] font-mono-tech text-sky-400/80">Co-Op & Klasik Lengkap</p>
+                <p className="font-display font-black text-sky-400 text-xl sm:text-2xl truncate">{typeCounts.PS4} Game</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-sky-400/80 truncate">Co-Op & Klasik</p>
               </div>
             </div>
 
@@ -157,7 +161,7 @@ export default function BrowseGamesPage() {
                   key={f}
                   onClick={() => setActiveFilter(f)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap ${active
-                    ? 'bg-cust-red text-white shadow-[0_0_20px_rgba(227,30,36,0.35)]'
+                    ? 'bg-cust-red text-white shadow-sm'
                     : 'text-cust-text-secondary hover:text-white hover:bg-white/[0.04]'
                     }`}
                 >
@@ -189,9 +193,9 @@ export default function BrowseGamesPage() {
       {/* ── GAME VAULT POSTER GRID ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
-              <div key={n} className="rounded-2xl bg-[#0c0c0f] border border-white/[0.06] p-3 space-y-3">
+              <div key={n} className="rounded-2xl bg-[#0c0c0f] border border-white/[0.06] p-2.5 sm:p-3 space-y-3">
                 <Skeleton className="aspect-[3/4.2] w-full rounded-xl" />
                 <Skeleton className="h-5 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
@@ -213,7 +217,7 @@ export default function BrowseGamesPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {filteredGames.map((game) => (
               <motion.div
                 key={game.id}

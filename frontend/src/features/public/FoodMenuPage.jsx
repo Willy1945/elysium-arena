@@ -169,7 +169,7 @@ export default function FoodMenuPage() {
           </div>
 
           <h1 className="font-display font-black text-white text-5xl sm:text-6xl lg:text-[76px] uppercase tracking-tight mb-4 leading-none">
-            FOOD & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cust-red via-red-500 to-amber-500">BEVERAGE</span>
+            FOOD & <span className="text-cust-red">BEVERAGE</span>
           </h1>
 
           <p className="text-cust-text-secondary text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
@@ -180,52 +180,56 @@ export default function FoodMenuPage() {
 
       {/* ── TELEMETRY STRIP ── */}
       <section className="border-b border-white/[0.06] bg-[#0c0c0f]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0">
-              <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
-                <UtensilsCrossed size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
+                <UtensilsCrossed size={20} className="sm:hidden" />
+                <UtensilsCrossed size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Menu Tersedia</p>
-                <p className="font-display font-black text-white text-2xl">{products.length} Menu</p>
-                <p className="text-[11px] font-mono-tech text-white/60">Makanan & Minuman</p>
+                <p className="font-display font-black text-white text-xl sm:text-2xl truncate">{products.length} Menu</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-white/60 truncate">Makanan & Minuman</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
-                <Coffee size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-amber-950/20 border border-amber-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <Coffee size={20} className="sm:hidden" />
+                <Coffee size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Kategori Cafe</p>
-                <p className="font-display font-black text-amber-400 text-2xl">{totalCategoriesCount} Jenis</p>
-                <p className="text-[11px] font-mono-tech text-amber-400/80">Snack, Meals & Drinks</p>
+                <p className="font-display font-black text-amber-400 text-xl sm:text-2xl truncate">{totalCategoriesCount} Jenis</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-amber-400/80 truncate">Snack & Refreshment</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                <Layers size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <Layers size={20} className="sm:hidden" />
+                <Layers size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Rentang Harga</p>
-                <p className="font-display font-black text-emerald-400 text-2xl">
+                <p className="font-display font-black text-emerald-400 text-xl sm:text-2xl truncate">
                   {priceRange ? `${Math.round(priceRange.min / 1000)}K - ${Math.round(priceRange.max / 1000)}K` : '-'}
                 </p>
-                <p className="text-[11px] font-mono-tech text-emerald-500/80">Harga Terjangkau</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-emerald-500/80 truncate">Hemat & Bersahabat</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
-                <Wallet size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-blue-950/20 border border-blue-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
+                <Wallet size={20} className="sm:hidden" />
+                <Wallet size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Metode Bayar</p>
-                <p className="font-display font-black text-white text-2xl">Kasir / QRIS</p>
-                <p className="text-[11px] font-mono-tech text-white/60">Digabung ke Billing Sesi</p>
+                <p className="font-display font-black text-white text-xl sm:text-2xl truncate">Kasir / QRIS</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-white/60 truncate">Gabung Billing Sesi</p>
               </div>
             </div>
 
@@ -251,7 +255,7 @@ export default function FoodMenuPage() {
                       key={f}
                       onClick={() => setActiveCategory(f)}
                       className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono-tech font-bold uppercase tracking-wider transition-all whitespace-nowrap ${active
-                        ? 'bg-cust-red text-white shadow-[0_0_20px_rgba(227,30,36,0.35)]'
+                        ? 'bg-cust-red text-white shadow-sm'
                         : 'text-cust-text-secondary hover:text-white hover:bg-white/[0.04]'
                         }`}
                     >
@@ -303,7 +307,7 @@ export default function FoodMenuPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5">
                 {filteredProducts.map((product) => {
                   const outOfStock = product.stock <= 0 || !product.is_active;
                   const itemInCartQty = cart[product.id] || 0;
@@ -313,13 +317,13 @@ export default function FoodMenuPage() {
                       key={product.id}
                       whileHover={outOfStock ? {} : { y: -4 }}
                       transition={{ duration: 0.2 }}
-                      className={`relative bg-[#0c0c0f] border rounded-3xl overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-xl group ${outOfStock
+                      className={`relative bg-[#0c0c0f] border rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-xl group ${outOfStock
                         ? 'border-white/[0.04] opacity-60'
                         : 'border-white/[0.08] hover:border-cust-red/40 hover:shadow-[0_8px_30px_rgba(227,30,36,0.15)]'
                         }`}
                     >
                       {/* Product Visual */}
-                      <div className="relative h-40 bg-[#121217] overflow-hidden">
+                      <div className="relative h-32 sm:h-40 bg-[#121217] overflow-hidden">
                         {product.image ? (
                           <img
                             src={resolveImageUrl(product.image)}
@@ -328,7 +332,8 @@ export default function FoodMenuPage() {
                           />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-[#121217]">
-                            <UtensilsCrossed size={36} className="text-white/20" />
+                            <UtensilsCrossed size={32} className="text-white/20 sm:hidden" />
+                            <UtensilsCrossed size={36} className="text-white/20 hidden sm:block" />
                             <span className="text-[10px] font-mono-tech text-white/40 uppercase">Elysium Cafe</span>
                           </div>
                         )}
@@ -336,12 +341,12 @@ export default function FoodMenuPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0f] via-transparent to-black/40" />
 
                         {/* Top Badges */}
-                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-                          <span className="text-[10px] font-mono-tech font-bold uppercase px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-white/80">
+                        <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-3 sm:right-3 flex items-center justify-between">
+                          <span className="text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-black/70 backdrop-blur-md border border-white/10 text-white/80">
                             {product.category?.name}
                           </span>
                           {outOfStock && (
-                            <span className="text-[10px] font-mono-tech font-bold uppercase px-2.5 py-1 rounded-lg bg-cust-red text-white shadow-md">
+                            <span className="text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-cust-red text-white shadow-md">
                               Habis
                             </span>
                           )}
@@ -349,12 +354,12 @@ export default function FoodMenuPage() {
                       </div>
 
                       {/* Product Content & Action */}
-                      <div className="p-4 flex-1 flex flex-col justify-between gap-3">
+                      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 sm:gap-3">
                         <div>
-                          <h4 className="font-display font-bold text-white text-base leading-snug uppercase line-clamp-1 group-hover:text-cust-red transition-colors">
+                          <h4 className="font-display font-bold text-white text-sm sm:text-base leading-snug uppercase line-clamp-1 group-hover:text-cust-red transition-colors">
                             {product.name}
                           </h4>
-                          <p className={`font-display font-black text-lg mt-0.5 ${outOfStock ? 'text-white/40 line-through' : 'text-white'}`}>
+                          <p className={`font-display font-black text-base sm:text-lg mt-0.5 ${outOfStock ? 'text-white/40 line-through' : 'text-white'}`}>
                             {formatRupiah(product.price)}
                           </p>
                         </div>
@@ -364,16 +369,16 @@ export default function FoodMenuPage() {
                           <div className="flex items-center justify-between p-1 rounded-xl bg-white/[0.04] border border-white/[0.08]">
                             <button
                               onClick={() => updateQuantity(product.id, -1)}
-                              className="w-8 h-8 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white flex items-center justify-center transition"
+                              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-white flex items-center justify-center transition"
                             >
                               <Minus size={13} />
                             </button>
-                            <span className="font-mono-tech text-xs font-bold text-white px-2">
+                            <span className="font-mono-tech text-xs font-bold text-white px-1 sm:px-2">
                               {itemInCartQty}
                             </span>
                             <button
                               onClick={() => updateQuantity(product.id, 1)}
-                              className="w-8 h-8 rounded-lg bg-cust-red hover:bg-cust-red-dark text-white flex items-center justify-center transition shadow-[0_0_10px_rgba(227,30,36,0.4)]"
+                              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cust-red hover:bg-cust-red-dark text-white flex items-center justify-center transition shadow-[0_0_10px_rgba(227,30,36,0.4)]"
                             >
                               <Plus size={13} />
                             </button>
@@ -382,13 +387,14 @@ export default function FoodMenuPage() {
                           <button
                             onClick={() => addToCart(product)}
                             disabled={outOfStock}
-                            className={`w-full py-2.5 rounded-xl font-mono-tech text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all ${outOfStock
+                            className={`w-full py-2 sm:py-2.5 rounded-xl font-mono-tech text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all ${outOfStock
                               ? 'bg-white/[0.04] text-white/20 cursor-not-allowed'
                               : 'bg-white/[0.05] hover:bg-cust-red text-white hover:shadow-[0_0_20px_rgba(227,30,36,0.35)]'
                               }`}
                           >
-                            <Plus size={14} />
-                            <span>Tambah Pesanan</span>
+                            <Plus size={13} className="shrink-0" />
+                            <span className="sm:hidden">Tambah</span>
+                            <span className="hidden sm:inline">Tambah Pesanan</span>
                           </button>
                         )}
                       </div>
@@ -400,7 +406,7 @@ export default function FoodMenuPage() {
           </div>
 
           {/* Kolom Kanan: Sticky Cart Console (Spans 4 cols) */}
-          <div className="lg:col-span-4 sticky top-24">
+          <div id="cart-checkout-console" className="lg:col-span-4 sticky top-24">
             <div className="bg-[#0c0c0f]/95 backdrop-blur-2xl border border-white/[0.1] rounded-3xl p-6 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col justify-between">
 
               {/* Cart Header */}
@@ -599,6 +605,37 @@ export default function FoodMenuPage() {
           </Link>
         </div>
       </section>
+
+      {/* ── FLOATING MOBILE CART BAR (Visible only on < lg screens when cart has items) ── */}
+      {cartItems.length > 0 && (
+        <aside
+          aria-label="Floating Mobile Cart"
+          className="lg:hidden fixed bottom-4 left-3 right-3 z-40 bg-[#121216]/95 backdrop-blur-2xl border border-cust-red/40 rounded-2xl p-3 shadow-[0_10px_35px_rgba(0,0,0,0.85)] flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300"
+        >
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-cust-red flex items-center justify-center text-white shrink-0 shadow-[0_0_15px_rgba(227,30,36,0.4)]">
+              <ShoppingCart size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="font-mono-tech text-[10px] text-zinc-400 uppercase tracking-wider truncate">
+                {cartItems.length} Menu Terpilih
+              </p>
+              <p className="font-display font-black text-white text-base truncate">
+                {formatRupiah(total)}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              document.getElementById('cart-checkout-console')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider transition shadow-md active:scale-95 cursor-pointer"
+          >
+            <span>Lihat Pesanan</span>
+            <ArrowRight size={13} />
+          </button>
+        </aside>
+      )}
     </PublicLayout>
   );
 }

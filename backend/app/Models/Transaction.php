@@ -12,6 +12,7 @@ class Transaction extends Model
     protected $fillable = [
         'transaction_code',
         'user_id',
+        'guest_name',
         'session_id',
         'gaming_amount',
         'food_amount',
@@ -19,7 +20,17 @@ class Transaction extends Model
         'status',
         'archived_at',
         'hidden_at',
+        'customer_hidden_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'archived_at' => 'datetime',
+            'hidden_at' => 'datetime',
+            'customer_hidden_at' => 'datetime',
+        ];
+    }
 
     // ── Relationships ──
     public function user()

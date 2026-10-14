@@ -14,8 +14,10 @@ class SessionResource extends JsonResource
             'booking_id' => $this->booking_id,
             'user' => [
                 'id' => $this->user?->id,
-                'name' => $this->user?->name,
+                'name' => $this->user?->name ?: ($this->guest_name ?: 'Tamu (Walk-In)'),
             ],
+            'guest_name' => $this->guest_name,
+            'is_guest' => is_null($this->user_id),
             'device' => new DeviceResource($this->whenLoaded('device')),
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,

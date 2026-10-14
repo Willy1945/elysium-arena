@@ -108,22 +108,4 @@ class ReportController extends Controller
             'total_revenue' => $topProducts->sum('total_revenue'),
         ]);
     }
-
-    public function inventory()
-    {
-        $products = Product::with('category')
-            ->whereColumn('stock', '<=', 'minimum_stock')
-            ->orderBy('stock')
-            ->get();
-
-        return response()->json([
-            'low_stock_products' => $products->map(fn ($p) => [
-                'name' => $p->name,
-                'category' => $p->category?->name,
-                'stock' => $p->stock,
-                'minimum_stock' => $p->minimum_stock,
-                'status' => $p->stock_status,
-            ]),
-        ]);
-    }
 }

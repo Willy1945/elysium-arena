@@ -19,6 +19,7 @@ class User extends Authenticatable
         'avatar',
         'password',
         'is_active',
+        'loyalty_points',
     ];
 
     protected $hidden = [
@@ -32,6 +33,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'loyalty_points' => 'integer',
         ];
     }
 
@@ -64,6 +66,16 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function loyaltyRewards()
+    {
+        return $this->hasMany(LoyaltyReward::class);
+    }
+
+    public function loyaltyTransactions()
+    {
+        return $this->hasMany(LoyaltyTransaction::class);
     }
 
     // ── Helper untuk cek role (dipakai di middleware/policy nanti) ──

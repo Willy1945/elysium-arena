@@ -119,10 +119,7 @@ export default function LoginPage() {
           </div>
 
           <h1 className="font-display font-black text-5xl xl:text-6xl uppercase tracking-tight text-white leading-[1.05] mb-5">
-            ENTER THE{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cust-red via-red-500 to-orange-500">
-              TACTICAL ARENA
-            </span>
+            ENTER THE <span className="text-cust-red">ELYSIUM ARENA</span>
           </h1>
 
           <p className="text-neutral-300 text-base leading-relaxed mb-8">
@@ -204,13 +201,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Tactical Card Enclosure */}
-          <div className="bg-[#111115]/90 border border-[#23232a] rounded-2xl p-7 sm:p-9 shadow-2xl relative shadow-black/80 backdrop-blur-xl">
-            {/* Corner Tactical Accents */}
-            <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cust-red/60 rounded-tl-sm pointer-events-none" />
-            <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-cust-red/60 rounded-tr-sm pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-cust-red/60 rounded-bl-sm pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cust-red/60 rounded-br-sm pointer-events-none" />
+          {/* Card Enclosure */}
+          <div className="bg-[#111115]/90 border border-[#23232a] rounded-3xl p-7 sm:p-9 shadow-xl relative backdrop-blur-xl">
 
             {/* Header Content */}
             <div className="mb-6">
@@ -302,7 +294,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full mt-3 group relative overflow-hidden bg-gradient-to-r from-cust-red to-[#b8151a] hover:from-[#f02830] hover:to-cust-red text-white font-display font-black tracking-wider uppercase text-base py-3.5 rounded-xl transition-all duration-300 disabled:opacity-50 active:scale-[0.98] shadow-[0_0_20px_rgba(227,30,36,0.35)] hover:shadow-[0_0_28px_rgba(227,30,36,0.55)] flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full mt-3 bg-cust-red hover:bg-cust-red-dark text-white font-bold tracking-wider uppercase text-xs py-3.5 rounded-xl transition duration-200 disabled:opacity-50 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 {loading ? (
                   <>
@@ -310,11 +302,11 @@ export default function LoginPage() {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
-                    <span>MEMVERIFIKASI...</span>
+                    <span>Memverifikasi...</span>
                   </>
                 ) : (
                   <>
-                    <span>OTORISASI MASUK</span>
+                    <span>Masuk ke Akun Saya</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}

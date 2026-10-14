@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/devices/{device}/availability', [BookingController::class, 'availability']);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
+    Route::delete('/bookings/clear-history', [BookingController::class, 'clearHistory']);
     Route::get('/bookings/{booking}', [BookingController::class, 'show']);
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus']);
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
@@ -80,14 +81,25 @@ Route::middleware('auth:sanctum')->group(function () {
     // Transaction
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+    Route::delete('/my-transactions/clear', [TransactionController::class, 'clearCustomerHistory']);
+    Route::delete('/my-transactions/{transaction}', [TransactionController::class, 'hideFromCustomer']);
 
+    // Ratings
     Route::post('/ratings', [RatingController::class, 'store']);
+    Route::delete('/ratings/{rating}', [RatingController::class, 'destroy']);
+    Route::delete('/my-rating', [RatingController::class, 'destroyMyRating']);
 
+    // Feedback
     Route::get('/feedback', [FeedbackController::class, 'index']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
+    Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 
+    // Loyalty Rewards
     Route::get('/my-rewards', [LoyaltyRewardController::class, 'index']);
+    Route::post('/rewards/redeem', [LoyaltyRewardController::class, 'redeem']);
     Route::post('/rewards/{reward}/choose', [LoyaltyRewardController::class, 'choose']);
+    Route::delete('/rewards/clear-redeemed', [LoyaltyRewardController::class, 'clearRedeemed']);
+    Route::delete('/rewards/{reward}', [LoyaltyRewardController::class, 'destroy']);
 
 
     // ── Khusus OWNER & ADMIN ──
@@ -136,7 +148,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/reports/revenue', [ReportController::class, 'revenue']);
             Route::get('/reports/gaming', [ReportController::class, 'gaming']);
             Route::get('/reports/food', [ReportController::class, 'food']);
-            Route::get('/reports/inventory', [ReportController::class, 'inventory']);
         });
     });
 
@@ -147,7 +158,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/products', [ProductController::class, 'store']);
         Route::put('/products/{product}', [ProductController::class, 'update']);
-        Route::post('/products/{product}/adjust-stock', [ProductController::class, 'adjustStock']);
         Route::delete('/products/{product}', [ProductController::class, 'destroy']);
     });
 });

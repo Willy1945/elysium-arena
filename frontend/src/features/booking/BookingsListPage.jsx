@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Trash2, Search, CalendarCheck, Play, Check, X, Clock } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Badge from '../../components/common/Badge';
 import { bookingService } from '../../api/bookingService';
 import { formatRupiah, BOOKING_STATUS_CONFIG } from '../../utils/format';
-import { useNavigate } from 'react-router-dom';
 import { sessionService } from '../../api/sessionService';
-import { Trash2, Search } from 'lucide-react';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { useToast } from '../../context/ToastContext';
 
@@ -81,46 +80,55 @@ export default function BookingsListPage() {
         booking_id: booking.id,
         duration: booking.duration,
       });
-      toast.success('Session berhasil dimulai.');
+      toast.success('Sesi stasiun berhasil dimulai.');
       navigate('/admin/sessions');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Gagal memulai session.');
+      toast.error(err.response?.data?.message || 'Gagal memulai sesi stasiun.');
     } finally {
       setActingId(null);
     }
   };
 
   const filters = ['All', 'pending', 'confirmed', 'completed', 'cancelled'];
+  const FILTER_LABEL = {
+    All: 'Semua',
+    pending: 'Menunggu',
+    confirmed: 'Terkonfirmasi',
+    completed: 'Selesai',
+    cancelled: 'Dibatalkan',
+  };
 
   return (
-    <DashboardLayout>
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <DashboardLayout onSearch={setSearch}>
+      {/* ── HEADER ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-text-primary text-2xl font-semibold">Bookings</h2>
-          <p className="text-text-secondary text-sm">Kelola jadwal booking gaming station.</p>
-        </div>
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="relative">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
-            <input
-              type="text"
-              placeholder="Cari kode booking / nama..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-surface-elevated border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-text-primary outline-none focus:ring-2 focus:ring-accent w-64"
-            />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+            <CalendarCheck size={14} />
+            <span>Manajemen Reservasi</span>
           </div>
-          <div className="flex gap-2">
+          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+            Daftar Booking Jadwal
+          </h1>
+          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+            Verifikasi dan mulai sesi bermain stasiun langsung dari daftar booking pelanggan.
+          </p>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="overflow-x-auto max-w-full pb-1 scrollbar-none">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 inline-flex gap-1">
             {filters.map((f) => (
               <button
                 key={f}
                 onClick={() => setStatusFilter(f)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium capitalize transition ${statusFilter === f
-                  ? 'bg-accent text-accent-lighter'
-                  : 'border border-border text-text-secondary hover:bg-surface-elevated'
-                  }`}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                  statusFilter === f
+                    ? 'bg-cust-red text-white'
+                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                }`}
               >
-                {f}
+                {FILTER_LABEL[f] || f}
               </button>
             ))}
           </div>
@@ -128,103 +136,130 @@ export default function BookingsListPage() {
       </div>
 
       {successMessage && (
-        <div className="bg-status-available/10 border border-status-available/20 text-status-available text-sm rounded-lg px-4 py-3 mb-4">
+        <div className="bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs rounded-2xl px-4 py-3 mb-6">
           {successMessage}
         </div>
       )}
 
-      <div className="bg-surface-elevated border border-border rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border text-left text-text-secondary text-xs uppercase tracking-wide">
-              <th className="px-4 py-3 font-medium">Kode</th>
-              <th className="px-4 py-3 font-medium">Customer</th>
-              <th className="px-4 py-3 font-medium">Device</th>
-              <th className="px-4 py-3 font-medium">Tanggal</th>
-              <th className="px-4 py-3 font-medium">Waktu</th>
-              <th className="px-4 py-3 font-medium">Total</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-text-secondary">Memuat data...</td></tr>
-            ) : bookings.length === 0 ? (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-text-secondary">Belum ada booking.</td></tr>
-            ) : (
-              bookings.map((b) => {
-                const status = BOOKING_STATUS_CONFIG[b.status];
-                return (
-                  <tr key={b.id} className="border-b border-border/50 last:border-0">
-                    <td className="px-4 py-3 text-text-primary font-medium">{b.booking_code}</td>
-                    <td className="px-4 py-3 text-text-secondary">{b.user?.name}</td>
-                    <td className="px-4 py-3 text-text-secondary">{b.device?.code}</td>
-                    <td className="px-4 py-3 text-text-secondary">{b.booking_date}</td>
-                    <td className="px-4 py-3 text-text-secondary">{b.start_time} - {b.end_time}</td>
-                    <td className="px-4 py-3 text-text-primary">{formatRupiah(b.total_price)}</td>
-                    <td className="px-4 py-3"><Badge colorVar={status.color}>{status.label}</Badge></td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
-                        {b.status === 'pending' && (
-                          <button
-                            disabled={actingId === b.id}
-                            onClick={() => handleStatusChange(b.id, 'confirmed')}
-                            className="text-xs px-2.5 py-1 rounded border border-status-available/30 text-status-available hover:bg-status-available/10 transition disabled:opacity-50"
-                          >
-                            Confirm
-                          </button>
-                        )}
-                        {b.status === 'confirmed' && (
-                          <button
-                            disabled={actingId === b.id}
-                            onClick={() => handleStartFromBooking(b)}
-                            className="text-xs px-2.5 py-1 rounded border border-status-available/30 text-status-available hover:bg-status-available/10 transition disabled:opacity-50"
-                          >
-                            Start Session
-                          </button>
-                        )}
-                        {b.status === 'confirmed' && (
-                          <button
-                            disabled={actingId === b.id}
-                            onClick={() => handleStatusChange(b.id, 'completed')}
-                            className="text-xs px-2.5 py-1 rounded border border-accent/30 text-accent-light hover:bg-accent/10 transition disabled:opacity-50"
-                          >
-                            Complete
-                          </button>
-                        )}
-                        {['pending', 'confirmed'].includes(b.status) && (
-                          <button
-                            disabled={actingId === b.id}
-                            onClick={() => handleStatusChange(b.id, 'cancelled')}
-                            className="text-xs px-2.5 py-1 rounded border border-status-occupied/30 text-status-occupied hover:bg-status-occupied/10 transition disabled:opacity-50"
-                          >
-                            Cancel
-                          </button>
-                        )}
-                        {['completed', 'cancelled'].includes(b.status) && (
-                          <button
-                            disabled={actingId === b.id}
-                            onClick={() => setDeletingBooking(b)}
-                            title="Hapus"
-                            className="text-xs px-2.5 py-1 rounded border border-border text-text-secondary hover:bg-status-occupied/10 hover:text-status-occupied hover:border-status-occupied/30 transition disabled:opacity-50"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+      {/* ── TABLE CARD CONTAINER ── */}
+      <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs min-w-[700px]">
+            <thead>
+              <tr className="border-b border-zinc-800 bg-zinc-900/50 text-left text-zinc-400 uppercase tracking-wider font-mono-tech">
+                <th className="px-5 py-4 font-semibold">Kode</th>
+                <th className="px-5 py-4 font-semibold">Pelanggan</th>
+                <th className="px-5 py-4 font-semibold">Stasiun</th>
+                <th className="px-5 py-4 font-semibold">Tanggal</th>
+                <th className="px-5 py-4 font-semibold">Waktu Sesi</th>
+                <th className="px-5 py-4 font-semibold">Tarif</th>
+                <th className="px-5 py-4 font-semibold">Status</th>
+                <th className="px-5 py-4 font-semibold text-right">Aksi Operator</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-800/60">
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="px-5 py-12 text-center text-zinc-500 uppercase tracking-wider">
+                    Memuat data booking...
+                  </td>
+                </tr>
+              ) : bookings.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-5 py-12 text-center text-zinc-500">
+                    Tidak ada jadwal booking yang ditemukan.
+                  </td>
+                </tr>
+              ) : (
+                bookings.map((b) => {
+                  const status = BOOKING_STATUS_CONFIG[b.status] || { label: b.status, color: 'neutral' };
+                  return (
+                    <tr key={b.id} className="hover:bg-zinc-900/40 transition">
+                      <td className="px-5 py-4 font-mono-tech font-bold text-white">
+                        {b.booking_code}
+                      </td>
+                      <td className="px-5 py-4 text-zinc-200 font-medium">
+                        {b.user?.name}
+                      </td>
+                      <td className="px-5 py-4 text-white font-semibold">
+                        {b.device?.code}
+                      </td>
+                      <td className="px-5 py-4 text-zinc-400">
+                        {b.booking_date}
+                      </td>
+                      <td className="px-5 py-4 text-zinc-400 font-mono-tech">
+                        {b.start_time} - {b.end_time}
+                      </td>
+                      <td className="px-5 py-4 text-white font-semibold">
+                        {formatRupiah(b.total_price)}
+                      </td>
+                      <td className="px-5 py-4">
+                        <Badge colorVar={status.color}>{status.label}</Badge>
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {b.status === 'pending' && (
+                            <button
+                              disabled={actingId === b.id}
+                              onClick={() => handleStatusChange(b.id, 'confirmed')}
+                              className="px-3 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold transition disabled:opacity-50 cursor-pointer"
+                            >
+                              Konfirmasi
+                            </button>
+                          )}
+                          {b.status === 'confirmed' && (
+                            <button
+                              disabled={actingId === b.id}
+                              onClick={() => handleStartFromBooking(b)}
+                              className="px-3 py-1.5 rounded-lg bg-cust-red hover:bg-cust-red-dark text-white text-[11px] font-bold uppercase transition disabled:opacity-50 flex items-center gap-1 cursor-pointer"
+                            >
+                              <Play size={11} fill="currentColor" />
+                              <span>Mulai Sesi</span>
+                            </button>
+                          )}
+                          {b.status === 'confirmed' && (
+                            <button
+                              disabled={actingId === b.id}
+                              onClick={() => handleStatusChange(b.id, 'completed')}
+                              className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[11px] font-medium transition disabled:opacity-50 cursor-pointer"
+                            >
+                              Selesai
+                            </button>
+                          )}
+                          {['pending', 'confirmed'].includes(b.status) && (
+                            <button
+                              disabled={actingId === b.id}
+                              onClick={() => handleStatusChange(b.id, 'cancelled')}
+                              className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/40 border border-zinc-800 text-zinc-400 hover:text-red-400 text-[11px] font-medium transition disabled:opacity-50 cursor-pointer"
+                            >
+                              Batal
+                            </button>
+                          )}
+                          {['completed', 'cancelled'].includes(b.status) && (
+                            <button
+                              disabled={actingId === b.id}
+                              onClick={() => setDeletingBooking(b)}
+                              title="Hapus"
+                              className="p-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/50 text-zinc-500 hover:text-red-400 border border-zinc-800 transition disabled:opacity-50 cursor-pointer"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <ConfirmDialog
         open={!!deletingBooking}
-        title="Hapus Booking?"
-        message={`Yakin ingin menghapus booking ${deletingBooking?.booking_code}? Data ini tidak bisa dikembalikan.`}
+        title="Hapus Data Booking?"
+        message={`Yakin ingin menghapus booking ${deletingBooking?.booking_code}? Tindakan ini tidak dapat dibatalkan.`}
         onConfirm={handleDelete}
         onCancel={() => setDeletingBooking(null)}
         loading={!!actingId}

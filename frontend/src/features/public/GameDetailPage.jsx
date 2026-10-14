@@ -19,18 +19,18 @@ const PLATFORM_BADGE = {
 const STATUS_CONFIG = {
   available: {
     label: 'Ready to Play',
-    badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-    dot: 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,1)]',
+    badgeClass: 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30',
+    dot: 'bg-emerald-400',
   },
   occupied: {
     label: 'Sedang Main',
-    badgeClass: 'bg-cust-red/15 text-cust-red border-cust-red/30',
-    dot: 'bg-cust-red shadow-[0_0_8px_rgba(227,30,36,1)] animate-pulse',
+    badgeClass: 'bg-red-950/40 text-red-400 border-red-500/30',
+    dot: 'bg-red-400',
   },
   booked: {
     label: 'Dipesan',
-    badgeClass: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-    dot: 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,1)]',
+    badgeClass: 'bg-amber-950/40 text-amber-400 border-amber-500/30',
+    dot: 'bg-amber-400',
   },
   maintenance: {
     label: 'Maintenance',

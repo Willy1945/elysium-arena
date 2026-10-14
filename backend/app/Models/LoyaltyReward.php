@@ -11,6 +11,7 @@ class LoyaltyReward extends Model
 
     protected $fillable = [
         'user_id', 'milestone', 'type', 'status',
+        'catalog_id', 'title',
         'redeemed_booking_id', 'redeemed_order_id', 'redeemed_at',
     ];
 
@@ -21,5 +22,10 @@ class LoyaltyReward extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function catalog()
+    {
+        return $this->belongsTo(LoyaltyRewardCatalog::class, 'catalog_id');
     }
 }

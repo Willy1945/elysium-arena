@@ -10,4 +10,6 @@ export const transactionService = {
   archive: (id) => axiosClient.post(`/transactions/${id}/archive`),
   unarchive: (id) => axiosClient.post(`/transactions/${id}/unarchive`),
   hide: (id) => axiosClient.post(`/transactions/${id}/hide`),
+  hideFromCustomer: (id) => axiosClient.delete(`/my-transactions/${id}`),
+  clearCustomerHistory: () => axiosClient.delete('/my-transactions/clear'),
 };

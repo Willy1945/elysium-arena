@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DeviceTypeSeeder::class,
             CategorySeeder::class,
+            LoyaltyRewardCatalogSeeder::class,
         ]);
     }
 }

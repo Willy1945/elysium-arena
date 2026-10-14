@@ -105,16 +105,34 @@ class BookingController extends Controller
         return new BookingResource($booking->load(['user', 'device.deviceType']));
     }
 
-    public function destroy(Booking $booking)
+    public function destroy(Request $request, Booking $booking)
     {
+        $user = $request->user();
+        $isStaff = in_array($user->role?->name, ['OWNER', 'ADMIN']);
+
+        if (!$isStaff && $booking->user_id !== $user->id) {
+            return response()->json(['message' => 'Anda tidak berhak menghapus booking ini.'], 403);
+        }
+
         if (!in_array($booking->status, ['completed', 'cancelled'])) {
             return response()->json([
-                'message' => 'Hanya booking dengan status Completed atau Cancelled yang bisa dihapus.',
+                'message' => 'Hanya booking dengan status Selesai atau Dibatalkan yang bisa dihapus dari riwayat.',
             ], 422);
         }
 
         $booking->delete();
 
         return response()->json(['message' => 'Booking berhasil dihapus.']);
+    }
+
+    public function clearHistory(Request $request)
+    {
+        $user = $request->user();
+
+        Booking::where('user_id', $user->id)
+            ->whereIn('status', ['completed', 'cancelled'])
+            ->delete();
+
+        return response()->json(['message' => 'Semua riwayat booking yang selesai atau dibatalkan berhasil dibersihkan.']);
     }
 }

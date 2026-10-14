@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Models\Booking;
 use App\Models\Device;
 use App\Models\GamingSession;
+use App\Models\LoyaltyTransaction;
+use App\Models\Notification;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -25,6 +28,7 @@ class SessionService
             }
 
             $userId = $data['user_id'] ?? null;
+            $guestName = $data['guest_name'] ?? null;
             $bookingId = $data['booking_id'] ?? null;
 
             if ($bookingId) {
@@ -39,16 +43,57 @@ class SessionService
                 }
 
                 $userId = $booking->user_id;
+                $guestName = null;
                 $booking->update(['status' => 'confirmed']);
+            }
+
+            if (! $userId && empty($guestName)) {
+                $guestName = 'Tamu Walk-In';
             }
 
             $startTime = now();
             $endTime = $startTime->copy()->addMinutes($data['duration']);
+
+            // ── VALIDASI BUFFER JADWAL: CEK BENTROK DENGAN BOOKING MENDATANG ──
+            $targetDates = array_unique([$startTime->toDateString(), $endTime->toDateString()]);
+            $upcomingBookings = Booking::where('device_id', $device->id)
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->when($bookingId, fn ($q) => $q->where('id', '!=', $bookingId))
+                ->whereIn('booking_date', $targetDates)
+                ->orderBy('booking_date')
+                ->orderBy('start_time')
+                ->get();
+
+            foreach ($upcomingBookings as $b) {
+                $bDateStr = Carbon::parse($b->booking_date)->format('Y-m-d');
+                $bStart = Carbon::parse($bDateStr . ' ' . $b->start_time);
+                $bEnd = Carbon::parse($bDateStr . ' ' . $b->end_time);
+                if ($bEnd->lte($bStart)) {
+                    $bEnd->addDay();
+                }
+
+                // Cek apakah rentang waktu sesi menabrak rentang waktu booking
+                if ($bStart->lt($endTime) && $bEnd->gt($startTime)) {
+                    $availableMinutes = (int) max(0, $startTime->diffInMinutes($bStart, false));
+                    $bookingTimeFormatted = substr($b->start_time, 0, 5);
+                    if ($availableMinutes < 15) {
+                        throw ValidationException::withMessages([
+                            'duration' => "Jadwal bentrok: Device ini sudah memiliki booking pada pukul {$bookingTimeFormatted}. Waktu yang tersisa tidak mencukupi untuk memulai sesi baru.",
+                        ]);
+                    } else {
+                        throw ValidationException::withMessages([
+                            'duration' => "Jadwal bentrok: Device ini sudah memiliki booking pada pukul {$bookingTimeFormatted}. Durasi maksimal yang tersedia adalah {$availableMinutes} menit.",
+                        ]);
+                    }
+                }
+            }
+
             $price = ($data['duration'] / 60) * $device->price_per_hour;
 
             $session = GamingSession::create([
                 'booking_id' => $bookingId,
                 'user_id' => $userId,
+                'guest_name' => $guestName,
                 'device_id' => $device->id,
                 'start_time' => $startTime,
                 'end_time' => $endTime,
@@ -85,6 +130,44 @@ class SessionService
                 throw ValidationException::withMessages(['additional_minutes' => 'Total durasi sesi minimal adalah 15 menit.']);
             }
 
+            // ── VALIDASI BUFFER JADWAL: CEK BENTROK SAAT PERPANJANGAN (EXTEND) ──
+            if ($additionalMinutes > 0) {
+                $sessionCurrentEnd = Carbon::parse($session->end_time);
+                $targetDates = array_unique([$sessionCurrentEnd->toDateString(), $newEndTime->toDateString()]);
+
+                $upcomingBookings = Booking::where('device_id', $device->id)
+                    ->whereIn('status', ['pending', 'confirmed'])
+                    ->when($session->booking_id, fn ($q) => $q->where('id', '!=', $session->booking_id))
+                    ->whereIn('booking_date', $targetDates)
+                    ->orderBy('booking_date')
+                    ->orderBy('start_time')
+                    ->get();
+
+                foreach ($upcomingBookings as $b) {
+                    $bDateStr = Carbon::parse($b->booking_date)->format('Y-m-d');
+                    $bStart = Carbon::parse($bDateStr . ' ' . $b->start_time);
+                    $bEnd = Carbon::parse($bDateStr . ' ' . $b->end_time);
+                    if ($bEnd->lte($bStart)) {
+                        $bEnd->addDay();
+                    }
+
+                    // Cek apakah perpanjangan menabrak booking ini
+                    if ($bStart->lt($newEndTime) && $bEnd->gt($sessionCurrentEnd)) {
+                        $maxAddMinutes = (int) max(0, $sessionCurrentEnd->diffInMinutes($bStart, false));
+                        $bookingTimeFormatted = substr($b->start_time, 0, 5);
+                        if ($maxAddMinutes <= 0) {
+                            throw ValidationException::withMessages([
+                                'additional_minutes' => "Tidak dapat memperpanjang sesi: Device ini sudah memiliki booking berikutnya pada pukul {$bookingTimeFormatted}.",
+                            ]);
+                        } else {
+                            throw ValidationException::withMessages([
+                                'additional_minutes' => "Tidak dapat memperpanjang {$additionalMinutes} menit: Device ini sudah memiliki booking pada pukul {$bookingTimeFormatted}. Perpanjangan maksimal yang diizinkan adalah {$maxAddMinutes} menit.",
+                            ]);
+                        }
+                    }
+                }
+            }
+
             $session->update([
                 'end_time' => $newEndTime,
                 'duration' => $newDuration,
@@ -115,30 +198,48 @@ class SessionService
                 $session->booking()->update(['status' => 'completed']);
             }
 
-            $this->checkLoyaltyMilestone($session);
+            if ($session->user_id) {
+                $this->awardLoyaltyPoints($session, $device);
+            }
 
             return $session->fresh();
         });
     }
 
-    private function checkLoyaltyMilestone(GamingSession $session): void
+    private function awardLoyaltyPoints(GamingSession $session, ?Device $device): void
     {
-        $completedCount = GamingSession::where('user_id', $session->user_id)
-            ->where('status', 'completed')
-            ->count();
+        // 1 jam (60 menit) = 100 poin
+        // 2 jam (120 menit) = 200 poin
+        $durationMinutes = (int) $session->duration;
+        $points = (int) round(($durationMinutes / 60) * 100);
 
-        if ($completedCount > 0 && $completedCount % 10 === 0) {
-            $alreadyExists = \App\Models\LoyaltyReward::where('user_id', $session->user_id)
-                ->where('milestone', $completedCount)
-                ->exists();
-
-            if (!$alreadyExists) {
-                \App\Models\LoyaltyReward::create([
-                    'user_id' => $session->user_id,
-                    'milestone' => $completedCount,
-                    'status' => 'pending_choice',
-                ]);
-            }
+        if ($points <= 0) {
+            return;
         }
+
+        $user = User::where('id', $session->user_id)->lockForUpdate()->first();
+        if (! $user) {
+            return;
+        }
+
+        $user->increment('loyalty_points', $points);
+
+        $hoursFormatted = round($durationMinutes / 60, 1);
+        $deviceName = $device ? $device->name : 'Station Gaming';
+
+        LoyaltyTransaction::create([
+            'user_id' => $user->id,
+            'type' => 'earn_session',
+            'amount' => $points,
+            'description' => "Selesai Sesi Bermain {$deviceName} ({$hoursFormatted} Jam)",
+            'reference_id' => $session->id,
+        ]);
+
+        Notification::create([
+            'user_id' => $user->id,
+            'title' => 'Koin Loyalitas Bertambah!',
+            'message' => "Selamat! Kamu mendapatkan {$points} koin dari sesi bermain {$deviceName} ({$hoursFormatted} Jam).",
+            'type' => 'loyalty_reward',
+        ]);
     }
 }

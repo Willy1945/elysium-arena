@@ -31,11 +31,6 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function inventoryLogs()
-    {
-        return $this->hasMany(InventoryLog::class);
-    }
-
     // ── Helper status stok, dipakai di §10 PRD ──
     public function getStockStatusAttribute(): string
     {

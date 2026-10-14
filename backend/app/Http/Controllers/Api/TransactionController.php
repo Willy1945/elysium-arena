@@ -30,7 +30,7 @@ class TransactionController extends Controller
 
         $user = $request->user();
         if (!in_array($user->role?->name, ['OWNER', 'ADMIN'])) {
-            $query->where('user_id', $user->id);
+            $query->where('user_id', $user->id)->whereNull('customer_hidden_at');
         }
 
         if ($request->boolean('archived')) {
@@ -137,5 +137,30 @@ class TransactionController extends Controller
         $transaction->update(['hidden_at' => now()]);
 
         return response()->json(['message' => 'Transaksi berhasil disembunyikan dari tampilan.']);
+    }
+
+    public function hideFromCustomer(Request $request, Transaction $transaction)
+    {
+        $user = $request->user();
+
+        if ($transaction->user_id !== $user->id) {
+            return response()->json(['message' => 'Anda tidak berhak menghapus riwayat transaksi ini.'], 403);
+        }
+
+        $transaction->update(['customer_hidden_at' => now()]);
+
+        return response()->json(['message' => 'Riwayat transaksi berhasil dihapus dari tampilan Anda.']);
+    }
+
+    public function clearCustomerHistory(Request $request)
+    {
+        $user = $request->user();
+
+        Transaction::where('user_id', $user->id)
+            ->where('status', 'paid')
+            ->whereNull('customer_hidden_at')
+            ->update(['customer_hidden_at' => now()]);
+
+        return response()->json(['message' => 'Semua riwayat transaksi berhasil dibersihkan.']);
     }
 }

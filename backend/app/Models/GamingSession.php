@@ -15,6 +15,7 @@ class GamingSession extends Model
     protected $fillable = [
         'booking_id',
         'user_id',
+        'guest_name',
         'device_id',
         'start_time',
         'end_time',

@@ -44,6 +44,7 @@ class TransactionService
             $transaction = Transaction::create([
                 'transaction_code' => 'TRX-' . now()->format('Ymd') . '-' . strtoupper(Str::random(5)),
                 'user_id' => $session->user_id,
+                'guest_name' => $session->guest_name,
                 'session_id' => $session->id,
                 'gaming_amount' => $gamingAmount,
                 'food_amount' => $foodAmount,

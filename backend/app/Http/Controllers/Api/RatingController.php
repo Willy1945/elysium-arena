@@ -60,4 +60,32 @@ class RatingController extends Controller
             ]),
         ]);
     }
+
+    public function destroy(Request $request, DeviceRating $rating)
+    {
+        $user = $request->user();
+        $isStaff = in_array($user->role?->name, ['OWNER', 'ADMIN']);
+
+        if (!$isStaff && $rating->user_id !== $user->id) {
+            return response()->json(['message' => 'Anda tidak berhak menghapus ulasan ini.'], 403);
+        }
+
+        $rating->delete();
+
+        return response()->json(['message' => 'Ulasan berhasil dihapus.']);
+    }
+
+    public function destroyMyRating(Request $request)
+    {
+        $user = $request->user();
+        $rating = DeviceRating::where('user_id', $user->id)->first();
+
+        if (!$rating) {
+            return response()->json(['message' => 'Kamu belum pernah mengirim ulasan.'], 404);
+        }
+
+        $rating->delete();
+
+        return response()->json(['message' => 'Ulasan berhasil dihapus.']);
+    }
 }

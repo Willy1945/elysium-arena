@@ -14,31 +14,31 @@ import { resolveImageUrl } from '../../utils/format';
 const STATUS_CONFIG = {
   available: {
     label: 'Ready to Play',
-    badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]',
-    dot: 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,1)]',
-    glowColor: 'group-hover:shadow-[0_0_40px_rgba(227,30,36,0.25)]',
-    borderColor: 'border-white/[0.1] hover:border-cust-red/60',
+    badgeClass: 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30',
+    dot: 'bg-emerald-400',
+    glowColor: '',
+    borderColor: 'border-zinc-800 hover:border-zinc-700',
   },
   occupied: {
     label: 'Sedang Main',
-    badgeClass: 'bg-cust-red/20 text-red-300 border-cust-red/40 shadow-[0_0_15px_rgba(227,30,36,0.3)]',
-    dot: 'bg-cust-red shadow-[0_0_8px_rgba(227,30,36,1)] animate-pulse',
-    glowColor: 'group-hover:shadow-[0_0_20px_rgba(227,30,36,0.15)]',
-    borderColor: 'border-cust-red/30',
+    badgeClass: 'bg-red-950/40 text-red-400 border-red-500/30',
+    dot: 'bg-red-400',
+    glowColor: '',
+    borderColor: 'border-zinc-800/80',
   },
   booked: {
     label: 'Telah Dibooking',
-    badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.3)]',
-    dot: 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,1)]',
-    glowColor: 'group-hover:shadow-[0_0_20px_rgba(245,158,11,0.15)]',
-    borderColor: 'border-amber-500/30',
+    badgeClass: 'bg-amber-950/40 text-amber-400 border-amber-500/30',
+    dot: 'bg-amber-400',
+    glowColor: '',
+    borderColor: 'border-zinc-800/80',
   },
   maintenance: {
     label: 'Maintenance',
-    badgeClass: 'bg-zinc-800/80 text-zinc-400 border-zinc-700/60',
+    badgeClass: 'bg-zinc-900 text-zinc-500 border-zinc-700/40',
     dot: 'bg-zinc-500',
     glowColor: '',
-    borderColor: 'border-white/[0.04]',
+    borderColor: 'border-zinc-800/60',
   },
 };
 
@@ -125,8 +125,8 @@ export default function BrowseDevicesPage() {
             </span>
           </div>
 
-          <h1 className="font-display font-black text-white text-5xl sm:text-6xl lg:text-[76px] uppercase tracking-tight mb-4 leading-none">
-            PILIH GAMING <span className="text-transparent bg-clip-text bg-gradient-to-r from-cust-red via-red-500 to-amber-500">STATION</span>
+          <h1 className="font-display font-black text-white text-4xl sm:text-6xl lg:text-[76px] uppercase tracking-tight mb-4 leading-none">
+            PILIH GAMING <span className="text-cust-red">STATION</span>
           </h1>
 
           <p className="text-cust-text-secondary text-sm sm:text-base max-w-xl mx-auto leading-relaxed font-normal">
@@ -137,52 +137,56 @@ export default function BrowseDevicesPage() {
 
       {/* ── TELEMETRY STRIP ── */}
       <section className="border-b border-white/[0.06] bg-[#0c0c0f]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0">
-              <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
-                <Layers size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
+                <Layers size={20} className="sm:hidden" />
+                <Layers size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Total Stasiun</p>
-                <p className="font-display font-black text-white text-2xl">{devices.length} Unit</p>
-                <p className="text-[11px] font-mono-tech text-white/60">PS5 · PC · PS4</p>
+                <p className="font-display font-black text-white text-xl sm:text-2xl truncate">{devices.length} Unit</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-white/60 truncate">PS5 · PC · PS4</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
-                <CheckCircle2 size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-emerald-950/20 border border-emerald-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                <CheckCircle2 size={20} className="sm:hidden" />
+                <CheckCircle2 size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Siap Digunakan</p>
-                <p className="font-display font-black text-emerald-400 text-2xl">{availableCount} Unit</p>
-                <p className="text-[11px] font-mono-tech text-emerald-500/80">Langsung Main Tanpa Antre</p>
+                <p className="font-display font-black text-emerald-400 text-xl sm:text-2xl truncate">{availableCount} Unit</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-emerald-500/80 truncate">Ready to Play</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-cust-red/10 border border-cust-red/20 flex items-center justify-center text-cust-red shrink-0">
-                <Activity size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-red-950/20 border border-red-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-cust-red/10 border border-cust-red/30 flex items-center justify-center text-cust-red shrink-0">
+                <Activity size={20} className="sm:hidden" />
+                <Activity size={22} className="hidden sm:block" />
               </div>
-              <div>
-                <p className="text-[10px] font-mono-tech text-white/40 uppercase">Sedang Berjalan</p>
-                <p className="font-display font-black text-cust-red text-2xl">{occupiedCount} Unit</p>
-                <p className="text-[11px] font-mono-tech text-cust-red/80">Tingkat Okupansi {occupancyPct}%</p>
+              <div className="min-w-0">
+                <p className="text-[10px] font-mono-tech text-white/40 uppercase">Sedang Digunakan</p>
+                <p className="font-display font-black text-cust-red text-xl sm:text-2xl truncate">{occupiedCount} Unit</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-cust-red/80 truncate">{occupancyPct}% Terisi</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4 pt-2 lg:pt-0 lg:pl-6">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
-                <Zap size={22} />
+            <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-2xl bg-amber-950/20 border border-amber-500/20">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <Zap size={20} className="sm:hidden" />
+                <Zap size={22} className="hidden sm:block" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-mono-tech text-white/40 uppercase">Tarif Sewa</p>
-                <p className="font-display font-black text-white text-2xl">
+                <p className="font-display font-black text-white text-xl sm:text-2xl truncate">
                   Rp{cheapestPrice ? Math.round(cheapestPrice / 1000) : 0}K<span className="text-xs text-white/50 font-sans">/jam</span>
                 </p>
-                <p className="text-[11px] font-mono-tech text-white/60">Tarif Pasti Tanpa Tambahan</p>
+                <p className="text-[10px] sm:text-[11px] font-mono-tech text-white/60 truncate">Tarif Pasti Tanpa Biaya Lain</p>
               </div>
             </div>
 
@@ -204,7 +208,7 @@ export default function BrowseDevicesPage() {
                   key={f}
                   onClick={() => setActiveFilter(f)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap ${active
-                    ? 'bg-cust-red text-white shadow-[0_0_20px_rgba(227,30,36,0.35)]'
+                    ? 'bg-cust-red text-white shadow-sm'
                     : 'text-cust-text-secondary hover:text-white hover:bg-white/[0.04]'
                     }`}
                 >
@@ -295,20 +299,20 @@ export default function BrowseDevicesPage() {
                   </div>
 
                   {/* ── TOP FLOATING HEADER ── */}
-                  <div className="relative z-10 p-6 flex items-center justify-between">
+                  <div className="relative z-10 p-4 sm:p-6 flex items-center justify-between">
 
                     {/* Unit Code Pill */}
-                    <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl border border-white/15 px-3.5 py-1.5 rounded-2xl shadow-xl">
+                    <div className="flex items-center gap-2 bg-black/60 backdrop-blur-xl border border-white/15 px-3 sm:px-3.5 py-1.5 rounded-2xl shadow-xl">
                       <span className="w-2 h-2 rounded-full bg-cust-red" />
-                      <span className="font-display font-black text-white text-base tracking-wider uppercase">
+                      <span className="font-display font-black text-white text-sm sm:text-base tracking-wider uppercase">
                         {device.code}
                       </span>
                     </div>
 
                     {/* Glowing Status Pill */}
-                    <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-2xl border backdrop-blur-xl ${status.badgeClass}`}>
+                    <div className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-2xl border backdrop-blur-xl ${status.badgeClass}`}>
                       <span className={`w-2 h-2 rounded-full ${status.dot}`} />
-                      <span className="text-[11px] font-mono-tech font-bold uppercase tracking-wider">
+                      <span className="text-[10px] sm:text-[11px] font-mono-tech font-bold uppercase tracking-wider">
                         {status.label}
                       </span>
                     </div>
@@ -316,7 +320,7 @@ export default function BrowseDevicesPage() {
                   </div>
 
                   {/* ── BOTTOM FROSTED GLASS DOSSIER ── */}
-                  <div className="relative z-10 p-6 pt-0">
+                  <div className="relative z-10 p-4 sm:p-6 pt-0">
 
                     {/* Title & Platform Header */}
                     <div className="mb-4">
