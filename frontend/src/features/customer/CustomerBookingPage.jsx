@@ -175,16 +175,16 @@ export default function CustomerBookingPage() {
   return (
     <PublicLayout>
       {/* ── BREADCRUMB STRIP ── */}
-      <div className="border-b border-zinc-800/80 bg-[#070709]">
+      <div className="border-b border-zinc-200/80 bg-zinc-50/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link
             to="/browse-devices"
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-xs font-semibold uppercase tracking-wider transition"
+            className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-semibold uppercase tracking-wider transition"
           >
             <ArrowLeft size={14} />
             <span>Kembali ke Katalog Station</span>
           </Link>
-          <span className="text-xs text-zinc-500 font-mono-tech uppercase">
+          <span className="text-xs text-zinc-500 font-mono-tech uppercase font-semibold">
             Station: {device.code}
           </span>
         </div>
@@ -194,15 +194,15 @@ export default function CustomerBookingPage() {
         
         {/* Title Header */}
         <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-semibold uppercase tracking-wider mb-3">
             <Shield size={14} />
             <span>Reservasi Online</span>
           </div>
-          <h1 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-white leading-tight">
+          <h1 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl uppercase tracking-tight text-zinc-950 leading-tight">
             Booking Station <span className="text-cust-red">{device.code}</span>
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm max-w-xl mt-2 leading-relaxed">
-            Tentukan tanggal bermain, pilih slot jam mulai, dan atur durasi sesi. Rig akan terkunci otomatis dengan Smart Lock hingga kamu tiba di tempat.
+          <p className="text-zinc-600 text-xs sm:text-sm max-w-xl mt-2 leading-relaxed font-medium">
+            Tentukan tanggal bermain, pilih slot jam mulai, dan atur durasi sesi bermain kamu.
           </p>
         </div>
 
@@ -212,9 +212,9 @@ export default function CustomerBookingPage() {
           <div className="lg:col-span-6 flex flex-col gap-6">
             
             {/* Rig Showcase Card */}
-            <div className="rounded-3xl border border-zinc-800 bg-[#121216] overflow-hidden shadow-xl">
+            <div className="rounded-3xl border border-zinc-200/90 bg-white overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               {/* Photo Banner */}
-              <div className="relative h-64 sm:h-72 bg-zinc-900 overflow-hidden">
+              <div className="relative h-64 sm:h-72 bg-zinc-100 overflow-hidden">
                 {device.photo ? (
                   <img
                     src={resolveImageUrl(device.photo)}
@@ -222,23 +222,27 @@ export default function CustomerBookingPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-zinc-900">
-                    <TypeIcon size={64} className="text-zinc-700" />
+                  <div className="w-full h-full flex items-center justify-center bg-zinc-100">
+                    <TypeIcon size={64} className="text-zinc-400" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#121216] via-transparent to-black/60" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
                 {/* Floating Pills */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                  <span className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-white">
+                  <span className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-zinc-200 text-zinc-900 shadow-sm">
                     {device.device_type?.name} Rig
                   </span>
 
                   <span
-                    className={`text-[11px] font-semibold uppercase px-3 py-1 rounded-full border backdrop-blur-md ${
+                    className={`text-[11px] font-bold uppercase px-3 py-1 rounded-full border shadow-xs ${
                       device.status === 'available'
-                        ? 'bg-emerald-950/80 text-emerald-400 border-emerald-500/30'
-                        : 'bg-zinc-900 text-zinc-400 border-zinc-700'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                        : device.status === 'occupied'
+                        ? 'bg-rose-50 text-rose-700 border-rose-300'
+                        : device.status === 'booked'
+                        ? 'bg-amber-50 text-amber-700 border-amber-300'
+                        : 'bg-zinc-100 text-zinc-700 border-zinc-300'
                     }`}
                   >
                     {status.label}
@@ -247,53 +251,42 @@ export default function CustomerBookingPage() {
 
                 {/* Price Tag */}
                 <div className="absolute bottom-4 left-6 z-10">
-                  <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Tarif Sewa Reguler</p>
+                  <p className="text-[10px] text-zinc-300 uppercase tracking-wider font-semibold">Tarif Sewa Reguler</p>
                   <p className="font-display font-black text-3xl text-white">
                     {formatRupiah(device.price_per_hour)}
-                    <span className="text-xs font-normal text-zinc-400 font-sans"> / jam</span>
+                    <span className="text-xs font-normal text-zinc-300 font-sans"> / jam</span>
                   </p>
                 </div>
               </div>
 
               {/* Rig Description */}
               <div className="p-6 sm:p-7">
-                <h3 className="text-xs uppercase tracking-wider text-zinc-400 font-bold mb-2">
+                <h3 className="text-xs uppercase tracking-wider text-zinc-500 font-bold mb-2">
                   Spesifikasi & Fasilitas Rig
                 </h3>
-                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-6">
+                <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed font-medium">
                   {device.description ||
                     'Stasiun gaming turnamen dengan display high-refresh, periferal mekanikal kabel anti-delay, dan pendingin ruangan full AC.'}
                 </p>
-
-                <div className="grid grid-cols-2 gap-2 pt-4 border-t border-zinc-800">
-                  <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 flex items-center gap-2">
-                    <Zap size={14} className="text-cust-red shrink-0" />
-                    <span>Gigabit Low-Latency LAN</span>
-                  </div>
-                  <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 flex items-center gap-2">
-                    <Shield size={14} className="text-emerald-400 shrink-0" />
-                    <span>Smart Lock Protected</span>
-                  </div>
-                </div>
               </div>
             </div>
 
             {/* Installed Games List */}
-            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-xl">
+            <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Joystick size={18} className="text-cust-red" />
-                  <h3 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <h3 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                     Game Terpasang di Rig Ini
                   </h3>
                 </div>
-                <span className="text-xs px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-400">
+                <span className="text-xs px-2.5 py-1 rounded-md bg-zinc-100 border border-zinc-200 text-zinc-700 font-semibold">
                   {device.games?.length || 0} Judul
                 </span>
               </div>
 
               {device.games?.length === 0 ? (
-                <p className="text-zinc-500 text-xs">
+                <p className="text-zinc-500 text-xs font-medium">
                   Belum ada game terpasang di stasiun ini.
                 </p>
               ) : (
@@ -301,10 +294,10 @@ export default function CustomerBookingPage() {
                   {device.games?.map((game) => (
                     <div
                       key={game.id}
-                      className="flex items-center gap-3 bg-zinc-900/80 border border-zinc-800/80 hover:border-zinc-700 px-4 py-2.5 rounded-xl transition"
+                      className="flex items-center gap-3 bg-zinc-50/70 border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 px-4 py-2.5 rounded-xl transition shadow-xs"
                     >
                       <Joystick size={14} className="text-cust-red shrink-0" />
-                      <span className="text-white text-xs sm:text-sm font-medium flex-1">
+                      <span className="text-zinc-900 text-xs sm:text-sm font-semibold flex-1">
                         {game.name}
                       </span>
                     </div>
@@ -318,19 +311,19 @@ export default function CustomerBookingPage() {
           {/* ── RIGHT COLUMN (Scheduler & Checkout) ── */}
           <div className="lg:col-span-6 flex flex-col gap-6">
             
-            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-8 shadow-xl">
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
-                <h3 className="font-display font-black text-white text-xl uppercase tracking-wide flex items-center gap-2">
+            <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-4 mb-6">
+                <h3 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide flex items-center gap-2">
                   <Clock size={18} className="text-cust-red" />
                   Konfigurasi Jadwal
                 </h3>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-zinc-500 font-medium">
                   Operasional: 10:00 - 22:00 WIB
                 </span>
               </div>
 
               {isMaintenance ? (
-                <div className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs text-center">
+                <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200 text-zinc-600 text-xs text-center font-medium">
                   Stasiun sedang tahap servis / maintenance dan tidak dapat dibooking saat ini.
                 </div>
               ) : (
@@ -338,7 +331,7 @@ export default function CustomerBookingPage() {
                   
                   {/* Step 1: Pilih Tanggal */}
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-zinc-300 font-bold mb-2">
+                    <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold mb-2">
                       1. Pilih Tanggal Bermain
                     </label>
                     <div className="relative">
@@ -351,14 +344,14 @@ export default function CustomerBookingPage() {
                         min={todayDate()}
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full bg-zinc-900 border border-zinc-700 text-white text-sm pl-11 pr-4 py-3 rounded-xl outline-none focus:border-cust-red transition"
+                        className="w-full bg-white border border-zinc-300 text-zinc-900 text-sm pl-11 pr-4 py-3 rounded-xl outline-none focus:border-cust-red transition shadow-xs"
                       />
                     </div>
                   </div>
 
                   {/* Step 2: Durasi Bermain */}
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-zinc-300 font-bold mb-2">
+                    <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold mb-2">
                       2. Durasi Sesi Bermain
                     </label>
                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
@@ -371,8 +364,8 @@ export default function CustomerBookingPage() {
                             onClick={() => setDurationHours(h)}
                             className={`py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                               active
-                                ? 'bg-cust-red text-white'
-                                : 'bg-zinc-900 text-zinc-300 border border-zinc-800 hover:border-zinc-700'
+                                ? 'bg-cust-red text-white shadow-sm'
+                                : 'bg-zinc-100 text-zinc-700 border border-zinc-200 hover:bg-zinc-200/70 hover:text-zinc-950'
                             }`}
                           >
                             {h} Jam
@@ -385,11 +378,11 @@ export default function CustomerBookingPage() {
                   {/* Step 3: Pilih Jam Mulai */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <label className="block text-xs uppercase tracking-wider text-zinc-300 font-bold">
+                      <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold">
                         3. Pilih Jam Mulai Main
                       </label>
                       {checkingSlots && (
-                        <span className="text-[11px] text-amber-400">
+                        <span className="text-[11px] text-amber-700 font-medium">
                           Memeriksa slot...
                         </span>
                       )}
@@ -409,8 +402,8 @@ export default function CustomerBookingPage() {
                               selected
                                 ? 'bg-cust-red text-white font-bold border border-cust-red shadow-sm'
                                 : available
-                                ? 'bg-zinc-900 text-zinc-200 border border-zinc-800 hover:border-zinc-700 hover:text-white'
-                                : 'bg-zinc-950 text-zinc-600 border border-zinc-900 cursor-not-allowed opacity-40 line-through'
+                                ? 'bg-zinc-50 text-zinc-800 border border-zinc-200 hover:border-zinc-300 hover:bg-white shadow-xs font-medium'
+                                : 'bg-zinc-100 text-zinc-400 border border-zinc-200/60 cursor-not-allowed opacity-50 line-through'
                             }`}
                           >
                             <span>{slot}</span>
@@ -427,44 +420,44 @@ export default function CustomerBookingPage() {
 
             {/* ── CHECKOUT SUMMARY CARD ── */}
             {!isMaintenance && (
-              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-8 shadow-xl">
+              <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-cust-red mb-4">
                   Ringkasan Booking
                 </h4>
 
-                <div className="space-y-3 pb-4 border-b border-zinc-800">
+                <div className="space-y-3 pb-4 border-b border-zinc-200">
                   <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-zinc-400">Stasiun Rig</span>
-                    <span className="font-display font-bold text-white uppercase text-base">
+                    <span className="text-zinc-500 font-medium">Stasiun Rig</span>
+                    <span className="font-display font-bold text-zinc-950 uppercase text-base">
                       {device.code} ({device.device_type?.name})
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-zinc-400">Jadwal Sesi</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-zinc-500 font-medium">Jadwal Sesi</span>
+                    <span className="text-zinc-900 font-semibold">
                       {startTime ? `${date} · ${startTime} - ${endTime} WIB` : 'Belum memilih jam'}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-zinc-400">Total Durasi</span>
-                    <span className="text-white font-semibold">{durationHours} Jam</span>
+                    <span className="text-zinc-500 font-medium">Total Durasi</span>
+                    <span className="text-zinc-900 font-semibold">{durationHours} Jam</span>
                   </div>
                 </div>
 
                 {/* Voucher Loyalty Reward */}
                 {availableGamingRewards.length > 0 && (
-                  <div className="mt-4 p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
-                    <div className="flex items-center justify-between text-xs font-bold text-emerald-400 uppercase mb-2">
+                  <div className="mt-4 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                    <div className="flex items-center justify-between text-xs font-bold text-emerald-800 uppercase mb-2">
                       <span className="flex items-center gap-1.5">
-                        <Award size={14} /> Gunakan Voucher Hadiah
+                        <Award size={14} className="text-emerald-600" /> Gunakan Voucher Hadiah
                       </span>
                       {selectedReward && (
                         <button
                           type="button"
                           onClick={() => setSelectedRewardId('')}
-                          className="text-[10px] text-zinc-400 hover:text-white underline cursor-pointer"
+                          className="text-[10px] text-zinc-600 hover:text-zinc-950 underline cursor-pointer font-medium"
                         >
                           Lepas Voucher
                         </button>
@@ -474,7 +467,7 @@ export default function CustomerBookingPage() {
                     <select
                       value={selectedRewardId}
                       onChange={(e) => setSelectedRewardId(e.target.value)}
-                      className="w-full bg-[#121217] border border-emerald-500/30 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-400 cursor-pointer"
+                      className="w-full bg-white border border-emerald-300 rounded-lg px-3 py-2 text-xs text-zinc-900 focus:outline-none focus:border-emerald-500 cursor-pointer shadow-xs"
                     >
                       <option value="">-- Pilih Voucher / Tidak Pakai --</option>
                       {availableGamingRewards.map((r) => {
@@ -488,11 +481,11 @@ export default function CustomerBookingPage() {
                     </select>
 
                     {selectedReward ? (
-                      <p className="text-[11px] text-emerald-300 mt-2">
+                      <p className="text-[11px] text-emerald-800 font-medium mt-2">
                         Voucher diterapkan: Hemat {freeHours} jam dari total tagihan!
                       </p>
                     ) : (
-                      <p className="text-[11px] text-zinc-400 mt-1.5">
+                      <p className="text-[11px] text-zinc-600 mt-1.5 font-medium">
                         Kamu memiliki {availableGamingRewards.length} voucher aktif yang bisa digunakan.
                       </p>
                     )}
@@ -502,22 +495,22 @@ export default function CustomerBookingPage() {
                 {/* Total Price Display */}
                 <div className="flex items-center justify-between pt-5 mb-6">
                   <div>
-                    <p className="text-[10px] text-zinc-500 uppercase tracking-wider">
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
                       Total Biaya Sewa
                     </p>
-                    <p className="font-display font-black text-3xl sm:text-4xl text-white mt-0.5">
+                    <p className="font-display font-black text-3xl sm:text-4xl text-zinc-950 mt-0.5">
                       {formatRupiah(totalPrice)}
                     </p>
                   </div>
                   {selectedReward && (
-                    <span className="text-xs text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-md">
+                    <span className="text-xs text-emerald-800 bg-emerald-100/80 border border-emerald-200 px-2.5 py-1 rounded-md font-bold">
                       Hemat {freeHours} Jam
                     </span>
                   )}
                 </div>
 
                 {error && (
-                  <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/30 text-red-300 text-xs flex items-center gap-2 mb-4">
+                  <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 mb-4 font-medium">
                     <AlertCircle size={15} className="text-cust-red shrink-0" />
                     <span>{error}</span>
                   </div>
@@ -533,7 +526,7 @@ export default function CustomerBookingPage() {
                   {submitting ? (
                     <>
                       <Activity className="animate-spin" size={18} />
-                      <span>Menyiapkan Smart Lock...</span>
+                      <span>Memproses Reservasi...</span>
                     </>
                   ) : (
                     <>

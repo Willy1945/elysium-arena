@@ -44,20 +44,20 @@ function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl">
-        <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80 mb-5">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 max-w-sm w-full shadow-[4px_4px_0px_0px_#18181b]">
+        <div className="flex items-center justify-between pb-4 border-b border-zinc-100 mb-5">
           <div>
-            <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-semibold">
+            <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-bold">
               Kategori Menu
             </span>
-            <h3 className="text-white font-black text-xl font-display uppercase tracking-tight">
+            <h3 className="text-zinc-950 font-black text-xl font-display uppercase tracking-tight">
               Kelola Kategori
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+            className="p-1.5 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-900 shadow-[2px_2px_0px_0px_#18181b] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition"
           >
             <X size={18} />
           </button>
@@ -68,12 +68,12 @@ function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
             placeholder="Nama kategori baru..."
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="flex-1 bg-zinc-900/80 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-cust-red transition"
+            className="flex-1 bg-white border border-zinc-950 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 placeholder-zinc-400 shadow-[2px_2px_0px_0px_#18181b] outline-none focus:border-cust-red transition"
           />
           <button
             type="submit"
             disabled={saving}
-            className="bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 rounded-xl transition disabled:opacity-50"
+            className="bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-4 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition disabled:opacity-50"
           >
             Tambah
           </button>
@@ -81,17 +81,17 @@ function ManageCategoriesModal({ open, onClose, categories, onRefresh }) {
 
         <div className="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
           {categories.length === 0 ? (
-            <p className="text-zinc-500 text-xs text-center py-4">Belum ada kategori.</p>
+            <p className="text-zinc-500 text-xs text-center py-4 font-medium">Belum ada kategori.</p>
           ) : (
             categories.map((c) => (
               <div
                 key={c.id}
-                className="flex items-center justify-between bg-zinc-900/60 border border-zinc-800/80 rounded-xl px-3.5 py-2.5 hover:border-zinc-700 transition"
+                className="flex items-center justify-between bg-zinc-50 border border-zinc-950 rounded-xl px-3.5 py-2.5 shadow-[2px_2px_0px_0px_#18181b]"
               >
-                <span className="text-white text-xs sm:text-sm font-medium">{c.name}</span>
+                <span className="text-zinc-950 text-xs sm:text-sm font-bold">{c.name}</span>
                 <button
                   onClick={() => handleDelete(c.id)}
-                  className="text-rose-400 hover:text-rose-300 text-xs font-semibold hover:underline"
+                  className="text-rose-600 hover:text-rose-700 text-xs font-bold uppercase tracking-wider hover:underline"
                 >
                   Hapus
                 </button>
@@ -185,14 +185,14 @@ export default function ProductsPage() {
       {/* ── HEADER ── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <UtensilsCrossed size={14} />
             <span>Katalog Kafe & Inventaris</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
             Menu & Inventaris Makanan
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
             Kelola katalog menu makanan/minuman, penyesuaian harga, serta monitoring stok berkala.
           </p>
         </div>
@@ -202,14 +202,14 @@ export default function ProductsPage() {
           {user.role !== 'STAFF_CAFE' && (
             <button
               onClick={() => setCategoriesModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 text-xs sm:text-sm font-semibold transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-950 text-xs sm:text-sm font-bold uppercase tracking-wider shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition"
             >
               <Tag size={15} /> Kelola Kategori
             </button>
           )}
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl transition shadow-lg shadow-cust-red/10"
+            className="inline-flex items-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-4 py-2 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition"
           >
             <Plus size={16} /> Tambah Menu
           </button>
@@ -218,15 +218,15 @@ export default function ProductsPage() {
 
       {/* ── FILTER BAR ── */}
       <div className="mb-6 flex overflow-x-auto pb-2 scrollbar-none">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 flex gap-1">
+        <div className="bg-white border border-zinc-950 rounded-xl p-1 flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
           {filters.map((f) => (
             <button
               key={f}
               onClick={() => setActiveFilter(f)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono-tech uppercase tracking-wider whitespace-nowrap transition ${
                 activeFilter === f
-                  ? 'bg-cust-red text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                  : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
               }`}
             >
               {f === 'All' ? 'Semua Menu' : f}
@@ -241,9 +241,9 @@ export default function ProductsPage() {
           Memuat katalog menu...
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
-          <PackageOpen size={40} className="mx-auto text-zinc-600 mb-3" />
-          <p className="text-white font-semibold text-sm">Belum ada produk dalam kategori ini.</p>
+        <div className="text-center py-20 border border-dashed border-zinc-300 rounded-2xl bg-white shadow-[2px_2px_0px_0px_#18181b]">
+          <PackageOpen size={40} className="mx-auto text-zinc-400 mb-3" />
+          <p className="text-zinc-950 font-bold text-sm">Belum ada produk dalam kategori ini.</p>
           <p className="text-zinc-500 text-xs mt-1">Tambahkan menu pertama kamu untuk mulai berjualan.</p>
         </div>
       ) : (

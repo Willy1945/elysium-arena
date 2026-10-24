@@ -13,6 +13,9 @@ use Illuminate\Validation\ValidationException;
 
 class BookingService
 {
+    public function __construct(protected TelegramService $telegramService)
+    {
+    }
     /**
      * Cek apakah device tersedia pada rentang waktu tertentu.
      */
@@ -90,7 +93,7 @@ class BookingService
      */
     public function create(int $userId, array $data): Booking
     {
-        return DB::transaction(function () use ($userId, $data) {
+        $booking = DB::transaction(function () use ($userId, $data) {
             $device = Device::where('id', $data['device_id'])->lockForUpdate()->first();
 
             if (! $device) {
@@ -152,5 +155,10 @@ class BookingService
 
             return $booking;
         });
+
+        // Notifikasi Telegram ke Admin / Kasir
+        $this->telegramService->sendNewBookingNotification($booking);
+
+        return $booking;
     }
 }

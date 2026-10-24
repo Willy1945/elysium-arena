@@ -54,19 +54,19 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* ── MOBILE BACKDROP OVERLAY ── */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-200"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-200"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed left-0 top-0 h-screen w-[270px] bg-[#0d0d11] border-r border-zinc-800/80 flex flex-col justify-between z-50 select-none transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 h-screen w-[270px] bg-white flex flex-col justify-between z-50 select-none transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* ── TOP BRAND HEADER ── */}
         <div>
-          <div className="h-16 flex items-center justify-between px-5 border-b border-zinc-800/80">
+          <div className="h-16 flex items-center justify-between px-5">
             <Link to="/" onClick={onClose} className="flex items-center gap-3 group">
               <img
                 src="/images/logo-elysium.png"
@@ -74,10 +74,10 @@ export default function Sidebar({ isOpen, onClose }) {
                 className="h-8 w-auto rounded-md object-contain"
               />
               <div>
-                <h1 className="font-display font-black text-white text-base tracking-wider uppercase leading-none">
+                <h1 className="font-display font-black text-zinc-950 text-base tracking-wider uppercase leading-none">
                   Elysium Arena
                 </h1>
-                <p className="text-zinc-500 text-[10px] uppercase font-mono-tech tracking-widest mt-0.5">
+                <p className="text-zinc-500 text-[10px] uppercase font-mono-tech tracking-widest mt-0.5 font-semibold">
                   Admin Console
                 </p>
               </div>
@@ -86,7 +86,7 @@ export default function Sidebar({ isOpen, onClose }) {
             {/* Mobile Close Button */}
             <button
               onClick={onClose}
-              className="lg:hidden p-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white transition"
+              className="lg:hidden p-1.5 rounded-lg bg-zinc-100 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200 transition cursor-pointer"
               aria-label="Tutup Menu"
             >
               <X size={16} />
@@ -101,7 +101,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
               return (
                 <div key={group.title} className="space-y-1">
-                  <p className="px-3 text-[10px] font-bold text-zinc-500 uppercase tracking-widest font-mono-tech mb-1.5">
+                  <p className="px-3 text-[10px] font-bold text-zinc-400 uppercase tracking-widest font-mono-tech mb-1.5">
                     {group.title}
                   </p>
                   {visibleItems.map(({ label, icon: Icon, path }) => (
@@ -110,10 +110,10 @@ export default function Sidebar({ isOpen, onClose }) {
                       to={path}
                       onClick={() => onClose?.()}
                       className={({ isActive }) =>
-                        `flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition duration-150 ${
+                        `flex items-center justify-between px-3 py-2 rounded-xl text-xs transition duration-150 cursor-pointer ${
                           isActive
-                            ? 'bg-cust-red text-white shadow-sm font-semibold'
-                            : 'text-zinc-400 hover:text-white hover:bg-zinc-800/60'
+                            ? 'bg-cust-red text-white shadow-sm font-bold'
+                            : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100 font-medium'
                         }`
                       }
                     >
@@ -130,25 +130,25 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         {/* ── BOTTOM USER FOOTER CARD ── */}
-        <div className="p-3 border-t border-zinc-800/80 bg-zinc-950/40">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
+        <div className="p-3 bg-white">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-zinc-50 border border-zinc-200/80">
             <div className="flex items-center gap-2.5 min-w-0">
               {user?.avatar ? (
                 <img
                   src={user.avatar}
                   alt={user.name}
-                  className="w-8 h-8 rounded-lg object-cover border border-zinc-700 shrink-0"
+                  className="w-8 h-8 rounded-lg object-cover border border-zinc-200 shrink-0"
                 />
               ) : (
-                <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white font-bold text-xs shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-bold text-xs shrink-0">
                   {user?.name?.charAt(0).toUpperCase()}
                 </div>
               )}
               <div className="min-w-0">
-                <p className="text-white text-xs font-semibold truncate leading-tight">
+                <p className="text-zinc-950 text-xs font-bold truncate leading-tight">
                   {user?.name}
                 </p>
-                <span className="text-[10px] text-zinc-500 font-mono-tech uppercase">
+                <span className="text-[10px] text-zinc-500 font-mono-tech uppercase font-semibold">
                   {user?.role}
                 </span>
               </div>
@@ -157,7 +157,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <button
               onClick={handleLogout}
               title="Keluar / Logout"
-              className="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-red-950/50 hover:text-red-400 text-zinc-400 flex items-center justify-center transition shrink-0 ml-1 cursor-pointer"
+              className="w-7 h-7 rounded-lg bg-zinc-100 hover:bg-red-50 hover:text-red-600 border border-zinc-200 text-zinc-600 flex items-center justify-center transition shrink-0 ml-1 cursor-pointer"
             >
               <LogOut size={13} />
             </button>

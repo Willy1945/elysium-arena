@@ -45,6 +45,18 @@ class SessionService
                 $userId = $booking->user_id;
                 $guestName = null;
                 $booking->update(['status' => 'confirmed']);
+            } elseif ($userId) {
+                // Auto-detect: Sambungkan ke jadwal booking pelanggan jika menyewa stasiun yang sama hari ini
+                $matchedBooking = Booking::where('device_id', $device->id)
+                    ->where('user_id', $userId)
+                    ->where('booking_date', now()->toDateString())
+                    ->whereIn('status', ['pending', 'confirmed'])
+                    ->first();
+
+                if ($matchedBooking) {
+                    $bookingId = $matchedBooking->id;
+                    $matchedBooking->update(['status' => 'confirmed']);
+                }
             }
 
             if (! $userId && empty($guestName)) {
@@ -196,6 +208,12 @@ class SessionService
 
             if ($session->booking_id) {
                 $session->booking()->update(['status' => 'completed']);
+            } elseif ($session->user_id) {
+                Booking::where('device_id', $session->device_id)
+                    ->where('user_id', $session->user_id)
+                    ->where('booking_date', Carbon::parse($session->start_time)->toDateString())
+                    ->whereIn('status', ['pending', 'confirmed'])
+                    ->update(['status' => 'completed']);
             }
 
             if ($session->user_id) {

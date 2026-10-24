@@ -21,34 +21,34 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl">
-        <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80 mb-5">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 max-w-sm w-full shadow-[4px_4px_0px_0px_#18181b]">
+        <div className="flex items-center justify-between pb-4 border-b border-zinc-100 mb-5">
           <div>
-            <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-semibold">
+            <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-bold">
               Kompensasi & Perpanjangan
             </span>
-            <h3 className="text-white font-black text-xl font-display uppercase tracking-tight">
+            <h3 className="text-zinc-950 font-black text-xl font-display uppercase tracking-tight">
               Kelola Durasi Sesi
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition"
+            className="p-1.5 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-900 shadow-[2px_2px_0px_0px_#18181b] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Tab Switcher: Tambah vs Kurangi */}
-        <div className="grid grid-cols-2 gap-1.5 p-1 bg-zinc-900 border border-zinc-800 rounded-2xl mb-5">
+        <div className="grid grid-cols-2 gap-1.5 p-1 bg-zinc-100 border border-zinc-950 rounded-xl mb-5 shadow-[2px_2px_0px_0px_#18181b]">
           <button
             type="button"
             onClick={() => setMode('add')}
-            className={`flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold rounded-xl transition ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold rounded-lg uppercase tracking-wider transition ${
               mode === 'add'
-                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-md'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-emerald-600 text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                : 'text-zinc-700 hover:text-zinc-950'
             }`}
           >
             <PlusCircle size={14} /> Tambah Waktu
@@ -57,10 +57,10 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
           <button
             type="button"
             onClick={() => setMode('reduce')}
-            className={`flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold rounded-xl transition ${
+            className={`flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold rounded-lg uppercase tracking-wider transition ${
               mode === 'reduce'
-                ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30 shadow-md'
-                : 'text-zinc-400 hover:text-white'
+                ? 'bg-rose-600 text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                : 'text-zinc-700 hover:text-zinc-950'
             }`}
           >
             <MinusCircle size={14} /> Kurangi Waktu
@@ -74,10 +74,10 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
               key={opt.value}
               disabled={loading}
               onClick={() => onConfirm(opt.value)}
-              className={`w-full border rounded-2xl py-3.5 text-xs font-bold font-mono-tech transition disabled:opacity-50 ${
+              className={`w-full border border-zinc-950 rounded-xl py-3.5 text-xs font-black font-mono-tech transition shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 ${
                 mode === 'add'
-                  ? 'bg-zinc-900/60 border-zinc-800 text-zinc-200 hover:border-emerald-500/40 hover:bg-emerald-500/10 hover:text-emerald-300'
-                  : 'bg-zinc-900/60 border-zinc-800 text-zinc-200 hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-300'
+                  ? 'bg-white text-zinc-950 hover:bg-emerald-50'
+                  : 'bg-white text-zinc-950 hover:bg-rose-50'
               }`}
             >
               {opt.label}
@@ -85,7 +85,7 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
           ))}
         </div>
 
-        <p className="text-[11px] text-zinc-500 text-center leading-relaxed">
+        <p className="text-[11px] text-zinc-600 text-center leading-relaxed font-medium">
           Perubahan waktu bermain akan otomatis disinkronkan ke PC stasiun dan timer dashboard.
         </p>
       </div>

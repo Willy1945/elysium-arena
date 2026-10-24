@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FeedbackResource;
 use App\Models\Feedback;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
+    public function __construct(protected TelegramService $telegramService)
+    {
+    }
     public function index(Request $request)
     {
         $user = $request->user();
@@ -44,6 +48,8 @@ class FeedbackController extends Controller
             'message' => $request->message,
             'status' => 'pending',
         ]);
+
+        $this->telegramService->sendFeedbackNotification($feedback);
 
         return new FeedbackResource($feedback->load('user'));
     }

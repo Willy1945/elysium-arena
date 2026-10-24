@@ -2,33 +2,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-surface: #0a0a0a;
-  --color-surface-elevated: #141414;
-  --color-surface-inset: #000000;
-  --color-border: #262626;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #f8fafc;
+  --color-surface-inset: #f1f5f9;
+  --color-border: #e2e8f0;
 
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a3a3a3;
+  --color-text-primary: #09090b;
+  --color-text-secondary: #64748b;
 
   --color-accent: #e31e24;
-  --color-accent-light: #ff6b6b;
-  --color-accent-lighter: #ffd6d6;
+  --color-accent-light: #ef4444;
+  --color-accent-lighter: #fee2e2;
 
-  --color-status-available: #22c55e;
-  --color-status-occupied: #ef4444;
-  --color-status-booked: #f97316;
-  --color-status-maintenance: #9ca3af;
+  --color-status-available: #16a34a;
+  --color-status-occupied: #dc2626;
+  --color-status-booked: #ea580c;
+  --color-status-maintenance: #94a3b8;
 
-   /* ── Token khusus Customer/Public (tema merah-hitam) ── */
-  --color-cust-bg: #0a0a0a;
-  --color-cust-elevated: #141414;
-  --color-cust-border: #262626;
-  --color-cust-text-primary: #ffffff;
-  --color-cust-text-secondary: #a3a3a3;
+  /* ── Token khusus Customer/Public (tema merah-putih terang) ── */
+  --color-cust-bg: #ffffff;
+  --color-cust-elevated: #ffffff;
+  --color-cust-border: #e4e4e7;
+  --color-cust-text-primary: #09090b;
+  --color-cust-text-secondary: #52525b;
   --color-cust-red: #e31e24;
   --color-cust-red-dark: #b8151a;
-  --color-cust-yellow: #fbbf24;
-  
+  --color-cust-yellow: #d97706;
 }
 
 .no-scrollbar {
@@ -41,7 +40,8 @@
 }
 
 body {
-  background-color: var(--color-surface);
+  background-color: #ffffff;
+  color: #09090b;
   font-family: 'Inter', sans-serif;
 }
 
@@ -65,3 +65,68 @@ select {
 .font-mono-tech {
   font-family: 'JetBrains Mono', monospace;
 }
+
+/* ── Print Styles (Struk Kasir Thermal POS & A4) ── */
+@media print {
+  /* Sembunyikan navigasi, sidebar, header, tombol & toast */
+  aside,
+  header,
+  nav,
+  footer,
+  .print\:hidden,
+  [data-print="hidden"] {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Reset layout container agar struk rapi tanpa dorongan sidebar */
+  #root,
+  .min-h-screen,
+  .flex-1,
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  /* Styling khusus struk invoice saat dicetak */
+  #invoice-print {
+    display: block !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    padding: 16px 20px !important;
+    border: 1px dashed #27272a !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  #invoice-print * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  @page {
+    margin: 6mm;
+    size: auto;
+  }
+}
+

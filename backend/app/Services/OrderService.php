@@ -12,9 +12,13 @@ use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
+    public function __construct(protected TelegramService $telegramService)
+    {
+    }
+
     public function create(array $data, int $actorId): Order
     {
-        return DB::transaction(function () use ($data, $actorId) {
+        $order = DB::transaction(function () use ($data, $actorId) {
             $totalPrice = 0;
             $lockedProducts = [];
 
@@ -108,6 +112,11 @@ class OrderService
 
             return $order;
         });
+
+        // Notifikasi Telegram ke Dapur & Kasir
+        $this->telegramService->sendNewOrderNotification($order);
+
+        return $order;
     }
 
     public function updateStatus(Order $order, string $status, int $actorId): Order

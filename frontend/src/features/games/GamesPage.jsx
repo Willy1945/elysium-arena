@@ -81,38 +81,38 @@ export default function GamesPage() {
       {/* ── HEADER ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <Gamepad2 size={14} />
             <span>Katalog Game Arena</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
             Game Vault & Library
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
             Kelola judul game yang terinstal di PlayStation 5, PS4, dan PC stasiun arena.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 flex gap-1">
+          <div className="bg-white border border-zinc-950 rounded-xl p-1 flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
             {['All', 'PS5', 'PS4', 'PC'].map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono-tech uppercase tracking-wider transition ${
                   activeFilter === f
-                    ? 'bg-cust-red text-white'
-                    : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                    ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                    : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
                 }`}
               >
-                {f === 'All' ? 'Semua Platform' : f}
+                {f === 'All' ? 'Semua' : f}
               </button>
             ))}
           </div>
 
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center justify-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-lg shadow-cust-red/10 shrink-0"
+            className="inline-flex items-center justify-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition shrink-0"
           >
             <Plus size={16} /> Tambah Game
           </button>
@@ -125,9 +125,9 @@ export default function GamesPage() {
           Memuat daftar game...
         </div>
       ) : games.length === 0 ? (
-        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
-          <Gamepad2 size={40} className="mx-auto text-zinc-600 mb-3" />
-          <p className="text-white font-semibold text-sm">Tidak ada game pada filter ini.</p>
+        <div className="text-center py-20 border border-dashed border-zinc-300 rounded-2xl bg-white shadow-[2px_2px_0px_0px_#18181b]">
+          <Gamepad2 size={40} className="mx-auto text-zinc-400 mb-3" />
+          <p className="text-zinc-950 font-bold text-sm">Tidak ada game pada filter ini.</p>
           <p className="text-zinc-500 text-xs mt-1">Tambahkan game baru untuk mengisi katalog.</p>
         </div>
       ) : (

@@ -9,9 +9,13 @@ use Illuminate\Validation\ValidationException;
 
 class PaymentService
 {
+    public function __construct(protected TelegramService $telegramService)
+    {
+    }
+
     public function pay(Transaction $transaction, string $method): Transaction
     {
-        return DB::transaction(function () use ($transaction, $method) {
+        $paidTransaction = DB::transaction(function () use ($transaction, $method) {
             $transaction = Transaction::where('id', $transaction->id)->lockForUpdate()->first();
 
             if ($transaction->status === 'paid') {
@@ -34,5 +38,10 @@ class PaymentService
 
             return $transaction->fresh();
         });
+
+        // Notifikasi Telegram transaksi lunas
+        $this->telegramService->sendPaymentNotification($paidTransaction, $method);
+
+        return $paidTransaction;
     }
 }

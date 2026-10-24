@@ -102,7 +102,7 @@ export default function DeviceDetailPage() {
       <div className="mb-6">
         <Link
           to="/admin/devices"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-xs font-semibold uppercase tracking-wider transition"
+          className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-bold uppercase tracking-wider transition"
         >
           <ArrowLeft size={14} /> Kembali ke Manajemen Stasiun
         </Link>
@@ -111,37 +111,37 @@ export default function DeviceDetailPage() {
       <div className="flex flex-col lg:flex-row items-start gap-6">
         {/* ── Kolom Kiri: Sidebar Stasiun ── */}
         <div className="w-full lg:w-80 shrink-0 flex flex-col gap-5">
-          <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
-            <div className="relative h-48 bg-zinc-900 overflow-hidden">
+          <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
+            <div className="relative h-48 bg-zinc-100 overflow-hidden">
               {device.photo ? (
                 <img src={resolveImageUrl(device.photo)} alt={device.code} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-zinc-900">
-                  <TypeIcon size={44} className="text-zinc-700" />
+                <div className="w-full h-full flex items-center justify-center bg-zinc-100">
+                  <TypeIcon size={44} className="text-zinc-400" />
                 </div>
               )}
-              <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-[10px] text-zinc-300 border border-zinc-800 font-mono-tech font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+              <div className="absolute top-3 left-3 bg-white text-[10px] text-zinc-950 border border-zinc-950 font-mono-tech font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg shadow-[2px_2px_0px_0px_#18181b]">
                 {device.device_type?.name}
               </div>
             </div>
-            <div className="p-4 flex gap-2.5">
+            <div className="p-4 flex gap-2.5 bg-white">
               <button
                 onClick={() => setEditOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 hover:text-white rounded-xl py-2.5 text-xs font-semibold transition"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-950 rounded-xl py-2.5 text-xs font-bold uppercase tracking-wider shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition"
               >
                 <Pencil size={13} /> Edit Rig
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-rose-900/40 text-rose-400 hover:bg-rose-950/20 rounded-xl py-2.5 text-xs font-semibold transition"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 border border-zinc-950 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl py-2.5 text-xs font-bold uppercase tracking-wider shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition"
               >
                 <Trash2 size={13} /> Hapus
               </button>
             </div>
           </div>
 
-          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-5 shadow-xl">
-            <h3 className="text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-3 font-mono-tech">
+          <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b]">
+            <h3 className="text-zinc-950 text-xs font-bold uppercase tracking-wider mb-3 font-mono-tech">
               Ubah Status Cepat
             </h3>
             <div className="grid grid-cols-2 gap-2">
@@ -150,10 +150,10 @@ export default function DeviceDetailPage() {
                   key={key}
                   onClick={() => handleStatusChange(key)}
                   disabled={device.status === key}
-                  className={`text-xs py-2.5 px-3 rounded-xl border font-semibold transition ${
+                  className={`text-xs py-2.5 px-3 rounded-xl border-2 font-bold uppercase tracking-wider transition ${
                     device.status === key
-                      ? 'border-cust-red bg-cust-red/20 text-white shadow-md shadow-cust-red/10 cursor-default'
-                      : 'border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:text-white hover:bg-zinc-800'
+                      ? 'border-zinc-950 bg-cust-red text-white shadow-[2px_2px_0px_0px_#18181b] cursor-default'
+                      : 'border-zinc-950 bg-white text-zinc-800 hover:bg-zinc-100 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b]'
                   }`}
                 >
                   {cfg.label}
@@ -165,14 +165,14 @@ export default function DeviceDetailPage() {
 
         {/* ── Kolom Kanan: Detail & Metrik ── */}
         <div className="flex-1 w-full flex flex-col gap-6">
-          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
+          <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex items-start justify-between mb-6">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-[11px] font-mono-tech font-bold uppercase tracking-wider mb-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-[11px] font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
                   <TypeIcon size={13} />
                   <span>{device.device_type?.name} RIG STATION</span>
                 </div>
-                <h1 className="text-white text-3xl font-black font-display uppercase tracking-tight">
+                <h1 className="text-zinc-950 text-3xl font-black font-display uppercase tracking-tight">
                   {device.code}
                 </h1>
               </div>
@@ -180,42 +180,42 @@ export default function DeviceDetailPage() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-6">
-              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
-                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Tarif Sewa</p>
-                <p className="text-white font-bold text-lg font-mono-tech">{formatRupiah(device.price_per_hour)}/jam</p>
+              <div className="bg-zinc-50 border border-zinc-950 rounded-xl p-4 shadow-[2px_2px_0px_0px_#18181b]">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-bold tracking-wider mb-1">Tarif Sewa</p>
+                <p className="text-zinc-950 font-black text-lg font-mono-tech">{formatRupiah(device.price_per_hour)}/jam</p>
               </div>
-              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
-                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Game Terinstal</p>
-                <p className="text-white font-bold text-lg font-mono-tech">{device.games?.length || 0} Judul</p>
+              <div className="bg-zinc-50 border border-zinc-950 rounded-xl p-4 shadow-[2px_2px_0px_0px_#18181b]">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-bold tracking-wider mb-1">Game Terinstal</p>
+                <p className="text-zinc-950 font-black text-lg font-mono-tech">{device.games?.length || 0} Judul</p>
               </div>
-              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
-                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Booking Hari Ini</p>
-                <p className="text-white font-bold text-lg font-mono-tech">{device.today_bookings_count || 0} Sesi</p>
+              <div className="bg-zinc-50 border border-zinc-950 rounded-xl p-4 shadow-[2px_2px_0px_0px_#18181b]">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-bold tracking-wider mb-1">Booking Hari Ini</p>
+                <p className="text-zinc-950 font-black text-lg font-mono-tech">{device.today_bookings_count || 0} Sesi</p>
               </div>
-              <div className="bg-zinc-900/70 border border-zinc-800/80 rounded-2xl p-4">
-                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Total Riwayat</p>
-                <p className="text-white font-bold text-lg font-mono-tech">{recentBookings.length} Log</p>
+              <div className="bg-zinc-50 border border-zinc-950 rounded-xl p-4 shadow-[2px_2px_0px_0px_#18181b]">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-bold tracking-wider mb-1">Total Riwayat</p>
+                <p className="text-zinc-950 font-black text-lg font-mono-tech">{recentBookings.length} Log</p>
               </div>
             </div>
 
             {device.description && (
-              <div className="pt-4 border-t border-zinc-800/80">
-                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-wider mb-1">Spesifikasi & Keterangan</p>
-                <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">{device.description}</p>
+              <div className="pt-4 border-t border-zinc-200">
+                <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-bold tracking-wider mb-1">Spesifikasi & Keterangan</p>
+                <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed">{device.description}</p>
               </div>
             )}
           </div>
 
           {/* Installed Games Section */}
-          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80 mb-5">
+          <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-100 mb-5">
               <div className="flex items-center gap-2">
                 <Joystick size={16} className="text-cust-red" />
-                <h2 className="text-white font-bold text-sm uppercase tracking-wider font-display">
+                <h2 className="text-zinc-950 font-black text-sm uppercase tracking-wider font-display">
                   Game Terinstal di Stasiun
                 </h2>
               </div>
-              <span className="font-mono-tech text-xs font-semibold px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300">
+              <span className="font-mono-tech text-xs font-bold px-2.5 py-0.5 rounded-lg bg-zinc-100 border border-zinc-950 text-zinc-900 shadow-[1px_1px_0px_0px_#18181b]">
                 {device.games?.length || 0} Judul
               </span>
             </div>
@@ -226,16 +226,16 @@ export default function DeviceDetailPage() {
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
                 {device.games?.map((game) => (
                   <Link key={game.id} to={`/admin/games/${game.id}`} className="group flex flex-col">
-                    <div className="aspect-[3/4] rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 group-hover:border-zinc-700 group-hover:-translate-y-1 transition duration-200">
+                    <div className="aspect-[3/4] rounded-xl overflow-hidden bg-zinc-100 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] group-hover:-translate-y-0.5 transition duration-200">
                       {game.cover_image ? (
                         <img src={resolveImageUrl(game.cover_image)} alt={game.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-zinc-900">
-                          <Joystick size={22} className="text-zinc-700" />
+                        <div className="w-full h-full flex items-center justify-center bg-zinc-100">
+                          <Joystick size={22} className="text-zinc-400" />
                         </div>
                       )}
                     </div>
-                    <p className="text-zinc-300 text-[11px] mt-1.5 font-medium line-clamp-1 group-hover:text-cust-red transition">
+                    <p className="text-zinc-900 text-[11px] mt-1.5 font-bold line-clamp-1 group-hover:text-cust-red transition">
                       {game.name}
                     </p>
                   </Link>
@@ -245,10 +245,10 @@ export default function DeviceDetailPage() {
           </div>
 
           {/* Recent Booking History */}
-          <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl">
-            <div className="flex items-center gap-2 pb-4 border-b border-zinc-800/80 mb-5">
+          <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
+            <div className="flex items-center gap-2 pb-4 border-b border-zinc-100 mb-5">
               <History size={16} className="text-cust-red" />
-              <h2 className="text-white font-bold text-sm uppercase tracking-wider font-display">
+              <h2 className="text-zinc-950 font-black text-sm uppercase tracking-wider font-display">
                 Riwayat Booking Terakhir
               </h2>
             </div>
@@ -260,13 +260,13 @@ export default function DeviceDetailPage() {
                 {recentBookings.map((b) => {
                   const bStatus = BOOKING_STATUS_CONFIG[b.status] || { label: b.status, color: 'neutral' };
                   return (
-                    <div key={b.id} className="flex items-center justify-between bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3.5">
+                    <div key={b.id} className="flex items-center justify-between bg-zinc-50 border border-zinc-950 rounded-xl p-3.5 shadow-[2px_2px_0px_0px_#18181b]">
                       <div>
-                        <p className="text-white text-xs font-semibold">{b.user?.name}</p>
-                        <p className="text-zinc-400 text-[11px] font-mono-tech mt-0.5">{b.booking_date} · {b.start_time} - {b.end_time}</p>
+                        <p className="text-zinc-950 text-xs font-bold">{b.user?.name}</p>
+                        <p className="text-zinc-600 text-[11px] font-mono-tech mt-0.5">{b.booking_date} · {b.start_time} - {b.end_time}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-white text-xs font-bold font-mono-tech">{formatRupiah(b.total_price)}</span>
+                        <span className="text-zinc-950 text-xs font-black font-mono-tech">{formatRupiah(b.total_price)}</span>
                         <Badge colorVar={bStatus.color}>{bStatus.label}</Badge>
                       </div>
                     </div>

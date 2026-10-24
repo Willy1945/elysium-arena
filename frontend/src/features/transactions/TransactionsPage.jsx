@@ -60,33 +60,33 @@ function CheckoutModal({ open, onClose, onDone }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl">
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-zinc-800">
-          <h3 className="text-white font-display font-black text-xl uppercase tracking-wide">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-[4px_4px_0px_0px_#18181b]">
+        <div className="flex items-center justify-between pb-4 mb-5 border-b border-zinc-100">
+          <h3 className="text-zinc-950 font-display font-black text-xl uppercase tracking-tight">
             Buat Transaksi Kasir Baru
           </h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition"
+            className="p-1.5 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-900 shadow-[2px_2px_0px_0px_#18181b] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition"
           >
             <X size={16} />
           </button>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 flex gap-1 mb-5">
+        <div className="bg-zinc-100 border border-zinc-950 rounded-xl p-1 flex gap-1 mb-5 shadow-[2px_2px_0px_0px_#18181b]">
           <button
             onClick={() => setTab('session')}
-            className={`flex-1 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition ${
-              tab === 'session' ? 'bg-cust-red text-white' : 'text-zinc-400 hover:text-white'
+            className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition ${
+              tab === 'session' ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]' : 'text-zinc-700 hover:text-zinc-950'
             }`}
           >
             Dari Sesi Bermain
           </button>
           <button
             onClick={() => setTab('orders')}
-            className={`flex-1 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition ${
-              tab === 'orders' ? 'bg-cust-red text-white' : 'text-zinc-400 hover:text-white'
+            className={`flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition ${
+              tab === 'orders' ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]' : 'text-zinc-700 hover:text-zinc-950'
             }`}
           >
             Take-away Kafe F&B
@@ -96,7 +96,7 @@ function CheckoutModal({ open, onClose, onDone }) {
         {tab === 'session' ? (
           <div className="space-y-2.5">
             {checkoutable.sessions.length === 0 ? (
-              <p className="text-zinc-500 text-xs text-center py-8">
+              <p className="text-zinc-500 text-xs text-center py-8 font-medium">
                 Tidak ada sesi stasiun yang siap di-checkout saat ini.
               </p>
             ) : (
@@ -105,13 +105,13 @@ function CheckoutModal({ open, onClose, onDone }) {
                   key={s.id}
                   disabled={loading}
                   onClick={() => handleCheckoutSession(s.id)}
-                  className="w-full flex items-center justify-between bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-4 text-left transition cursor-pointer"
+                  className="w-full flex items-center justify-between bg-zinc-50 border border-zinc-950 hover:bg-zinc-100 rounded-xl p-4 text-left transition shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer"
                 >
                   <div>
-                    <p className="text-white text-sm font-semibold">{s.device?.code} — {s.user?.name}</p>
-                    <p className="text-zinc-500 text-xs mt-0.5">Durasi: {s.duration / 60} jam</p>
+                    <p className="text-zinc-950 text-sm font-bold">{s.device?.code} — {s.user?.name}</p>
+                    <p className="text-zinc-500 text-xs font-mono-tech mt-0.5">Durasi: {s.duration / 60} jam</p>
                   </div>
-                  <span className="font-display font-bold text-base text-white">{formatRupiah(s.price)}</span>
+                  <span className="font-display font-black text-base text-zinc-950">{formatRupiah(s.price)}</span>
                 </button>
               ))
             )}
@@ -119,7 +119,7 @@ function CheckoutModal({ open, onClose, onDone }) {
         ) : (
           <div className="space-y-3">
             {checkoutable.orders.length === 0 ? (
-              <p className="text-zinc-500 text-xs text-center py-8">
+              <p className="text-zinc-500 text-xs text-center py-8 font-medium">
                 Tidak ada pesanan take-away yang menunggu checkout.
               </p>
             ) : (
@@ -128,28 +128,28 @@ function CheckoutModal({ open, onClose, onDone }) {
                   {checkoutable.orders.map((o) => (
                     <label
                       key={o.id}
-                      className="flex items-center justify-between bg-zinc-900/80 border border-zinc-800 p-3.5 rounded-2xl cursor-pointer hover:border-zinc-700 transition"
+                      className="flex items-center justify-between bg-zinc-50 border border-zinc-950 p-3.5 rounded-xl cursor-pointer hover:bg-zinc-100 transition shadow-[2px_2px_0px_0px_#18181b]"
                     >
                       <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={selectedOrderIds.includes(o.id)}
                           onChange={() => toggleOrder(o)}
-                          className="accent-red-600 w-4 h-4 rounded"
+                          className="accent-cust-red w-4 h-4 rounded border border-zinc-950"
                         />
                         <div>
-                          <p className="text-white text-xs font-semibold">Order #{o.order_code}</p>
-                          <p className="text-zinc-500 text-[11px]">{o.user?.name}</p>
+                          <p className="text-zinc-950 text-xs font-bold">Order #{o.order_code}</p>
+                          <p className="text-zinc-600 text-[11px] font-medium">{o.user?.name}</p>
                         </div>
                       </div>
-                      <span className="text-white font-semibold text-xs">{formatRupiah(o.total_price)}</span>
+                      <span className="text-zinc-950 font-black text-xs font-mono-tech">{formatRupiah(o.total_price)}</span>
                     </label>
                   ))}
                 </div>
                 <button
                   onClick={handleCheckoutOrders}
                   disabled={selectedOrderIds.length === 0 || loading}
-                  className="w-full py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider transition disabled:opacity-40"
+                  className="w-full py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition disabled:opacity-40"
                 >
                   Proses Tagihan ({selectedOrderIds.length} Pesanan)
                 </button>
@@ -243,93 +243,100 @@ export default function TransactionsPage() {
     paid: 'Lunas',
     cancelled: 'Batal',
   };
+  const FILTER_DOTS = {
+    pending: 'bg-amber-500',
+    paid: 'bg-emerald-500',
+    cancelled: 'bg-rose-500',
+  };
 
   return (
     <DashboardLayout>
       {/* ── HEADER ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <Receipt size={14} />
             <span>Billing Kasir</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
             Log Transaksi Arena
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
             Rekap invoice gabungan persewaan gaming rig dan pesanan kafe F&B.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-          {/* Filter Status */}
-          <div className="overflow-x-auto max-w-full pb-1 scrollbar-none">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 inline-flex gap-1">
-              {filters.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setStatusFilter(f)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
-                    statusFilter === f
-                      ? 'bg-cust-red text-white'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-                  }`}
-                >
-                  {FILTER_LABEL[f] || f}
-                </button>
-              ))}
-            </div>
-          </div>
+        {/* Action Buttons on Header Right */}
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <button
+            onClick={() => setShowArchived((prev) => !prev)}
+            className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider border border-zinc-950 transition cursor-pointer shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+              showArchived
+                ? 'bg-zinc-950 text-white'
+                : 'bg-white text-zinc-950 hover:bg-zinc-100'
+            }`}
+          >
+            <Archive size={14} />
+            <span>{showArchived ? 'Daftar Utama' : 'Arsip'}</span>
+          </button>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={() => setCheckoutOpen(true)}
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition cursor-pointer"
+          >
+            <Plus size={15} />
+            <span>Transaksi Baru</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── FILTER STATUS BAR (Baris tersendiri di atas tabel) ── */}
+      <div className="mb-6 flex overflow-x-auto pb-1 scrollbar-none">
+        <div className="bg-white border border-zinc-950 rounded-xl p-1 inline-flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
+          {filters.map((f) => (
             <button
-              onClick={() => setShowArchived((prev) => !prev)}
-              className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${
-                showArchived
-                  ? 'bg-zinc-800 border-zinc-700 text-white'
-                  : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
+              key={f}
+              onClick={() => setStatusFilter(f)}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono-tech uppercase tracking-wider whitespace-nowrap transition cursor-pointer ${
+                statusFilter === f
+                  ? 'bg-zinc-950 text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                  : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
               }`}
             >
-              <Archive size={14} />
-              <span>{showArchived ? 'Daftar Utama' : 'Arsip'}</span>
+              {FILTER_DOTS[f] && (
+                <span className={`w-2 h-2 rounded-full border border-zinc-950/40 shrink-0 ${FILTER_DOTS[f]}`} />
+              )}
+              <span>{FILTER_LABEL[f] || f}</span>
             </button>
-
-            <button
-              onClick={() => setCheckoutOpen(true)}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-sm transition cursor-pointer"
-            >
-              <Plus size={15} />
-              <span>Transaksi Baru</span>
-            </button>
-          </div>
+          ))}
         </div>
       </div>
 
       {/* ── TABLE CONTAINER ── */}
-      <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+      <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
         <div className="overflow-x-auto">
           <table className="w-full text-xs min-w-[700px]">
             <thead>
-              <tr className="border-b border-zinc-800 bg-zinc-900/50 text-left text-zinc-400 uppercase tracking-wider font-mono-tech">
-                <th className="px-5 py-4 font-semibold">Kode Transaksi</th>
-                <th className="px-5 py-4 font-semibold">Pelanggan</th>
-                <th className="px-5 py-4 font-semibold">Gaming Rig</th>
-                <th className="px-5 py-4 font-semibold">Kafe F&B</th>
-                <th className="px-5 py-4 font-semibold">Total Tagihan</th>
-                <th className="px-5 py-4 font-semibold">Status</th>
-                <th className="px-5 py-4 font-semibold text-right">Aksi</th>
+              <tr className="border-b border-zinc-200 bg-zinc-100 text-left text-zinc-950 uppercase tracking-wider font-mono-tech">
+                <th className="px-5 py-4 font-black">Kode Transaksi</th>
+                <th className="px-5 py-4 font-black">Pelanggan</th>
+                <th className="px-5 py-4 font-black">Gaming Rig</th>
+                <th className="px-5 py-4 font-black">Kafe F&B</th>
+                <th className="px-5 py-4 font-black">Total Tagihan</th>
+                <th className="px-5 py-4 font-black">Status</th>
+                <th className="px-5 py-4 font-black text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800/60">
+            <tbody className="divide-y divide-zinc-200">
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-12 text-center text-zinc-500 uppercase tracking-wider">
+                  <td colSpan={7} className="px-5 py-12 text-center text-zinc-500 font-mono-tech uppercase tracking-wider">
                     Memuat data transaksi...
                   </td>
                 </tr>
               ) : transactions.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-5 py-12 text-center text-zinc-500">
+                  <td colSpan={7} className="px-5 py-12 text-center text-zinc-500 font-medium">
                     Belum ada riwayat transaksi yang tercatat.
                   </td>
                 </tr>
@@ -337,37 +344,37 @@ export default function TransactionsPage() {
                 transactions.map((t) => {
                   const status = TRANSACTION_STATUS_CONFIG[t.status] || { label: t.status, color: 'neutral' };
                   return (
-                    <tr key={t.id} className="hover:bg-zinc-900/40 transition">
-                      <td className="px-5 py-4 font-mono-tech font-bold text-white">
+                    <tr key={t.id} className="hover:bg-zinc-50 transition">
+                      <td className="px-5 py-4 font-mono-tech font-bold text-zinc-950">
                         {t.transaction_code}
                       </td>
-                      <td className="px-5 py-4 text-zinc-200 font-medium">
+                      <td className="px-5 py-4 text-zinc-900 font-bold">
                         <div className="flex items-center gap-1.5">
                           <span>{t.user?.name || t.guest_name || 'Tamu (Walk-In)'}</span>
                           {t.is_guest && (
-                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700/60">
+                            <span className="text-[10px] font-mono-tech px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-800 border border-zinc-950 font-bold">
                               Tamu
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="px-5 py-4 text-zinc-300">
+                      <td className="px-5 py-4 text-zinc-700">
                         {t.gaming_amount > 0 ? (
-                          <span className="flex items-center gap-1.5 font-mono-tech">
+                          <span className="flex items-center gap-1.5 font-mono-tech font-bold">
                             <Gamepad2 size={13} className="text-cust-red" />
                             {formatRupiah(t.gaming_amount)}
                           </span>
                         ) : '-'}
                       </td>
-                      <td className="px-5 py-4 text-zinc-300">
+                      <td className="px-5 py-4 text-zinc-700">
                         {t.food_amount > 0 ? (
-                          <span className="flex items-center gap-1.5 font-mono-tech">
-                            <UtensilsCrossed size={13} className="text-amber-400" />
+                          <span className="flex items-center gap-1.5 font-mono-tech font-bold">
+                            <UtensilsCrossed size={13} className="text-amber-700" />
                             {formatRupiah(t.food_amount)}
                           </span>
                         ) : '-'}
                       </td>
-                      <td className="px-5 py-4 font-display font-bold text-base text-white">
+                      <td className="px-5 py-4 font-display font-black text-base text-zinc-950">
                         {formatRupiah(t.total_amount)}
                       </td>
                       <td className="px-5 py-4">
@@ -377,7 +384,7 @@ export default function TransactionsPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => navigate(`/admin/transactions/${t.id}`)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-[11px] font-medium transition cursor-pointer"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white hover:bg-zinc-100 border border-zinc-950 text-zinc-950 text-[11px] font-bold uppercase tracking-wider transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer"
                           >
                             <Receipt size={12} />
                             <span>Detail</span>
@@ -386,7 +393,7 @@ export default function TransactionsPage() {
                             <button
                               onClick={() => setDeletingTransaction(t)}
                               title="Arsipkan Transaksi"
-                              className="p-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 transition cursor-pointer"
+                              className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-950 transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer"
                             >
                               <Archive size={13} />
                             </button>
@@ -396,14 +403,14 @@ export default function TransactionsPage() {
                               <button
                                 onClick={() => handleUnarchive(t)}
                                 title="Kembalikan dari Arsip"
-                                className="p-1.5 rounded-lg bg-zinc-900 hover:bg-emerald-950/40 text-emerald-400 border border-zinc-800 transition cursor-pointer"
+                                className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-zinc-950 transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer"
                               >
                                 <ArchiveRestore size={13} />
                               </button>
                               <button
                                 onClick={() => setHidingTransaction(t)}
                                 title="Hapus dari Tampilan"
-                                className="p-1.5 rounded-lg bg-zinc-900 hover:bg-red-950/40 text-zinc-400 hover:text-red-400 border border-zinc-800 transition cursor-pointer"
+                                className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-zinc-950 transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer"
                               >
                                 <Trash2 size={13} />
                               </button>

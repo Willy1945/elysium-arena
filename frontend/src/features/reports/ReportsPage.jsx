@@ -102,14 +102,14 @@ export default function ReportsPage() {
       {/* ── HEADER & EXPORT ACTION ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <BarChart3 size={14} />
             <span>Laporan & Analitik Finansial</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
             Laporan Kinerja Bisnis
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
             Analisis tren pendapatan, utilisasi rig PC/PS5, produk F&B terlaris, dan status stok.
           </p>
         </div>
@@ -117,7 +117,7 @@ export default function ReportsPage() {
         <button
           onClick={handleExport}
           disabled={!isDataMatchingTab || loading}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-semibold transition disabled:opacity-40 cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-100 border border-zinc-950 text-zinc-950 text-xs font-bold uppercase tracking-wider transition disabled:opacity-40 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer self-start sm:self-auto"
         >
           <Download size={14} />
           <span>Export Data CSV</span>
@@ -133,10 +133,10 @@ export default function ReportsPage() {
             <button
               key={t.value}
               onClick={() => handleTabChange(t.value)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider transition whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition whitespace-nowrap cursor-pointer border border-zinc-950 ${
                 active
-                  ? 'bg-cust-red text-white shadow-sm'
-                  : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  ? 'bg-cust-red text-white shadow-[2px_2px_0px_0px_#18181b]'
+                  : 'bg-white text-zinc-800 hover:bg-zinc-100 shadow-[1px_1px_0px_0px_#18181b]'
               }`}
             >
               <Icon size={14} />
@@ -147,43 +147,43 @@ export default function ReportsPage() {
       </div>
 
       {/* ── PERIOD SELECTOR ── */}
-      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-zinc-900/60 border border-zinc-800 rounded-2xl w-full sm:w-fit mb-6">
-          {PERIOD_OPTIONS.map((p) => (
-            <button
-              key={p.value}
-              onClick={() => handlePeriodChange(p.value)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                period === p.value
-                  ? 'bg-zinc-800 text-white border border-zinc-700'
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
-          {period === 'custom' && (
-            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 pl-0 sm:pl-2 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l border-zinc-800 text-xs w-full sm:w-auto">
-              <input
-                type="date"
-                value={customFrom}
-                onChange={(e) => setCustomFrom(e.target.value)}
-                className="bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-white text-xs outline-none focus:border-cust-red"
-              />
-              <span className="text-zinc-500">s/d</span>
-              <input
-                type="date"
-                value={customTo}
-                onChange={(e) => setCustomTo(e.target.value)}
-                className="bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1 text-white text-xs outline-none focus:border-cust-red"
-              />
-            </div>
-          )}
-        </div>
+      <div className="flex flex-wrap items-center gap-2 p-1.5 bg-white border border-zinc-950 rounded-xl w-full sm:w-fit mb-6 shadow-[2px_2px_0px_0px_#18181b]">
+        {PERIOD_OPTIONS.map((p) => (
+          <button
+            key={p.value}
+            onClick={() => handlePeriodChange(p.value)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono-tech uppercase tracking-wider transition cursor-pointer ${
+              period === p.value
+                ? 'bg-zinc-950 text-white'
+                : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
+            }`}
+          >
+            {p.label}
+          </button>
+        ))}
+        {period === 'custom' && (
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 pl-0 sm:pl-2 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l border-zinc-200 text-xs w-full sm:w-auto">
+            <input
+              type="date"
+              value={customFrom}
+              onChange={(e) => setCustomFrom(e.target.value)}
+              className="bg-white border border-zinc-950 rounded-lg px-2.5 py-1 text-zinc-950 font-bold text-xs outline-none focus:border-cust-red"
+            />
+            <span className="text-zinc-500 font-bold">s/d</span>
+            <input
+              type="date"
+              value={customTo}
+              onChange={(e) => setCustomTo(e.target.value)}
+              className="bg-white border border-zinc-950 rounded-lg px-2.5 py-1 text-zinc-950 font-bold text-xs outline-none focus:border-cust-red"
+            />
+          </div>
+        )}
+      </div>
 
       {/* ── CONTENT BODY ── */}
       {loading || !isDataMatchingTab ? (
-        <div className="py-24 text-center text-zinc-500 text-xs uppercase tracking-wider flex flex-col items-center justify-center gap-3">
-          <div className="w-8 h-8 border-2 border-cust-red border-t-transparent rounded-full animate-spin" />
+        <div className="py-24 text-center text-zinc-500 text-xs font-mono-tech uppercase tracking-wider flex flex-col items-center justify-center gap-3">
+          <div className="w-8 h-8 border border-cust-red border-t-transparent rounded-full animate-spin" />
           <span>Mengkalkulasi Laporan...</span>
         </div>
       ) : (
@@ -192,62 +192,62 @@ export default function ReportsPage() {
           {tab === 'revenue' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-[#121216] border border-zinc-800 rounded-2xl p-5 shadow-lg">
-                  <p className="text-zinc-400 text-xs font-medium mb-1">Total Transaksi Selesai</p>
-                  <p className="font-display font-black text-3xl text-white">
+                <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b]">
+                  <p className="text-zinc-600 text-xs font-bold uppercase tracking-wider mb-1">Total Transaksi Selesai</p>
+                  <p className="font-display font-black text-3xl text-zinc-950">
                     {data?.summary?.total_transactions ?? 0} <span className="text-xs text-zinc-500 font-sans font-normal">Transaksi</span>
                   </p>
                 </div>
-                <div className="bg-[#121216] border border-zinc-800 rounded-2xl p-5 shadow-lg">
-                  <p className="text-zinc-400 text-xs font-medium mb-1">Pendapatan Gaming Rig</p>
+                <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b]">
+                  <p className="text-zinc-600 text-xs font-bold uppercase tracking-wider mb-1">Pendapatan Gaming Rig</p>
                   <p className="font-display font-black text-3xl text-cust-red">
                     {formatRupiah(data?.summary?.gaming_total ?? 0)}
                   </p>
                 </div>
-                <div className="bg-[#121216] border border-zinc-800 rounded-2xl p-5 shadow-lg">
-                  <p className="text-zinc-400 text-xs font-medium mb-1">Pendapatan Kafe F&B</p>
-                  <p className="font-display font-black text-3xl text-emerald-400">
+                <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b]">
+                  <p className="text-zinc-600 text-xs font-bold uppercase tracking-wider mb-1">Pendapatan Kafe F&B</p>
+                  <p className="font-display font-black text-3xl text-emerald-700">
                     {formatRupiah(data?.summary?.food_total ?? 0)}
                   </p>
                 </div>
               </div>
 
-              <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+              <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>
-                      <tr className="border-b border-zinc-800 bg-zinc-900/50 text-left text-zinc-400 uppercase tracking-wider font-mono-tech">
-                        <th className="px-5 py-4 font-semibold">Kode Transaksi</th>
-                        <th className="px-5 py-4 font-semibold">Pelanggan</th>
-                        <th className="px-5 py-4 font-semibold">Gaming Rig</th>
-                        <th className="px-5 py-4 font-semibold">Kafe F&B</th>
-                        <th className="px-5 py-4 font-semibold">Total</th>
-                        <th className="px-5 py-4 font-semibold">Tanggal</th>
+                      <tr className="border-b border-zinc-200 bg-zinc-100 text-left text-zinc-950 uppercase tracking-wider font-mono-tech font-black">
+                        <th className="px-5 py-4">Kode Transaksi</th>
+                        <th className="px-5 py-4">Pelanggan</th>
+                        <th className="px-5 py-4">Gaming Rig</th>
+                        <th className="px-5 py-4">Kafe F&B</th>
+                        <th className="px-5 py-4">Total</th>
+                        <th className="px-5 py-4">Tanggal</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-800/60">
+                    <tbody className="divide-y divide-zinc-200">
                       {(!data?.transactions || data.transactions.length === 0) ? (
                         <tr>
-                          <td colSpan={6} className="px-5 py-12 text-center text-zinc-500">
+                          <td colSpan={6} className="px-5 py-12 text-center text-zinc-500 font-medium">
                             Tidak ada transaksi pada periode ini.
                           </td>
                         </tr>
                       ) : (
                         data.transactions.map((t) => (
-                          <tr key={t.transaction_code} className="hover:bg-zinc-900/40 transition">
-                            <td className="px-5 py-3.5 font-mono-tech font-bold text-white">
+                          <tr key={t.transaction_code} className="hover:bg-zinc-50 transition">
+                            <td className="px-5 py-3.5 font-mono-tech font-bold text-zinc-950">
                               {t.transaction_code}
                             </td>
-                            <td className="px-5 py-3.5 text-zinc-300">
+                            <td className="px-5 py-3.5 text-zinc-900 font-medium">
                               {t.customer ?? 'Anonim'}
                             </td>
-                            <td className="px-5 py-3.5 text-zinc-300 font-mono-tech">
+                            <td className="px-5 py-3.5 text-zinc-700 font-mono-tech font-bold">
                               {formatRupiah(t.gaming_amount)}
                             </td>
-                            <td className="px-5 py-3.5 text-zinc-300 font-mono-tech">
+                            <td className="px-5 py-3.5 text-zinc-700 font-mono-tech font-bold">
                               {formatRupiah(t.food_amount)}
                             </td>
-                            <td className="px-5 py-3.5 font-display font-bold text-base text-white">
+                            <td className="px-5 py-3.5 font-display font-black text-base text-zinc-950">
                               {formatRupiah(t.total_amount)}
                             </td>
                             <td className="px-5 py-3.5 text-zinc-500 font-mono-tech">
@@ -265,26 +265,26 @@ export default function ReportsPage() {
 
           {/* TAB 2: GAMING RIG REPORT */}
           {tab === 'gaming' && (
-            <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-8 shadow-[3px_3px_0px_0px_#18181b]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                 <div>
-                  <h3 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <h3 className="font-display font-black text-zinc-950 text-xl uppercase tracking-tight">
                     Distribusi Pendapatan per Stasiun
                   </h3>
-                  <p className="text-zinc-500 text-xs">
-                    Total Revenue Gaming: <strong className="text-white">{formatRupiah(data?.total_revenue ?? 0)}</strong>
+                  <p className="text-zinc-600 text-xs font-medium">
+                    Total Revenue Gaming: <strong className="text-zinc-950">{formatRupiah(data?.total_revenue ?? 0)}</strong>
                   </p>
                 </div>
               </div>
 
               {(!data?.per_device || data.per_device.length === 0) ? (
-                <div className="py-16 text-center text-zinc-500 text-xs">
+                <div className="py-16 text-center text-zinc-500 text-xs font-medium">
                   Belum ada data sesi gaming yang selesai pada periode ini.
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={320}>
                   <BarChart data={data.per_device}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.6} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" opacity={0.8} />
                     <XAxis dataKey="device_code" stroke="#71717a" fontSize={12} tickLine={false} />
                     <YAxis
                       stroke="#71717a"
@@ -294,7 +294,7 @@ export default function ReportsPage() {
                     />
                     <Tooltip
                       formatter={(v) => formatRupiah(v)}
-                      contentStyle={{ backgroundColor: '#121216', border: '1px solid #27272a', borderRadius: '0.75rem', fontSize: '12px' }}
+                      contentStyle={{ backgroundColor: '#ffffff', border: '2px solid #18181b', borderRadius: '0.75rem', fontSize: '12px', fontWeight: 'bold' }}
                     />
                     <Bar dataKey="total_revenue" name="Total Omzet" fill="#e31e24" radius={[6, 6, 0, 0]} />
                   </BarChart>
@@ -305,17 +305,17 @@ export default function ReportsPage() {
 
           {/* TAB 3: FOOD & BEVERAGE REPORT */}
           {tab === 'food' && (
-            <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
-              <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+            <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
+              <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
                 <div>
-                  <h3 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <h3 className="font-display font-black text-zinc-950 text-xl uppercase tracking-tight">
                     Menu Kafe Terlaris (Top Seller)
                   </h3>
-                  <p className="text-zinc-500 text-xs">Peringkat menu berdasarkan kuantitas terjual.</p>
+                  <p className="text-zinc-600 text-xs font-medium">Peringkat menu berdasarkan kuantitas terjual.</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Total Omzet Kafe</span>
-                  <span className="font-display font-black text-lg text-emerald-400">
+                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider block font-bold font-mono-tech">Total Omzet Kafe</span>
+                  <span className="font-display font-black text-lg text-emerald-700">
                     {formatRupiah(data?.total_revenue ?? 0)}
                   </span>
                 </div>
@@ -324,29 +324,29 @@ export default function ReportsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="border-b border-zinc-800 bg-zinc-900/50 text-left text-zinc-400 uppercase tracking-wider font-mono-tech">
-                      <th className="px-5 py-4 font-semibold">Nama Produk</th>
-                      <th className="px-5 py-4 font-semibold">Total Porsi Terjual</th>
-                      <th className="px-5 py-4 font-semibold text-right">Akumulasi Omzet</th>
+                    <tr className="border-b border-zinc-200 bg-zinc-100 text-left text-zinc-950 uppercase tracking-wider font-mono-tech font-black">
+                      <th className="px-5 py-4">Nama Produk</th>
+                      <th className="px-5 py-4">Total Porsi Terjual</th>
+                      <th className="px-5 py-4 text-right">Akumulasi Omzet</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-800/60">
+                  <tbody className="divide-y divide-zinc-200">
                     {(!data?.top_products || data.top_products.length === 0) ? (
                       <tr>
-                        <td colSpan={3} className="px-5 py-12 text-center text-zinc-500">
+                        <td colSpan={3} className="px-5 py-12 text-center text-zinc-500 font-medium">
                           Belum ada penjualan menu kafe pada periode ini.
                         </td>
                       </tr>
                     ) : (
                       data.top_products.map((p, idx) => (
-                        <tr key={idx} className="hover:bg-zinc-900/40 transition">
-                          <td className="px-5 py-4 text-white font-semibold">
+                        <tr key={idx} className="hover:bg-zinc-50 transition">
+                          <td className="px-5 py-4 text-zinc-950 font-bold">
                             {p.product_name}
                           </td>
-                          <td className="px-5 py-4 text-zinc-300 font-mono-tech">
+                          <td className="px-5 py-4 text-zinc-700 font-mono-tech font-bold">
                             {p.total_qty}x Porsi
                           </td>
-                          <td className="px-5 py-4 text-right font-display font-bold text-base text-emerald-400 font-mono-tech">
+                          <td className="px-5 py-4 text-right font-display font-black text-base text-emerald-700 font-mono-tech">
                             {formatRupiah(p.total_revenue)}
                           </td>
                         </tr>

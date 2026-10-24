@@ -14,17 +14,33 @@ export function formatRupiah(value) {
 }
 
 export const STATUS_CONFIG = {
-  available: { label: 'Available', color: 'status-available' },
-  occupied: { label: 'Occupied', color: 'status-occupied' },
-  booked: { label: 'Booked', color: 'status-booked' },
-  maintenance: { label: 'Maintenance', color: 'status-maintenance' },
+  available: {
+    label: 'Available',
+    color: 'available',
+    badgeClass: 'bg-emerald-100 text-emerald-950 border-zinc-950 font-bold',
+  },
+  occupied: {
+    label: 'Occupied',
+    color: 'occupied',
+    badgeClass: 'bg-rose-100 text-rose-950 border-zinc-950 font-bold',
+  },
+  booked: {
+    label: 'Booked',
+    color: 'booked',
+    badgeClass: 'bg-amber-100 text-amber-950 border-zinc-950 font-bold',
+  },
+  maintenance: {
+    label: 'Maintenance',
+    color: 'maintenance',
+    badgeClass: 'bg-zinc-200 text-zinc-950 border-zinc-950 font-bold',
+  },
 };
 
 export const BOOKING_STATUS_CONFIG = {
-  pending: { label: 'Pending', color: 'status-booked' },
-  confirmed: { label: 'Confirmed', color: 'status-available' },
-  cancelled: { label: 'Cancelled', color: 'status-occupied' },
-  completed: { label: 'Completed', color: 'status-maintenance' },
+  pending: { label: 'Pending', color: 'pending' },
+  confirmed: { label: 'Confirmed', color: 'confirmed' },
+  cancelled: { label: 'Cancelled', color: 'cancelled' },
+  completed: { label: 'Completed', color: 'completed' },
 };
 
 export function timeToMinutes(time) {
@@ -50,18 +66,18 @@ export function isSlotAvailable(startTime, durationHours, bookedSlots) {
 }
 
 export const STOCK_STATUS_CONFIG = {
-  in_stock: { label: 'Stok Aman', color: 'status-available' },
-  low_stock: { label: 'Stok Menipis', color: 'status-booked' },
-  out_of_stock: { label: 'Stok Habis', color: 'status-occupied' },
+  in_stock: { label: 'Stok Aman', color: 'in_stock' },
+  low_stock: { label: 'Stok Menipis', color: 'low_stock' },
+  out_of_stock: { label: 'Stok Habis', color: 'out_of_stock' },
 };
 
 export const ORDER_STATUS_CONFIG = {
-  pending: { label: 'Pending', color: 'status-booked' },
-  processing: { label: 'Processing', color: 'status-occupied' },
-  ready: { label: 'Ready', color: 'status-available' },
-  delivered: { label: 'Delivered', color: 'status-maintenance' },
-  completed: { label: 'Completed', color: 'status-maintenance' },
-  cancelled: { label: 'Cancelled', color: 'status-occupied' },
+  pending: { label: 'Pending', color: 'pending' },
+  processing: { label: 'Processing', color: 'processing' },
+  ready: { label: 'Ready', color: 'ready' },
+  delivered: { label: 'Delivered', color: 'delivered' },
+  completed: { label: 'Completed', color: 'completed' },
+  cancelled: { label: 'Cancelled', color: 'cancelled' },
 };
 
 export const ORDER_STATUS_FLOW = {
@@ -79,10 +95,10 @@ export const ORDER_STATUS_ACTION_LABEL = {
 };
 
 export const TRANSACTION_STATUS_CONFIG = {
-  pending: { label: 'Belum Dibayar', color: 'status-booked' },
-  paid: { label: 'Lunas', color: 'status-available' },
-  failed: { label: 'Gagal', color: 'status-occupied' },
-  cancelled: { label: 'Dibatalkan', color: 'status-occupied' },
+  pending: { label: 'Belum Dibayar', color: 'pending' },
+  paid: { label: 'Lunas', color: 'paid' },
+  failed: { label: 'Gagal', color: 'failed' },
+  cancelled: { label: 'Dibatalkan', color: 'cancelled' },
 };
 
 export const PAYMENT_METHOD_LABEL = {

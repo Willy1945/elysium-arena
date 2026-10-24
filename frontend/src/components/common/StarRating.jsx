@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
 
-export default function StarRating({ value = 0, size = 16, interactive = false, onChange }) {
+export default function StarRating({ value = 0, size = 16, interactive = false, onChange, emptyClassName = 'text-cust-border' }) {
   return (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((s) => {
@@ -15,7 +15,7 @@ export default function StarRating({ value = 0, size = 16, interactive = false, 
           >
             <Star
               size={size}
-              className={filled ? 'text-cust-red' : 'text-cust-border'}
+              className={filled ? 'text-cust-red' : emptyClassName}
               fill={filled ? 'currentColor' : 'none'}
               strokeWidth={filled ? 0 : 1.5}
             />

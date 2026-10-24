@@ -15,22 +15,22 @@ export default function RatingFormModal({ open, onClose, onSubmit, deviceCode, l
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
       <form
         onSubmit={handleSubmit}
-        className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl relative"
+        className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl relative"
       >
-        <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-800">
+        <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-200">
           <div className="flex items-center gap-2">
-            <Star size={18} className="text-amber-400 fill-amber-400" />
-            <h3 className="font-display font-black text-white uppercase text-lg tracking-wide">
+            <Star size={18} className="text-amber-500 fill-amber-500" />
+            <h3 className="font-display font-black text-zinc-950 uppercase text-lg tracking-wide">
               Beri Ulasan Arena {deviceCode ? `— ${deviceCode}` : ''}
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition"
+            className="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-200 text-zinc-500 hover:text-zinc-900 flex items-center justify-center transition cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -38,12 +38,12 @@ export default function RatingFormModal({ open, onClose, onSubmit, deviceCode, l
 
         <div className="flex flex-col items-center gap-2.5 mb-6 py-2">
           <StarRating value={rating} size={32} interactive onChange={setRating} />
-          <p className="text-zinc-400 text-xs font-medium">
+          <p className="text-zinc-600 text-xs font-semibold">
             {rating > 0 ? `${rating} dari 5 bintang` : 'Pilih bintang untuk memberikan rating'}
           </p>
         </div>
 
-        <label className="block text-zinc-300 text-xs font-bold uppercase tracking-wider mb-2">
+        <label className="block text-zinc-700 text-xs font-bold uppercase tracking-wider mb-2">
           Ulasan & Pengalaman Bermain
         </label>
         <textarea
@@ -52,13 +52,13 @@ export default function RatingFormModal({ open, onClose, onSubmit, deviceCode, l
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={500}
-          className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl text-white text-xs sm:text-sm p-3.5 outline-none focus:border-cust-red transition mb-5"
+          className="w-full bg-white border border-zinc-300 rounded-xl text-zinc-900 text-xs sm:text-sm p-3.5 outline-none focus:border-cust-red transition mb-5 shadow-xs placeholder:text-zinc-400"
         />
 
         <button
           type="submit"
           disabled={rating === 0 || loading}
-          className="w-full bg-cust-red hover:bg-cust-red-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold uppercase text-xs tracking-wider py-3.5 rounded-xl shadow-sm transition"
+          className="w-full bg-cust-red hover:bg-cust-red-dark disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold uppercase text-xs tracking-wider py-3.5 rounded-xl shadow-sm transition cursor-pointer"
         >
           {loading ? 'Mengirim Rating...' : 'Kirim Ulasan Sekarang'}
         </button>

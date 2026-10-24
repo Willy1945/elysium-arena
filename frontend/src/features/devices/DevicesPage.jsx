@@ -64,7 +64,7 @@ export default function DevicesPage() {
     try {
       if (editingDevice) {
         await deviceService.update(editingDevice.id, formData);
-        toast.success('Stasiun berhasil diperbarui.');
+        toast.success(`Stasiun ${editingDevice.code} berhasil diperbarui.`);
       } else {
         await deviceService.create(formData);
         toast.success('Stasiun baru berhasil ditambahkan.');
@@ -79,10 +79,11 @@ export default function DevicesPage() {
   };
 
   const handleDelete = async () => {
+    if (!deletingDevice) return;
     setSaving(true);
     try {
       await deviceService.remove(deletingDevice.id);
-      toast.success('Stasiun berhasil dihapus.');
+      toast.success(`Stasiun ${deletingDevice.code} berhasil dihapus.`);
       setDeletingDevice(null);
       fetchDevices();
     } catch (err) {
@@ -92,37 +93,37 @@ export default function DevicesPage() {
     }
   };
 
-  const filters = ['All', ...deviceTypes.map((t) => t.name)];
+  const filters = ['All', 'PS5', 'PC', 'PS4'];
 
   return (
     <DashboardLayout onSearch={setSearch}>
-      {/* ── HEADER & CONTROLS ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+      {/* ── HEADER ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <Gamepad2 size={14} />
-            <span>Katalog Stasiun</span>
+            <span>Katalog Hardware Arena</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
-            Gaming Rig & Stasiun
+          <h1 className="font-display font-black text-zinc-950 text-2xl sm:text-3xl uppercase tracking-tight">
+            Katalog Stasiun Rig
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
-            Kelola inventaris PC turnamen, PlayStation 5, dan lounge PlayStation 4.
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
+            Kelola data perangkat PlayStation dan PC gaming di arena.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Filter Pills */}
-          <div className="overflow-x-auto max-w-full pb-1 scrollbar-none">
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-1 inline-flex gap-1">
+        {/* Filter Pills & Add Button */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="flex items-center gap-1 bg-white border border-zinc-950 p-1.5 rounded-xl overflow-x-auto no-scrollbar shadow-[1px_1px_0px_0px_#18181b]">
+            <div className="flex items-center gap-1">
               {filters.map((f) => (
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold font-mono-tech uppercase tracking-wider transition cursor-pointer ${
                     activeFilter === f
-                      ? 'bg-cust-red text-white'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                      ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                      : 'text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100'
                   }`}
                 >
                   {f === 'All' ? 'Semua' : f}
@@ -133,7 +134,7 @@ export default function DevicesPage() {
 
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center justify-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl shadow-sm transition cursor-pointer w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-1.5 bg-cust-red hover:bg-cust-red-dark text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition cursor-pointer w-full sm:w-auto"
           >
             <Plus size={15} />
             <span>Tambah Stasiun</span>
@@ -142,17 +143,17 @@ export default function DevicesPage() {
       </div>
 
       {loading ? (
-        <div className="py-24 text-center text-zinc-500 text-xs uppercase tracking-wider">
+        <div className="py-24 text-center text-zinc-600 font-mono-tech text-xs uppercase tracking-wider font-bold">
           Memuat data stasiun...
         </div>
       ) : devices.length === 0 ? (
-        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
-          <Gamepad2 size={40} className="mx-auto text-zinc-600 mb-3" />
-          <p className="text-white font-bold text-sm mb-1">Belum Ada Stasiun</p>
-          <p className="text-zinc-500 text-xs mb-4">Tambahkan stasiun gaming pertamamu ke dalam sistem.</p>
+        <div className="text-center py-20 border border-dashed border-zinc-950 rounded-2xl bg-white shadow-[2px_2px_0px_0px_#18181b]">
+          <Gamepad2 size={40} className="mx-auto text-zinc-400 mb-3" />
+          <p className="text-zinc-950 font-bold text-sm mb-1">Belum Ada Stasiun</p>
+          <p className="text-zinc-600 text-xs mb-4 font-medium">Tambahkan stasiun gaming pertamamu ke dalam sistem.</p>
           <button
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-xl border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b] transition cursor-pointer"
           >
             <Plus size={14} />
             <span>Tambah Sekarang</span>

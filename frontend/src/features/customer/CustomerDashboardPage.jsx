@@ -18,6 +18,13 @@ import RatingFormModal from './RatingFormModal';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { formatRupiah, BOOKING_STATUS_CONFIG } from '../../utils/format';
 
+const STATUS_BADGE_STYLE = {
+  pending: 'bg-amber-50 text-amber-700 border-amber-200',
+  confirmed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  cancelled: 'bg-rose-50 text-rose-700 border-rose-200',
+  completed: 'bg-sky-50 text-sky-700 border-sky-200',
+};
+
 const ORDER_STEPS = ['pending', 'processing', 'ready'];
 const ORDER_STEP_LABEL = {
   pending: 'Diterima Kasir',
@@ -38,19 +45,19 @@ function ActiveSessionCard({ session }) {
   }, [session]);
 
   return (
-    <div className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-7 shadow-xl relative overflow-hidden">
+    <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] relative overflow-hidden">
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-800/80">
+      <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-200/80">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
-          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+          <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
             Sesi Sedang Berjalan
           </span>
         </div>
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300">
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-zinc-100 border border-zinc-200 text-zinc-700">
           Station {session.device?.code}
         </span>
       </div>
@@ -58,31 +65,31 @@ function ActiveSessionCard({ session }) {
       {/* Device Info */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-zinc-500 font-medium">
             {session.device?.device_type?.name} Rig
           </p>
-          <h2 className="font-display font-black text-white text-3xl sm:text-4xl uppercase tracking-tight mt-0.5">
+          <h2 className="font-display font-black text-zinc-950 text-3xl sm:text-4xl uppercase tracking-tight mt-0.5">
             {session.device?.code}
           </h2>
         </div>
         <div className="text-right">
-          <p className="text-[11px] text-zinc-500 uppercase">Smart Lock Terminal</p>
-          <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mt-0.5">
+          <p className="text-[11px] text-zinc-500 uppercase font-semibold">Smart Lock Terminal</p>
+          <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-bold mt-0.5">
             <CheckCircle2 size={13} /> Terbuka & Aktif
           </span>
         </div>
       </div>
 
       {/* Countdown Timer Display */}
-      <div className="p-6 rounded-2xl bg-[#09090c] border border-zinc-800 text-center mb-6">
-        <p className="text-xs text-zinc-400 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5">
+      <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200/90 text-center mb-6 shadow-inner">
+        <p className="text-xs text-zinc-600 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5 font-semibold">
           <Clock size={14} className="text-cust-red" />
           Sisa Waktu Bermain
         </p>
 
         <p
           className={`font-display font-black text-5xl sm:text-6xl tracking-tight tabular-nums ${
-            isExpired ? 'text-cust-red animate-pulse' : 'text-white'
+            isExpired ? 'text-cust-red animate-pulse' : 'text-zinc-950'
           }`}
         >
           {formatted}
@@ -90,11 +97,11 @@ function ActiveSessionCard({ session }) {
 
         {/* Meter Bar */}
         <div className="mt-4 max-w-sm mx-auto">
-          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1.5">
+          <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1.5 font-medium">
             <span>Durasi Berjalan</span>
             <span>{Math.round(progressPct)}%</span>
           </div>
-          <div className="h-2 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+          <div className="h-2 w-full bg-zinc-200 rounded-full overflow-hidden border border-zinc-300/80">
             <div
               className="h-full bg-cust-red rounded-full transition-all duration-300"
               style={{ width: `${progressPct}%` }}
@@ -104,9 +111,9 @@ function ActiveSessionCard({ session }) {
       </div>
 
       {/* Price & Order CTA */}
-      <div className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 mb-5">
-        <span className="text-xs text-zinc-400">Tarif Sesi Ini</span>
-        <span className="font-display font-black text-xl text-white">
+      <div className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 mb-5">
+        <span className="text-xs text-zinc-600 font-medium">Tarif Sesi Ini</span>
+        <span className="font-display font-black text-xl text-zinc-950">
           {formatRupiah(session.price)}
         </span>
       </div>
@@ -274,7 +281,7 @@ export default function CustomerDashboardPage() {
   return (
     <PublicLayout>
       {/* ── PLAYER HEADER BANNER ── */}
-      <section className="bg-[#09090b] border-b border-zinc-800/80">
+      <section className="bg-gradient-to-b from-zinc-50 via-white to-white border-b border-zinc-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             
@@ -285,14 +292,14 @@ export default function CustomerDashboardPage() {
                   <img
                     src={user.avatar}
                     alt={user.name}
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-zinc-700 shadow-sm"
+                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-zinc-200 shadow-md"
                   />
                 ) : (
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white font-display font-black text-xl sm:text-2xl">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-display font-black text-xl sm:text-2xl shadow-sm">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#09090b]" />
+                <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white shadow-sm" />
               </div>
 
               <div className="min-w-0">
@@ -300,22 +307,22 @@ export default function CustomerDashboardPage() {
                   <span className="text-[10px] sm:text-[11px] font-bold text-cust-red uppercase tracking-wider">
                     Member Elysium
                   </span>
-                  <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                  <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 border border-zinc-200 font-semibold">
                     Aktif
                   </span>
                   <Link
                     to="/rewards"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-[10px] sm:text-[11px] font-bold font-mono transition"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 text-[10px] sm:text-[11px] font-bold font-mono transition shadow-xs"
                     title="Klik untuk membuka katalog reward loyalitas"
                   >
-                    <Coins size={11} className="text-amber-400" />
+                    <Coins size={11} className="text-amber-600" />
                     <span>{new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} PTS</span>
                   </Link>
                 </div>
-                <h1 className="font-display font-black text-xl sm:text-3xl text-white uppercase tracking-tight truncate">
+                <h1 className="font-display font-black text-xl sm:text-3xl text-zinc-950 uppercase tracking-tight truncate">
                   {user?.name}
                 </h1>
-                <p className="text-zinc-400 text-xs mt-0.5 truncate">
+                <p className="text-zinc-500 text-xs mt-0.5 truncate font-medium">
                   {user?.email}
                 </p>
               </div>
@@ -325,9 +332,9 @@ export default function CustomerDashboardPage() {
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <Link
                 to="/rewards"
-                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold uppercase tracking-wider text-xs transition shadow-sm"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-bold uppercase tracking-wider text-xs transition shadow-sm"
               >
-                <Coins size={14} className="text-amber-400" />
+                <Coins size={14} className="text-amber-600" />
                 <span>{new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} Koin</span>
               </Link>
 
@@ -341,9 +348,9 @@ export default function CustomerDashboardPage() {
 
               <Link
                 to="/menu"
-                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/80 text-zinc-200 font-semibold uppercase tracking-wider text-xs transition"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 font-semibold uppercase tracking-wider text-xs transition shadow-sm"
               >
-                <ShoppingBag size={14} className="text-amber-400" />
+                <ShoppingBag size={14} className="text-amber-600" />
                 <span>Order Kafe</span>
               </Link>
             </div>
@@ -353,30 +360,30 @@ export default function CustomerDashboardPage() {
       </section>
 
       {/* ── QUICK NAVIGATION STRIP ── */}
-      <section className="bg-[#0c0c10] border-b border-zinc-800/60 py-3">
+      <section className="bg-zinc-50/80 border-b border-zinc-200/80 py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-6 overflow-x-auto no-scrollbar text-xs">
             <Link
               to="/rewards"
-              className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold transition whitespace-nowrap py-1"
+              className="inline-flex items-center gap-2 text-amber-700 hover:text-amber-800 font-bold transition whitespace-nowrap py-1"
             >
-              <Coins size={14} />
+              <Coins size={14} className="text-amber-600" />
               <span>Reward Loyalitas ({new Intl.NumberFormat('id-ID').format(data?.loyalty_points ?? 0)} Koin)</span>
             </Link>
-            <span className="text-zinc-700">/</span>
+            <span className="text-zinc-300">/</span>
             <Link
               to="/feedback"
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition whitespace-nowrap py-1"
+              className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 font-semibold transition whitespace-nowrap py-1"
             >
-              <MessageSquarePlus size={14} className="text-amber-400" />
+              <MessageSquarePlus size={14} className="text-cust-red" />
               <span>Kirim Masukan & Request Game</span>
             </Link>
-            <span className="text-zinc-700">/</span>
+            <span className="text-zinc-300">/</span>
             <Link
               to="/profile"
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition whitespace-nowrap py-1"
+              className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 font-semibold transition whitespace-nowrap py-1"
             >
-              <User size={14} className="text-emerald-400" />
+              <User size={14} className="text-emerald-600" />
               <span>Edit Profil & Password</span>
             </Link>
           </div>
@@ -392,14 +399,14 @@ export default function CustomerDashboardPage() {
             {data.active_session ? (
               <ActiveSessionCard session={data.active_session} />
             ) : (
-              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-8 sm:p-10 text-center shadow-lg">
-                <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mx-auto mb-4">
+              <div className="rounded-3xl border border-zinc-200/90 bg-white p-8 sm:p-10 text-center shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
+                <div className="w-14 h-14 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-500 mx-auto mb-4">
                   <Gamepad2 size={28} />
                 </div>
-                <h3 className="font-display font-black text-white text-2xl uppercase mb-1">
+                <h3 className="font-display font-black text-zinc-950 text-2xl uppercase mb-1">
                   Tidak Ada Sesi Aktif
                 </h3>
-                <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mx-auto mb-6 leading-relaxed">
+                <p className="text-zinc-600 text-xs sm:text-sm max-w-xs mx-auto mb-6 leading-relaxed font-medium">
                   Stasiun siap ditempati. Pilih PlayStation 5 atau PC Gaming spek tinggi untuk mulai bermain.
                 </p>
                 <Link
@@ -414,17 +421,17 @@ export default function CustomerDashboardPage() {
 
             {/* 1. Ulasan yang Pernah Dikirim Customer (Bisa Dihapus) */}
             {data.my_rating && (
-              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 shadow-xl relative overflow-hidden">
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-800/80">
+              <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] relative overflow-hidden">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-200/80">
                   <div className="flex items-center gap-2">
-                    <Star size={16} className="text-amber-400 fill-amber-400" />
-                    <h3 className="font-display font-bold text-white text-base uppercase tracking-wide">
+                    <Star size={16} className="text-amber-500 fill-amber-500" />
+                    <h3 className="font-display font-bold text-zinc-950 text-base uppercase tracking-wide">
                       Ulasan Kamu
                     </h3>
                   </div>
                   <button
                     onClick={() => setDeletingRating(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-zinc-400 hover:text-red-400 bg-zinc-900/80 hover:bg-red-950/30 border border-zinc-800 hover:border-red-500/40 text-xs font-semibold transition cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-zinc-600 hover:text-red-600 bg-zinc-100 hover:bg-red-50 border border-zinc-200 hover:border-red-200 text-xs font-semibold transition cursor-pointer"
                     title="Hapus Ulasan Ini"
                   >
                     <Trash2 size={13} />
@@ -441,12 +448,12 @@ export default function CustomerDashboardPage() {
                         size={15}
                         className={
                           s <= data.my_rating.rating
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-zinc-700'
+                            ? 'text-amber-500 fill-amber-500'
+                            : 'text-zinc-300'
                         }
                       />
                     ))}
-                    <span className="text-amber-400 text-xs font-bold font-mono ml-1.5">
+                    <span className="text-amber-600 text-xs font-bold font-mono ml-1.5">
                       {data.my_rating.rating}.0
                     </span>
                   </div>
@@ -463,7 +470,7 @@ export default function CustomerDashboardPage() {
 
                 {/* Comment Text */}
                 {data.my_rating.comment ? (
-                  <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed italic bg-zinc-900/60 p-3.5 rounded-2xl border border-zinc-800/70">
+                  <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed italic bg-zinc-50 p-3.5 rounded-2xl border border-zinc-200/80">
                     "{data.my_rating.comment}"
                   </p>
                 ) : (
@@ -474,19 +481,19 @@ export default function CustomerDashboardPage() {
 
             {/* 2. Beri Rating Arena Baru (Muncul jika belum ada ulasan & sudah main) */}
             {data.can_rate_arena && (
-              <div className="rounded-3xl border border-amber-500/30 bg-[#121216] p-6 shadow-lg">
+              <div className="rounded-3xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Star size={16} className="text-amber-400 fill-amber-400" />
-                  <h3 className="font-display font-black text-white text-lg uppercase tracking-wide">
+                  <Star size={16} className="text-amber-500 fill-amber-500" />
+                  <h3 className="font-display font-black text-zinc-950 text-lg uppercase tracking-wide">
                     Ulasan Elysium Arena
                   </h3>
                 </div>
-                <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                <p className="text-zinc-600 text-xs leading-relaxed mb-4 font-medium">
                   Bagikan kepuasanmu bermain di sini untuk membantu kami menjaga kualitas perangkat & layanan.
                 </p>
                 <button
                   onClick={() => setRatingTarget(true)}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-wider transition cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold uppercase tracking-wider transition cursor-pointer shadow-sm"
                 >
                   <Star size={14} />
                   <span>Beri Rating Sekarang</span>
@@ -500,15 +507,15 @@ export default function CustomerDashboardPage() {
             
             {/* 1. Tagihan Menunggu Pembayaran */}
             {data.pending_transactions.length > 0 && (
-              <div className="rounded-3xl border border-amber-500/40 bg-[#14120f] p-6 sm:p-7 shadow-lg">
+              <div className="rounded-3xl border border-amber-200 bg-amber-50/30 p-6 sm:p-7 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <AlertTriangle size={18} className="text-amber-400" />
-                    <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                    <AlertTriangle size={18} className="text-amber-600" />
+                    <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                       Tagihan Menunggu Pembayaran
                     </h2>
                   </div>
-                  <span className="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full font-bold">
+                  <span className="text-[11px] text-amber-700 bg-amber-100/80 border border-amber-200 px-2.5 py-0.5 rounded-full font-bold">
                     {data.pending_transactions.length} Pending
                   </span>
                 </div>
@@ -517,21 +524,21 @@ export default function CustomerDashboardPage() {
                   {data.pending_transactions.map((t) => (
                     <div
                       key={t.id}
-                      className="flex items-center justify-between bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4"
+                      className="flex items-center justify-between bg-white border border-amber-200/80 rounded-2xl p-4 shadow-xs"
                     >
                       <div>
-                        <p className="text-zinc-500 text-[10px] font-mono-tech uppercase">
+                        <p className="text-zinc-500 text-[10px] font-mono-tech uppercase font-semibold">
                           {t.transaction_code}
                         </p>
-                        <p className="text-white font-bold text-sm mt-0.5">
+                        <p className="text-zinc-950 font-bold text-sm mt-0.5">
                           {t.session?.device_code ? `Sesi ${t.session.device_code}` : 'Pesanan F&B'}
                         </p>
-                        <p className="text-[11px] text-amber-400 mt-0.5">
+                        <p className="text-[11px] text-amber-700 mt-0.5 font-medium">
                           Selesaikan pembayaran di kasir atau scan QRIS
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-display font-black text-amber-400 text-2xl">
+                        <p className="font-display font-black text-amber-600 text-2xl">
                           {formatRupiah(t.total_amount)}
                         </p>
                       </div>
@@ -542,17 +549,17 @@ export default function CustomerDashboardPage() {
             )}
 
             {/* 2. Booking Mendatang */}
-            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+            <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5">
                   <CalendarCheck size={18} className="text-cust-red" />
-                  <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                     Jadwal Booking Mendatang
                   </h2>
                 </div>
                 <Link
                   to="/browse-devices"
-                  className="text-cust-red hover:text-white text-xs font-bold uppercase flex items-center gap-1 transition"
+                  className="text-cust-red hover:text-cust-red-dark text-xs font-bold uppercase flex items-center gap-1 transition"
                 >
                   <span>Pesan Baru</span>
                   <ArrowRight size={12} />
@@ -560,8 +567,8 @@ export default function CustomerDashboardPage() {
               </div>
 
               {data.upcoming_bookings.length === 0 ? (
-                <div className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-center">
-                  <p className="text-zinc-500 text-xs">
+                <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200 text-center">
+                  <p className="text-zinc-500 text-xs font-medium">
                     Belum ada jadwal booking yang akan datang.
                   </p>
                 </div>
@@ -572,21 +579,21 @@ export default function CustomerDashboardPage() {
                     return (
                       <div
                         key={b.id}
-                        className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-4 flex flex-col justify-between hover:border-zinc-700 transition"
+                        className="bg-zinc-50/70 border border-zinc-200 rounded-2xl p-4 flex flex-col justify-between hover:border-zinc-300 hover:bg-zinc-50 transition shadow-xs"
                       >
                         <div>
                           <div className="flex items-center justify-between mb-3">
-                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase">
+                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-semibold">
                               {b.booking_code}
                             </span>
-                            <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">
+                            <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${STATUS_BADGE_STYLE[b.status] || 'bg-zinc-100 text-zinc-700 border-zinc-200'}`}>
                               {status.label}
                             </span>
                           </div>
-                          <p className="text-white font-display font-black text-xl uppercase mb-1">
+                          <p className="text-zinc-950 font-display font-black text-xl uppercase mb-1">
                             {b.device?.code}
                           </p>
-                          <div className="flex items-center gap-1.5 text-zinc-400 text-xs mb-3">
+                          <div className="flex items-center gap-1.5 text-zinc-600 text-xs mb-3 font-medium">
                             <Clock size={12} className="text-cust-red" />
                             <span>
                               {b.booking_date} · {b.start_time} - {b.end_time}
@@ -594,14 +601,20 @@ export default function CustomerDashboardPage() {
                           </div>
                         </div>
                         {['pending', 'confirmed'].includes(b.status) && (
-                          <div className="pt-2 border-t border-zinc-800/80 flex justify-end">
-                            <button
-                              type="button"
-                              onClick={() => setCancellingBookingId(b.id)}
-                              className="text-[11px] text-zinc-500 hover:text-red-400 transition cursor-pointer"
-                            >
-                              Batalkan Jadwal
-                            </button>
+                          <div className="pt-2 border-t border-zinc-200 flex justify-end">
+                            {b.can_cancel !== false ? (
+                              <button
+                                type="button"
+                                onClick={() => setCancellingBookingId(b.id)}
+                                className="text-[11px] text-zinc-500 hover:text-red-600 font-medium transition cursor-pointer"
+                              >
+                                Batalkan Jadwal
+                              </button>
+                            ) : (
+                              <span className="text-[11px] text-emerald-600 font-bold font-mono-tech">
+                                Sesi Sedang Berjalan
+                              </span>
+                            )}
                           </div>
                         )}
                       </div>
@@ -613,18 +626,18 @@ export default function CustomerDashboardPage() {
 
             {/* 2b. Riwayat Booking Lampau (Selesai & Dibatalkan) */}
             {data.booking_history?.length > 0 && (
-              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+              <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center justify-between mb-5">
                   <div className="flex items-center gap-2.5">
                     <CalendarCheck size={18} className="text-zinc-500" />
-                    <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                    <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                       Riwayat Booking Lampau
                     </h2>
                   </div>
                   <button
                     type="button"
                     onClick={() => setConfirmClearAllBookings(true)}
-                    className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-red-400 hover:bg-red-950/20 px-3 py-1.5 rounded-xl border border-transparent hover:border-red-500/30 transition cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs text-zinc-600 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl border border-zinc-200 hover:border-red-200 transition cursor-pointer font-medium"
                     title="Bersihkan semua riwayat booking yang telah selesai atau dibatalkan"
                   >
                     <Trash2 size={13} />
@@ -638,31 +651,25 @@ export default function CustomerDashboardPage() {
                     return (
                       <div
                         key={b.id}
-                        className="group flex items-center justify-between bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-xl px-4 py-3 transition"
+                        className="group flex items-center justify-between bg-zinc-50/70 border border-zinc-200 hover:border-zinc-300 rounded-xl px-4 py-3 transition shadow-xs"
                       >
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase">
+                            <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-semibold">
                               {b.booking_code}
                             </span>
-                            <span
-                              className={`text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded border ${
-                                isCompleted
-                                  ? 'bg-emerald-950/50 text-emerald-400 border-emerald-500/30'
-                                  : 'bg-zinc-800 text-zinc-400 border-zinc-700'
-                              }`}
-                            >
+                            <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border ${isCompleted ? STATUS_BADGE_STYLE.completed : STATUS_BADGE_STYLE.cancelled}`}>
                               {isCompleted ? 'Selesai' : 'Dibatalkan'}
                             </span>
                           </div>
-                          <p className="text-white font-bold text-xs mt-1">
+                          <p className="text-zinc-950 font-bold text-xs mt-1">
                             {b.device?.code} · {b.booking_date} ({b.start_time} - {b.end_time})
                           </p>
                         </div>
                         <button
                           type="button"
                           onClick={() => setDeletingBookingId(b.id)}
-                          className="opacity-60 group-hover:opacity-100 p-2 text-zinc-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition cursor-pointer"
+                          className="opacity-60 group-hover:opacity-100 p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
                           title="Hapus riwayat booking ini"
                         >
                           <Trash2 size={14} />
@@ -676,10 +683,10 @@ export default function CustomerDashboardPage() {
 
             {/* 3. Status Pesanan F&B Aktif */}
             {data.active_orders.length > 0 && (
-              <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+              <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center gap-2.5 mb-5">
-                  <ShoppingBag size={18} className="text-amber-400" />
-                  <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <ShoppingBag size={18} className="text-amber-600" />
+                  <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                     Pesanan Kafe Sedang Berjalan
                   </h2>
                 </div>
@@ -690,18 +697,18 @@ export default function CustomerDashboardPage() {
                     return (
                       <div
                         key={o.id}
-                        className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-5"
+                        className="bg-zinc-50/70 border border-zinc-200 rounded-2xl p-5 shadow-xs"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-amber-400 text-xs font-bold uppercase">
+                          <span className="text-amber-700 text-xs font-bold uppercase">
                             Order #{o.order_code}
                           </span>
-                          <span className="text-xs font-semibold text-white">
+                          <span className="text-xs font-semibold text-zinc-950">
                             {formatRupiah(o.total_price)}
                           </span>
                         </div>
 
-                        <p className="text-zinc-300 text-xs mb-4">
+                        <p className="text-zinc-700 text-xs mb-4 font-medium">
                           {o.items.map((item) => `${item.product.name} ×${item.quantity}`).join(', ')}
                         </p>
 
@@ -712,13 +719,13 @@ export default function CustomerDashboardPage() {
                               <div
                                 className={`h-1.5 rounded-full ${
                                   idx <= currentIdx
-                                    ? 'bg-amber-400'
-                                    : 'bg-zinc-800'
+                                    ? 'bg-amber-500'
+                                    : 'bg-zinc-200'
                                 }`}
                               />
                               <span
                                 className={`text-[10px] uppercase ${
-                                  idx <= currentIdx ? 'text-amber-400 font-bold' : 'text-zinc-600'
+                                  idx <= currentIdx ? 'text-amber-700 font-bold' : 'text-zinc-400'
                                 }`}
                               >
                                 {ORDER_STEP_LABEL[step]}
@@ -734,18 +741,18 @@ export default function CustomerDashboardPage() {
             )}
 
             {/* 4. Riwayat Transaksi */}
-            <div className="rounded-3xl border border-zinc-800 bg-[#121216] p-6 sm:p-7 shadow-lg">
+            <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5">
-                  <Receipt size={18} className="text-zinc-400" />
-                  <h2 className="font-display font-black text-white text-xl uppercase tracking-wide">
+                  <Receipt size={18} className="text-zinc-500" />
+                  <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
                     Riwayat Transaksi Terakhir
                   </h2>
                 </div>
                 {data.recent_transactions.length > 0 && (
                   <button
                     onClick={() => setConfirmClearAllTrx(true)}
-                    className="flex items-center gap-1.5 text-xs text-zinc-400 hover:text-red-400 hover:bg-red-950/20 px-3 py-1.5 rounded-xl border border-transparent hover:border-red-500/30 transition cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs text-zinc-600 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl border border-zinc-200 hover:border-red-200 transition cursor-pointer font-medium"
                     title="Bersihkan semua riwayat transaksi dari akun Anda"
                   >
                     <Trash2 size={13} />
@@ -755,8 +762,8 @@ export default function CustomerDashboardPage() {
               </div>
 
               {data.recent_transactions.length === 0 ? (
-                <div className="p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800 text-center">
-                  <p className="text-zinc-500 text-xs">
+                <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200 text-center">
+                  <p className="text-zinc-500 text-xs font-medium">
                     Belum ada catatan riwayat transaksi.
                   </p>
                 </div>
@@ -765,24 +772,24 @@ export default function CustomerDashboardPage() {
                   {data.recent_transactions.map((t) => (
                     <div
                       key={t.id}
-                      className="group flex items-center justify-between bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-xl px-4 py-3 transition"
+                      className="group flex items-center justify-between bg-zinc-50/70 border border-zinc-200 hover:border-zinc-300 rounded-xl px-4 py-3 transition shadow-xs"
                     >
                       <div>
-                        <p className="text-zinc-500 font-mono-tech text-[10px] uppercase">
+                        <p className="text-zinc-500 font-mono-tech text-[10px] uppercase font-semibold">
                           {t.transaction_code}
                         </p>
-                        <p className="text-white font-medium text-xs sm:text-sm mt-0.5">
+                        <p className="text-zinc-900 font-semibold text-xs sm:text-sm mt-0.5">
                           {t.session?.device_code ? `Sesi ${t.session.device_code}` : 'Pesanan F&B'}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <p className="font-display font-bold text-white text-base">
+                        <p className="font-display font-bold text-zinc-950 text-base">
                           {formatRupiah(t.total_amount)}
                         </p>
                         <button
                           onClick={() => setDeletingTrxId(t.id)}
                           title="Hapus transaksi ini dari riwayat"
-                          className="opacity-70 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition cursor-pointer"
+                          className="opacity-70 group-hover:opacity-100 p-1.5 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 transition cursor-pointer"
                         >
                           <Trash2 size={13} />
                         </button>

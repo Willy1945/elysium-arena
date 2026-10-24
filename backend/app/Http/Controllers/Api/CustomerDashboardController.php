@@ -25,9 +25,27 @@ class CustomerDashboardController extends Controller
             ->where('status', 'active')
             ->first();
 
+        // Cari ID booking yang sedang berjalan aktif dalam sesi bermain agar tidak tampil ganda di "Jadwal Mendatang"
+        $activeBookingIds = GamingSession::where('user_id', $userId)
+            ->where('status', 'active')
+            ->whereNotNull('booking_id')
+            ->pluck('booking_id')
+            ->toArray();
+
+        if ($activeSession) {
+            $todayDeviceBookingIds = Booking::where('user_id', $userId)
+                ->where('device_id', $activeSession->device_id)
+                ->where('booking_date', now()->toDateString())
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->pluck('id')
+                ->toArray();
+            $activeBookingIds = array_unique(array_merge($activeBookingIds, $todayDeviceBookingIds));
+        }
+
         $upcomingBookings = Booking::with(['device.deviceType'])
             ->where('user_id', $userId)
             ->whereIn('status', ['pending', 'confirmed'])
+            ->whereNotIn('id', $activeBookingIds)
             ->where('booking_date', '>=', now()->toDateString())
             ->orderBy('booking_date')
             ->orderBy('start_time')

@@ -9,6 +9,16 @@ class BookingResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $isPlaying = \App\Models\GamingSession::where('status', 'active')
+            ->where(function ($q) {
+                $q->where('booking_id', $this->id)
+                  ->orWhere(function ($sub) {
+                      $sub->where('device_id', $this->device_id)
+                          ->where('user_id', $this->user_id);
+                  });
+            })
+            ->exists();
+
         return [
             'id' => $this->id,
             'booking_code' => $this->booking_code,
@@ -23,6 +33,8 @@ class BookingResource extends JsonResource
             'duration' => $this->duration,
             'total_price' => $this->total_price,
             'status' => $this->status,
+            'is_playing' => $isPlaying,
+            'can_cancel' => in_array($this->status, ['pending', 'confirmed']) && ! $isPlaying,
             'created_at' => $this->created_at,
         ];
     }

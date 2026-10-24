@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../features/auth/LoginPage';
+import ResetPasswordPage from '../features/auth/ResetPasswordPage';
 import DevicesPage from '../features/devices/DevicesPage';
 import ProtectedRoute from './ProtectedRoute';
 import GamesPage from '../features/games/GamesPage';
@@ -25,16 +26,18 @@ import CafeDashboardPage from '../features/cafe/CafeDashboardPage';
 import CustomerBookingPage from '../features/customer/CustomerBookingPage';
 import FoodMenuPage from '../features/public/FoodMenuPage';
 import ProfilePage from '../features/customer/ProfilePage';
-import FeedbackPage from '../features/customer/FeedbackPage';
+import ContactPage from '../features/public/ContactPage';
 import FeedbackManagePage from '../features/feedback/FeedbackManagePage';
 import RewardsPage from '../features/customer/RewardsPage';
 import StaffPage from '../features/staff/StaffPage';
 import TermsPage from '../features/public/TermsPage';
 import PrivacyPage from '../features/public/PrivacyPage';
+import ScrollToTop from '../components/common/ScrollToTop';
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
 
@@ -189,19 +192,14 @@ export default function AppRouter() {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+            <ProtectedRoute allowedRoles={['CUSTOMER', 'OWNER', 'ADMIN', 'STAFF_CAFE']}>
               <ProfilePage />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/feedback"
-          element={
-            <ProtectedRoute allowedRoles={['CUSTOMER']}>
-              <FeedbackPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/kontak" element={<ContactPage />} />
+        <Route path="/feedback" element={<ContactPage />} />
         <Route
           path="/admin/feedback"
           element={
@@ -222,6 +220,7 @@ export default function AppRouter() {
         <Route path="/browse-devices" element={<BrowseDevicesPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/browse-games" element={<BrowseGamesPage />} />
         <Route path="/browse-games/:id" element={<PublicGameDetailPage />} />
         <Route path="/menu" element={<FoodMenuPage />} />

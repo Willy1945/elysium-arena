@@ -71,27 +71,27 @@ export default function SessionsPage() {
       {/* ── HEADER TITLE ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
             <Timer size={14} />
             <span>Sesi Bermain Aktif</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
             Monitoring Stasiun Berjalan
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
             Kelola durasi bermain, sinkronisasi Smart Lock, dan penambahan waktu sewa secara realtime.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-zinc-950 text-xs font-mono-tech font-bold text-zinc-950 shadow-[2px_2px_0px_0px_#18181b]">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border border-zinc-950 animate-pulse" />
             <span>{sessions.length} Stasiun Berjalan</span>
           </div>
 
           <button
             onClick={() => setStartWalkInOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cust-red/20 active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition cursor-pointer"
           >
             <Plus size={15} />
             <span>Mulai Sesi Walk-In</span>
@@ -100,19 +100,19 @@ export default function SessionsPage() {
       </div>
 
       {loading ? (
-        <div className="py-24 text-center text-zinc-500 text-xs uppercase tracking-wider">
+        <div className="py-24 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
           Memuat sesi aktif...
         </div>
       ) : sessions.length === 0 ? (
-        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-3xl bg-[#121216]/50">
-          <Timer size={40} className="mx-auto text-zinc-600 mb-3" />
-          <p className="text-white font-bold text-sm mb-1">Tidak Ada Sesi yang Berjalan</p>
-          <p className="text-zinc-500 text-xs max-w-sm mx-auto mb-5">
+        <div className="text-center py-20 border border-dashed border-zinc-300 rounded-2xl bg-white shadow-[2px_2px_0px_0px_#18181b]">
+          <Timer size={40} className="mx-auto text-zinc-400 mb-3" />
+          <p className="text-zinc-950 font-bold text-sm mb-1">Tidak Ada Sesi yang Berjalan</p>
+          <p className="text-zinc-600 text-xs max-w-sm mx-auto mb-5">
             Semua stasiun sedang standby. Sesi akan otomatis muncul di sini saat pelanggan mulai bermain.
           </p>
           <button
             onClick={() => setStartWalkInOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cust-red/25 active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition cursor-pointer"
           >
             <Plus size={15} />
             <span>Mulai Sesi Walk-In Sekarang</span>

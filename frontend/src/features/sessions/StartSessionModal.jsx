@@ -186,21 +186,21 @@ export default function StartSessionModal({
   const DeviceIcon = activeDevice?.device_type?.name === 'PC' ? Monitor : Gamepad2;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="bg-[#121217] border border-zinc-800 rounded-3xl p-6 sm:p-7 max-w-lg w-full shadow-2xl relative max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 max-w-lg w-full shadow-[4px_4px_0px_0px_#18181b] relative max-h-[92vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-start justify-between pb-4 border-b border-zinc-800/80 mb-5">
+        <div className="flex items-start justify-between pb-4 border-b border-zinc-100 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cust-red/10 border border-cust-red/30 flex items-center justify-center text-cust-red shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-red-50 border border-zinc-950 flex items-center justify-center text-cust-red shrink-0 shadow-[2px_2px_0px_0px_#18181b]">
               <Zap size={20} />
             </div>
             <div>
-              <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-semibold flex items-center gap-1.5">
+              <span className="text-[10px] font-mono-tech text-cust-red uppercase tracking-widest font-bold flex items-center gap-1.5">
                 <span>Direct Rental</span>
                 <span>•</span>
-                <span className="text-emerald-400">Smart Lock Sync</span>
+                <span className="text-emerald-700">Smart Lock Sync</span>
               </span>
-              <h3 className="text-white font-black text-xl font-display uppercase tracking-tight">
+              <h3 className="text-zinc-950 font-black text-xl font-display uppercase tracking-tight">
                 Mulai Sesi Walk-In
               </h3>
             </div>
@@ -208,14 +208,14 @@ export default function StartSessionModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl border border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition cursor-pointer"
+            className="p-1.5 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-900 shadow-[2px_2px_0px_0px_#18181b] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition cursor-pointer"
           >
             <X size={18} />
           </button>
         </div>
 
         {error && (
-          <div className="mb-5 p-3.5 rounded-2xl bg-red-950/40 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
+          <div className="mb-5 p-3.5 rounded-xl bg-rose-50 border border-zinc-950 text-rose-800 text-xs font-bold flex items-center gap-2 shadow-[2px_2px_0px_0px_#18181b]">
             <span>{error}</span>
           </div>
         )}
@@ -223,34 +223,34 @@ export default function StartSessionModal({
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* 1. Pilih Stasiun Gaming */}
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold mb-2 flex items-center justify-between">
+            <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <Monitor size={14} className="text-cust-red" />
                 Pilih Stasiun Gaming
               </span>
               {activeDevice && (
-                <span className="text-zinc-400 font-mono text-[11px]">
-                  Tarif: <strong className="text-white">{formatRupiah(activeDevice.price_per_hour)}</strong>/jam
+                <span className="text-zinc-600 font-mono-tech text-[11px] font-bold">
+                  Tarif: <strong className="text-zinc-950">{formatRupiah(activeDevice.price_per_hour)}</strong>/jam
                 </span>
               )}
             </label>
 
             {preselectedDevice ? (
-              <div className="p-3 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-between">
+              <div className="p-3 rounded-xl bg-zinc-50 border border-zinc-950 flex items-center justify-between shadow-[2px_2px_0px_0px_#18181b]">
                 <div className="flex items-center gap-2.5">
                   <DeviceIcon size={16} className="text-cust-red" />
-                  <span className="text-white font-bold text-sm uppercase">
+                  <span className="text-zinc-950 font-black text-sm uppercase">
                     {preselectedDevice.code} ({preselectedDevice.device_type?.name})
                   </span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono font-bold uppercase">
+                <span className="px-2 py-0.5 rounded-md bg-emerald-100 border border-zinc-950 text-emerald-900 text-[10px] font-mono-tech font-bold uppercase shadow-[1px_1px_0px_0px_#18181b]">
                   Ready
                 </span>
               </div>
             ) : loadingDevices ? (
-              <div className="py-3 text-center text-zinc-500 text-xs">Memeriksa stasiun kosong...</div>
+              <div className="py-3 text-center text-zinc-500 font-mono-tech text-xs">Memeriksa stasiun kosong...</div>
             ) : availableDevices.length === 0 ? (
-              <div className="p-3.5 rounded-2xl bg-zinc-900/60 border border-dashed border-zinc-800 text-center text-zinc-400 text-xs">
+              <div className="p-3.5 rounded-xl bg-zinc-50 border border-dashed border-zinc-300 text-center text-zinc-600 text-xs font-medium">
                 Tidak ada stasiun yang kosong saat ini. Semua sedang terpakai atau maintenance.
               </div>
             ) : (
@@ -258,10 +258,10 @@ export default function StartSessionModal({
                 value={selectedDeviceId}
                 onChange={(e) => setSelectedDeviceId(e.target.value)}
                 required
-                className="w-full bg-zinc-900/90 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white outline-none focus:border-cust-red transition cursor-pointer font-medium"
+                className="w-full bg-white border border-zinc-950 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 shadow-[2px_2px_0px_0px_#18181b] outline-none focus:border-cust-red transition cursor-pointer font-bold"
               >
                 {availableDevices.map((d) => (
-                  <option key={d.id} value={d.id} className="bg-zinc-900 text-white py-1">
+                  <option key={d.id} value={d.id} className="text-zinc-950">
                     {d.code} • {d.device_type?.name} ({formatRupiah(d.price_per_hour)}/jam)
                   </option>
                 ))}
@@ -271,18 +271,18 @@ export default function StartSessionModal({
 
           {/* 2. Tipe Pelanggan (Tamu vs Member) */}
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold mb-2 flex items-center gap-1.5">
+            <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <User size={14} className="text-cust-red" />
               Tipe Pelanggan
             </label>
-            <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-zinc-900 border border-zinc-800">
+            <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-zinc-100 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b]">
               <button
                 type="button"
                 onClick={() => setCustomerType('guest')}
-                className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer ${
                   customerType === 'guest'
-                    ? 'bg-cust-red text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white'
+                    ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                    : 'text-zinc-700 hover:text-zinc-950'
                 }`}
               >
                 <UserX size={14} />
@@ -291,10 +291,10 @@ export default function StartSessionModal({
               <button
                 type="button"
                 onClick={() => setCustomerType('member')}
-                className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer ${
                   customerType === 'member'
-                    ? 'bg-cust-red text-white shadow-md'
-                    : 'text-zinc-400 hover:text-white'
+                    ? 'bg-cust-red text-white border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b]'
+                    : 'text-zinc-700 hover:text-zinc-950'
                 }`}
               >
                 <UserCheck size={14} />
@@ -305,8 +305,8 @@ export default function StartSessionModal({
 
           {/* Input Sesuai Tipe Pelanggan */}
           {customerType === 'guest' ? (
-            <div className="p-3.5 rounded-2xl bg-zinc-900/40 border border-zinc-800/70 space-y-2">
-              <label className="block text-zinc-400 text-[11px] font-medium">
+            <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] space-y-2">
+              <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider">
                 Nama Panggilan Tamu (Opsional)
               </label>
               <input
@@ -314,17 +314,17 @@ export default function StartSessionModal({
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
                 placeholder="Contoh: Rian / Mas Fajar (atau biarkan kosong)"
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-cust-red transition"
+                className="w-full bg-white border border-zinc-950 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 placeholder-zinc-400 shadow-[1px_1px_0px_0px_#18181b] outline-none focus:border-cust-red transition"
               />
-              <p className="text-[11px] text-zinc-500 leading-relaxed">
-                💡 Pelanggan langsung bermain tanpa perlu registrasi website. Sesi tamu tidak mengumpulkan Koin Loyalitas.
+              <p className="text-[11px] text-zinc-600 leading-relaxed font-medium">
+                Pelanggan langsung bermain tanpa perlu registrasi website. Sesi tamu tidak mengumpulkan Koin Loyalitas.
               </p>
             </div>
           ) : (
-            <div className="p-3.5 rounded-2xl bg-zinc-900/40 border border-zinc-800/70 space-y-2.5">
-              <label className="block text-zinc-400 text-[11px] font-medium flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] space-y-2.5">
+              <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider flex items-center justify-between">
                 <span>Cari Akun Member</span>
-                <span className="text-amber-400 text-[10px] flex items-center gap-1 font-mono">
+                <span className="text-amber-800 text-[10px] flex items-center gap-1 font-mono-tech font-bold">
                   <Coins size={11} /> +100 Koin/Jam
                 </span>
               </label>
@@ -334,18 +334,18 @@ export default function StartSessionModal({
                   value={searchMember}
                   onChange={(e) => setSearchMember(e.target.value)}
                   placeholder="Ketik nama / email / no HP member..."
-                  className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-9 pr-3.5 py-2 text-xs sm:text-sm text-white placeholder-zinc-500 outline-none focus:border-cust-red transition"
+                  className="w-full bg-white border border-zinc-950 rounded-xl pl-9 pr-3.5 py-2 text-xs sm:text-sm text-zinc-950 placeholder-zinc-400 shadow-[1px_1px_0px_0px_#18181b] outline-none focus:border-cust-red transition"
                 />
-                <Search size={14} className="absolute left-3 top-2.5 text-zinc-500" />
+                <Search size={14} className="absolute left-3 top-2.5 text-zinc-400" />
               </div>
 
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
                 required={customerType === 'member'}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white outline-none focus:border-cust-red transition cursor-pointer"
+                className="w-full bg-white border border-zinc-950 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-950 shadow-[1px_1px_0px_0px_#18181b] outline-none focus:border-cust-red transition cursor-pointer font-bold"
               >
-                <option value="" className="text-zinc-500">
+                <option value="" className="text-zinc-400">
                   {loadingMembers ? 'Mencari member...' : '-- Pilih Akun Member --'}
                 </option>
                 {customers.map((c) => (
@@ -359,7 +359,7 @@ export default function StartSessionModal({
 
           {/* 3. Durasi Sewa */}
           <div>
-            <label className="block text-zinc-300 text-xs font-semibold mb-2 flex items-center gap-1.5">
+            <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Clock size={14} className="text-cust-red" />
               Durasi Sewa Bermain
             </label>
@@ -369,10 +369,10 @@ export default function StartSessionModal({
                   key={h}
                   type="button"
                   onClick={() => setDuration(h)}
-                  className={`py-2 rounded-xl text-xs font-mono font-bold border transition cursor-pointer ${
+                  className={`py-2 rounded-xl text-xs font-mono-tech font-bold border-2 uppercase tracking-wider transition cursor-pointer ${
                     duration === h
-                      ? 'bg-cust-red border-cust-red text-white shadow-md'
-                      : 'bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'
+                      ? 'bg-cust-red border-zinc-950 text-white shadow-[2px_2px_0px_0px_#18181b]'
+                      : 'bg-white border-zinc-950 text-zinc-800 hover:bg-zinc-100 shadow-[2px_2px_0px_0px_#18181b]'
                   }`}
                 >
                   {h} Jam
@@ -382,18 +382,18 @@ export default function StartSessionModal({
           </div>
 
           {/* 4. Live Telemetry & Summary Box */}
-          <div className="p-4 rounded-2xl bg-zinc-900/90 border border-zinc-800 space-y-2.5 font-mono text-xs">
-            <div className="flex items-center justify-between text-zinc-400">
-              <span>Waktu Mulai:</span>
-              <span className="text-white font-semibold">{startTimeStr} WIB (Detik ini)</span>
+          <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-950 space-y-2.5 font-mono-tech text-xs shadow-[2px_2px_0px_0px_#18181b]">
+            <div className="flex items-center justify-between text-zinc-600">
+              <span className="font-bold">Waktu Mulai:</span>
+              <span className="text-zinc-950 font-bold">{startTimeStr} WIB (Detik ini)</span>
             </div>
-            <div className="flex items-center justify-between text-zinc-400">
-              <span>Estimasi Selesai:</span>
-              <span className="text-emerald-400 font-semibold">{endTimeStr} WIB ({duration * 60} Menit)</span>
+            <div className="flex items-center justify-between text-zinc-600">
+              <span className="font-bold">Estimasi Selesai:</span>
+              <span className="text-emerald-700 font-bold">{endTimeStr} WIB ({duration * 60} Menit)</span>
             </div>
-            <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-sm">
-              <span className="text-zinc-300 font-sans font-bold">Total Biaya Sewa:</span>
-              <span className="font-display font-black text-lg text-white">
+            <div className="pt-2 border-t border-zinc-200 flex items-center justify-between text-sm">
+              <span className="text-zinc-800 font-bold uppercase tracking-wider">Total Biaya Sewa:</span>
+              <span className="font-display font-black text-lg text-zinc-950">
                 {formatRupiah(totalPrice)}
               </span>
             </div>
@@ -405,14 +405,14 @@ export default function StartSessionModal({
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="flex-1 py-3 rounded-xl border border-zinc-800 bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 font-bold text-xs uppercase tracking-wider transition cursor-pointer"
+              className="flex-1 py-3 rounded-xl border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-950 font-bold text-xs uppercase tracking-wider transition shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting || !activeDevice || (customerType === 'member' && !selectedUserId)}
-              className="flex-1 py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-cust-red/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+              className="flex-1 py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
             >
               <Zap size={14} />
               <span>{submitting ? 'Mengaktifkan...' : 'Nyalakan Stasiun'}</span>

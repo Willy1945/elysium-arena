@@ -14,9 +14,9 @@ const CATEGORY_OPTIONS = [
 ];
 
 const STATUS_CONFIG = {
-  pending: { label: 'Baru', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
-  in_review: { label: 'Ditinjau', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10' },
-  resolved: { label: 'Selesai', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
+  pending: { label: 'Baru', color: 'text-amber-700 border-amber-200 bg-amber-50' },
+  in_review: { label: 'Ditinjau', color: 'text-sky-700 border-sky-200 bg-sky-50' },
+  resolved: { label: 'Selesai', color: 'text-emerald-700 border-emerald-200 bg-emerald-50' },
 };
 
 export default function FeedbackPage() {
@@ -80,7 +80,7 @@ export default function FeedbackPage() {
         {/* Back Link */}
         <Link
           to="/dashboard"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-xs font-semibold uppercase tracking-wider mb-8 transition"
+          className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-semibold uppercase tracking-wider mb-8 transition"
         >
           <ArrowLeft size={14} />
           <span>Kembali ke Dashboard</span>
@@ -88,21 +88,21 @@ export default function FeedbackPage() {
 
         {/* Page Header */}
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
             <MessageSquarePlus size={14} />
             <span>Customer Voice & Request</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl sm:text-4xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl sm:text-4xl uppercase tracking-tight">
             Kirim Masukan & Request
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-1">
+          <p className="text-zinc-600 text-xs sm:text-sm mt-1 font-medium">
             Keluhan teknis, permintaan judul game baru, ide menu kafe, atau saran fasilitas — kami membaca dan menindaklanjuti setiap masukan.
           </p>
         </div>
 
         {/* Form Card */}
-        <form onSubmit={handleSubmit} className="bg-[#121216] border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-xl mb-12">
-          <label className="block text-zinc-300 text-xs font-bold uppercase tracking-wider mb-3">
+        <form onSubmit={handleSubmit} className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] mb-12">
+          <label className="block text-zinc-700 text-xs font-bold uppercase tracking-wider mb-3">
             Pilih Kategori
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
@@ -113,8 +113,8 @@ export default function FeedbackPage() {
                 onClick={() => setCategory(opt.value)}
                 className={`flex flex-col items-center gap-2 py-3.5 px-3 rounded-2xl border text-xs font-bold uppercase transition cursor-pointer ${
                   category === opt.value
-                    ? 'border-cust-red bg-cust-red/10 text-cust-red'
-                    : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700 hover:text-white'
+                    ? 'border-cust-red bg-red-50/70 text-cust-red shadow-xs'
+                    : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300 hover:text-zinc-950'
                 }`}
               >
                 <opt.icon size={18} />
@@ -123,7 +123,7 @@ export default function FeedbackPage() {
             ))}
           </div>
 
-          <label className="block text-zinc-300 text-xs font-bold uppercase tracking-wider mb-2">
+          <label className="block text-zinc-700 text-xs font-bold uppercase tracking-wider mb-2">
             Judul Masukan
           </label>
           <input
@@ -132,10 +132,10 @@ export default function FeedbackPage() {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Ringkasan singkat masukan atau nama game/menu yang diinginkan..."
-            className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl text-white text-sm px-4 py-3 outline-none focus:border-cust-red transition mb-5"
+            className="w-full bg-white border border-zinc-300 rounded-xl text-zinc-900 text-sm px-4 py-3 outline-none focus:border-cust-red transition mb-5 shadow-xs placeholder:text-zinc-400"
           />
 
-          <label className="block text-zinc-300 text-xs font-bold uppercase tracking-wider mb-2">
+          <label className="block text-zinc-700 text-xs font-bold uppercase tracking-wider mb-2">
             Penjelasan Detail
           </label>
           <textarea
@@ -145,7 +145,7 @@ export default function FeedbackPage() {
             onChange={(e) => setMessage(e.target.value)}
             maxLength={2000}
             placeholder="Tuliskan detail masukan kamu agar tim kami dapat memahami dan menindaklanjuti dengan cepat..."
-            className="w-full bg-zinc-900 border border-zinc-700/80 rounded-xl text-white text-sm p-4 outline-none focus:border-cust-red transition mb-6"
+            className="w-full bg-white border border-zinc-300 rounded-xl text-zinc-900 text-sm p-4 outline-none focus:border-cust-red transition mb-6 shadow-xs placeholder:text-zinc-400"
           />
 
           <button
@@ -162,16 +162,16 @@ export default function FeedbackPage() {
         <div>
           <div className="flex items-center gap-2 mb-5">
             <MessageSquarePlus size={18} className="text-cust-red" />
-            <h2 className="font-display font-black text-white uppercase text-xl">
+            <h2 className="font-display font-black text-zinc-950 uppercase text-xl">
               Riwayat Masukan Kamu
             </h2>
           </div>
 
           {loadingHistory ? (
-            <p className="text-zinc-500 text-xs">Memuat riwayat masukan...</p>
+            <p className="text-zinc-500 text-xs font-medium">Memuat riwayat masukan...</p>
           ) : history.length === 0 ? (
-            <div className="p-8 rounded-2xl bg-[#121216] border border-zinc-800 text-center">
-              <p className="text-zinc-500 text-xs">Belum ada masukan yang kamu kirimkan.</p>
+            <div className="p-8 rounded-2xl bg-white border border-zinc-200 text-center shadow-xs">
+              <p className="text-zinc-500 text-xs font-medium">Belum ada masukan yang kamu kirimkan.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -179,11 +179,11 @@ export default function FeedbackPage() {
                 const catOpt = CATEGORY_OPTIONS.find((c) => c.value === f.category);
                 const status = STATUS_CONFIG[f.status] || STATUS_CONFIG.pending;
                 return (
-                  <div key={f.id} className="bg-[#121216] border border-zinc-800 rounded-2xl p-5 sm:p-6">
+                  <div key={f.id} className="bg-white border border-zinc-200/90 rounded-2xl p-5 sm:p-6 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06)]">
                     <div className="flex items-start justify-between mb-3 flex-wrap gap-2">
                       <div className="flex items-center gap-2">
                         {catOpt && <catOpt.icon size={15} className="text-cust-red" />}
-                        <span className="text-zinc-400 text-xs font-bold uppercase">{catOpt?.label}</span>
+                        <span className="text-zinc-500 text-xs font-bold uppercase">{catOpt?.label}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-[10px] font-semibold uppercase px-2.5 py-0.5 rounded-md border ${status.color}`}>
@@ -192,20 +192,20 @@ export default function FeedbackPage() {
                         <button
                           onClick={() => setDeletingFeedback(f)}
                           title="Hapus masukan ini dari riwayat"
-                          className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-zinc-900 border border-transparent hover:border-zinc-800 transition cursor-pointer"
+                          className="p-1.5 rounded-lg text-zinc-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 transition cursor-pointer"
                         >
                           <Trash2 size={13} />
                         </button>
                       </div>
                     </div>
 
-                    <h3 className="text-white font-bold text-sm mb-1.5">{f.subject}</h3>
-                    <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-4">{f.message}</p>
+                    <h3 className="text-zinc-950 font-bold text-sm mb-1.5">{f.subject}</h3>
+                    <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed mb-4 font-medium">{f.message}</p>
 
                     {f.admin_response && (
-                      <div className="bg-zinc-900 border-l-2 border-cust-red p-3.5 rounded-r-xl mt-3">
+                      <div className="bg-zinc-50 border-l-2 border-cust-red p-3.5 rounded-r-xl mt-3">
                         <p className="text-cust-red text-xs font-bold uppercase mb-1">Tanggapan Operator / Admin</p>
-                        <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">{f.admin_response}</p>
+                        <p className="text-zinc-800 text-xs sm:text-sm leading-relaxed font-medium">{f.admin_response}</p>
                       </div>
                     )}
 

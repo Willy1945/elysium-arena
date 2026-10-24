@@ -98,6 +98,23 @@ class BookingController extends Controller
             if ($booking->user_id !== $user->id || $request->status !== 'cancelled' || $booking->status === 'completed') {
                 return response()->json(['message' => 'Anda tidak memiliki akses untuk mengubah status ini.'], 403);
             }
+
+            // Larang pembatalan jika sesi bermain stasiun untuk booking ini sedang berjalan aktif
+            $hasActiveSession = \App\Models\GamingSession::where('status', 'active')
+                ->where(function ($q) use ($booking) {
+                    $q->where('booking_id', $booking->id)
+                      ->orWhere(function ($sub) use ($booking) {
+                          $sub->where('device_id', $booking->device_id)
+                              ->where('user_id', $booking->user_id);
+                      });
+                })
+                ->exists();
+
+            if ($hasActiveSession) {
+                return response()->json([
+                    'message' => 'Jadwal booking tidak dapat dibatalkan karena sesi bermain di stasiun ini sedang berjalan aktif.',
+                ], 422);
+            }
         }
 
         $booking->update(['status' => $request->status]);

@@ -20,25 +20,25 @@ export default function TermsPage() {
         {/* Top Back Link */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-zinc-400 hover:text-white text-xs font-semibold uppercase tracking-wider mb-8 transition"
+          className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-bold uppercase tracking-wider mb-8 transition"
         >
           <ArrowLeft size={14} />
           <span>Kembali ke Beranda</span>
         </Link>
 
         {/* Page Title Header */}
-        <div className="mb-10 pb-8 border-b border-zinc-800/80">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-3">
+        <div className="mb-10 pb-8 border-b border-zinc-200">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
             <FileText size={14} />
             <span>Legalitas & Tata Tertib</span>
           </div>
-          <h1 className="font-display font-black text-white text-3xl sm:text-5xl uppercase tracking-tight">
+          <h1 className="font-display font-black text-zinc-950 text-3xl sm:text-5xl uppercase tracking-tight">
             Syarat & Ketentuan Layanan
           </h1>
-          <p className="text-zinc-400 text-xs sm:text-sm mt-3 leading-relaxed max-w-2xl">
+          <p className="text-zinc-700 text-xs sm:text-sm mt-3 leading-relaxed max-w-2xl font-medium">
             Ketentuan resmi mengenai pemesanan gaming station, penggunaan perangkat hardware, etika di arena, serta hak dan kewajiban seluruh pengunjung Elysium Arena.
           </p>
-          <div className="flex items-center gap-4 text-zinc-500 text-xs font-mono mt-4">
+          <div className="flex items-center gap-4 text-zinc-500 text-xs font-mono mt-4 font-semibold">
             <span>Berlaku efektif sejak: 13 Oktober 2026</span>
             <span>•</span>
             <span>Versi: 2.1 (Terbaru)</span>
@@ -46,19 +46,19 @@ export default function TermsPage() {
         </div>
 
         {/* ── SECTIONS LIST ── */}
-        <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-zinc-300">
+        <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-zinc-700">
           
           {/* Pasal 1: Ketentuan Umum & Akun */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cust-red shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
                 <CheckCircle2 size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 1. Ketentuan Umum & Registrasi Akun
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
                 1.1. Dengan mendaftar akun atau menggunakan fasilitas di Elysium Arena, pengguna dianggap telah membaca, memahami, dan menyetujui seluruh isi Syarat & Ketentuan ini.
               </p>
@@ -72,16 +72,16 @@ export default function TermsPage() {
           </section>
 
           {/* Pasal 2: Tata Tertib Stasiun Gaming & Perangkat */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cust-red shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
                 <Gamepad2 size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 2. Pemakaian Perangkat & Tata Tertib Stasiun
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
                 2.1. Seluruh periferal gaming (Monitor high-refresh rate, Mechanical Keyboard, Mouse Gaming, Headset, serta Controller DualSense PS5) disediakan dalam kondisi prima dan diuji sebelum sesi dimulai.
               </p>
@@ -98,18 +98,18 @@ export default function TermsPage() {
           </section>
 
           {/* Pasal 3: Reservasi & Booking Waktu */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cust-red shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
                 <Clock size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 3. Prosedur Reservasi & Waktu Bermain
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
-                3.1. Pemesanan station secara online menghasilkan Kode Booking unik (contoh: <code className="text-zinc-200 bg-zinc-900 px-1.5 py-0.5 rounded border border-zinc-800">BK-XXXXX</code>) yang wajib ditunjukkan ke kasir/resepsionis saat tiba di arena.
+                3.1. Pemesanan station secara online menghasilkan Kode Booking unik (contoh: <code className="text-zinc-900 bg-zinc-100 px-1.5 py-0.5 rounded border border-zinc-300 font-bold">BK-XXXXX</code>) yang wajib ditunjukkan ke kasir/resepsionis saat tiba di arena.
               </p>
               <p>
                 3.2. <strong>Batas Toleransi Keterlambatan:</strong> Diberikan batas toleransi kedatangan maksimal <strong>15 menit</strong> dari jadwal mulai booking. Apabila pemain belum hadir melebihi 15 menit tanpa konfirmasi sebelumnya, pihak arena berhak mengalihkan stasiun ke pelanggan walk-in.
@@ -121,16 +121,16 @@ export default function TermsPage() {
           </section>
 
           {/* Pasal 4: Kafe F&B & Kenyamanan Bersama */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
                 <UtensilsCrossed size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 4. Layanan Kafe F&B & Kebersihan Area
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
                 4.1. Pesanan makanan dan minuman kafe dapat dipesan langsung dari dashboard atau kasir dan akan diantar langsung ke meja stasiun pemain.
               </p>
@@ -144,16 +144,16 @@ export default function TermsPage() {
           </section>
 
           {/* Pasal 5: Koin Loyalitas & Voucher Reward */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-amber-400 shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
                 <Coins size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 5. Koin Loyalitas & Penukaran Hadiah
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
                 5.1. Koin loyalitas dihitung otomatis dari durasi bermain (100 Koin per 1 jam selesai bermain).
               </p>
@@ -167,16 +167,16 @@ export default function TermsPage() {
           </section>
 
           {/* Pasal 6: Keamanan & Pembatasan Tanggung Jawab */}
-          <section className="bg-[#121217] border border-zinc-800/90 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-cust-red shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
                 <ShieldAlert size={18} />
               </div>
-              <h2 className="font-display font-bold text-white text-lg sm:text-xl uppercase tracking-wide">
+              <h2 className="font-display font-black text-zinc-950 text-lg sm:text-xl uppercase tracking-wide">
                 6. Keamanan Barang Pribadi & Etika
               </h2>
             </div>
-            <div className="space-y-3 text-zinc-400">
+            <div className="space-y-3 text-zinc-700 font-medium">
               <p>
                 6.1. Pengunjung bertanggung jawab penuh atas barang bawaan pribadi (ponsel, dompet, laptop, dll.). Pihak manajemen Elysium Arena tidak bertanggung jawab atas kehilangan atau kerusakan barang bawaan pribadi akibat kelalaian pengunjung.
               </p>
@@ -189,18 +189,18 @@ export default function TermsPage() {
         </div>
 
         {/* Support Contact Box */}
-        <div className="mt-12 bg-gradient-to-r from-zinc-900 via-[#14141a] to-zinc-900 border border-zinc-800 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-12 bg-white border border-zinc-200 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center text-amber-400 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
               <HelpCircle size={24} />
             </div>
             <div>
-              <h4 className="font-display font-bold text-white text-base">Ada Pertanyaan Mengenai Ketentuan?</h4>
-              <p className="text-zinc-400 text-xs mt-0.5">Hubungi customer service staf Elysium Arena melalui WhatsApp resmi kami.</p>
+              <h4 className="font-display font-black text-zinc-950 text-base">Ada Pertanyaan Mengenai Ketentuan?</h4>
+              <p className="text-zinc-600 text-xs mt-0.5 font-medium">Hubungi customer service staf Elysium Arena melalui WhatsApp resmi kami.</p>
             </div>
           </div>
           <a
-            href="https://wa.me/6281234567890"
+            href="https://wa.me/6283869002070"
             target="_blank"
             rel="noreferrer"
             className="px-5 py-3 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition whitespace-nowrap shadow-md cursor-pointer"

@@ -84,82 +84,82 @@ export default function StaffPage() {
             {/* ── HEADER ── */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
                         <Users size={14} />
                         <span>Manajemen Akun Internal</span>
                     </div>
-                    <h1 className="font-display font-black text-white text-3xl uppercase tracking-tight">
+                    <h1 className="font-display font-black text-zinc-950 text-3xl uppercase tracking-tight">
                         Kelola Staff & Operator
                     </h1>
-                    <p className="text-zinc-400 text-xs sm:text-sm mt-0.5">
+                    <p className="text-zinc-600 text-xs sm:text-sm mt-0.5">
                         Kelola akun hak akses Admin dan Staff Cafe untuk operasional arena.
                     </p>
                 </div>
                 <button
                     onClick={handleOpenCreate}
-                    className="inline-flex items-center justify-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition shadow-lg shadow-cust-red/10 shrink-0 w-full sm:w-auto"
+                    className="inline-flex items-center justify-center gap-2 bg-cust-red hover:bg-cust-red-dark text-white text-xs sm:text-sm font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#18181b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition shrink-0 w-full sm:w-auto cursor-pointer"
                 >
                     <Plus size={16} /> Tambah Staff
                 </button>
             </div>
 
             {/* ── TABLE CARD CONTAINER ── */}
-            <div className="bg-[#121216] border border-zinc-800 rounded-3xl overflow-hidden shadow-xl">
+            <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-xs min-w-[650px]">
                         <thead>
-                            <tr className="border-b border-zinc-800 bg-zinc-900/50 text-left text-zinc-400 uppercase tracking-wider font-mono-tech">
-                                <th className="px-5 py-4 font-semibold">Nama Staff</th>
-                                <th className="px-5 py-4 font-semibold">Email</th>
-                                <th className="px-5 py-4 font-semibold">No. HP</th>
-                                <th className="px-5 py-4 font-semibold">Role Hak Akses</th>
-                                <th className="px-5 py-4 font-semibold">Status Akun</th>
-                                <th className="px-5 py-4 font-semibold text-right">Aksi</th>
+                            <tr className="border-b border-zinc-200 bg-zinc-100 text-left text-zinc-950 uppercase tracking-wider font-mono-tech font-black">
+                                <th className="px-5 py-4">Nama Staff</th>
+                                <th className="px-5 py-4">Email</th>
+                                <th className="px-5 py-4">No. HP</th>
+                                <th className="px-5 py-4">Role Hak Akses</th>
+                                <th className="px-5 py-4">Status Akun</th>
+                                <th className="px-5 py-4 text-right">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-zinc-800/60">
+                        <tbody className="divide-y divide-zinc-200">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="px-5 py-12 text-center text-zinc-500 uppercase tracking-wider">
+                                    <td colSpan={6} className="px-5 py-12 text-center text-zinc-500 font-mono-tech uppercase tracking-wider">
                                         Memuat data staff...
                                     </td>
                                 </tr>
                             ) : staff.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-5 py-12 text-center text-zinc-500">
+                                    <td colSpan={6} className="px-5 py-12 text-center text-zinc-500 font-medium">
                                         Belum ada akun staff terdaftar. Silakan tambahkan staff baru.
                                     </td>
                                 </tr>
                             ) : (
                                 staff.map((s) => (
-                                    <tr key={s.id} className="hover:bg-zinc-900/40 transition">
+                                    <tr key={s.id} className="hover:bg-zinc-50 transition">
                                         <td className="px-5 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700/60 flex items-center justify-center text-white font-bold text-xs uppercase">
+                                                <div className="w-8 h-8 rounded-full bg-zinc-100 border border-zinc-950 flex items-center justify-center text-zinc-950 font-black text-xs uppercase shadow-[1px_1px_0px_0px_#18181b]">
                                                     {s.name.charAt(0)}
                                                 </div>
-                                                <span className="text-white font-semibold text-sm">{s.name}</span>
+                                                <span className="text-zinc-950 font-bold text-sm">{s.name}</span>
                                             </div>
                                         </td>
-                                        <td className="px-5 py-4 text-zinc-400 font-mono-tech">{s.email}</td>
-                                        <td className="px-5 py-4 text-zinc-400">{s.phone || '—'}</td>
+                                        <td className="px-5 py-4 text-zinc-600 font-mono-tech font-medium">{s.email}</td>
+                                        <td className="px-5 py-4 text-zinc-600 font-medium">{s.phone || '—'}</td>
                                         <td className="px-5 py-4">
-                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
+                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border ${
                                                 s.role === 'ADMIN'
-                                                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                                                    : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                                                    ? 'bg-amber-100 border-zinc-950 text-amber-950 shadow-[1px_1px_0px_0px_#18181b]'
+                                                    : 'bg-cyan-100 border-zinc-950 text-cyan-950 shadow-[1px_1px_0px_0px_#18181b]'
                                             }`}>
                                                 <Shield size={12} />
                                                 {ROLE_LABEL[s.role] || s.role}
                                             </span>
                                         </td>
                                         <td className="px-5 py-4">
-                                            <span className={`inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full border ${
+                                            <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg border ${
                                                 s.is_active
-                                                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                                                    : 'bg-zinc-800/80 border-zinc-700 text-zinc-400'
+                                                    ? 'bg-emerald-100 border-zinc-950 text-emerald-950 shadow-[1px_1px_0px_0px_#18181b]'
+                                                    : 'bg-zinc-100 border-zinc-950 text-zinc-700 shadow-[1px_1px_0px_0px_#18181b]'
                                             }`}>
-                                                <span className={`w-1.5 h-1.5 rounded-full ${s.is_active ? 'bg-emerald-400' : 'bg-zinc-500'}`} />
+                                                <span className={`w-1.5 h-1.5 rounded-full ${s.is_active ? 'bg-emerald-600' : 'bg-zinc-500'}`} />
                                                 {s.is_active ? 'Aktif' : 'Nonaktif'}
                                             </span>
                                         </td>
@@ -167,16 +167,16 @@ export default function StaffPage() {
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => handleOpenEdit(s)}
-                                                    className="px-3 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 hover:text-white text-zinc-300 text-xs font-semibold transition"
+                                                    className="px-3 py-1.5 rounded-lg border border-zinc-950 bg-white hover:bg-zinc-100 text-zinc-950 text-xs font-bold uppercase tracking-wider transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     onClick={() => setTogglingStaff(s)}
-                                                    className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border text-xs font-semibold transition ${
+                                                    className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-zinc-950 text-xs font-bold uppercase tracking-wider transition shadow-[1px_1px_0px_0px_#18181b] cursor-pointer ${
                                                         s.is_active
-                                                            ? 'border-rose-900/40 text-rose-400 hover:bg-rose-950/40'
-                                                            : 'border-emerald-900/40 text-emerald-400 hover:bg-emerald-950/40'
+                                                            ? 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+                                                            : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
                                                     }`}
                                                 >
                                                     <Power size={12} />

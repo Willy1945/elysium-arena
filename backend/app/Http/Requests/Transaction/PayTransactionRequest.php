@@ -14,7 +14,7 @@ class PayTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'method' => ['required', 'in:cash,qris,transfer'],
+            'method' => ['required', 'in:cash,qris'],
         ];
     }
 }

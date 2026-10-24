@@ -8,4 +8,6 @@ export const authService = {
   updateProfile: (formData) => axiosClient.post('/profile', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
+  forgotPassword: (email) => axiosClient.post('/forgot-password', { email }),
+  resetPassword: (payload) => axiosClient.post('/reset-password', payload),
 };
