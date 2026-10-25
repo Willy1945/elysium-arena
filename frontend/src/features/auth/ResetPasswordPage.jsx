@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
       <div className="text-center mb-8 relative z-10">
         <Link to="/" className="inline-flex items-center gap-3 group mb-4">
           <img
-            src="/images/logo-elysium.png"
+            src="/images/logoElysiumFix.png"
             alt="Elysium Arena Logo"
             className="h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-md"
           />

@@ -80,7 +80,7 @@ export default function PublicNavbar() {
               className="relative"
             >
               <img
-                src="/images/logo-elysium.png"
+                src="/images/logoElysiumFix.png"
                 alt="Elysium Arena"
                 className="h-11 w-auto transition-transform duration-300 drop-shadow-sm"
               />

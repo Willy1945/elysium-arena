@@ -99,7 +99,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3.5 group">
             <img
-              src="/images/logo-elysium.png"
+              src="/images/logoElysiumFix.png"
               alt="Elysium Arena Logo"
               className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
             />
@@ -198,7 +198,7 @@ export default function LoginPage() {
           <div className="lg:hidden flex items-center justify-between mb-8">
             <Link to="/" className="flex items-center gap-3">
               <img
-                src="/images/logo-elysium.png"
+                src="/images/logoElysiumFix.png"
                 alt="Elysium Arena Logo"
                 className="h-10 w-auto object-contain drop-shadow-xs"
               />

@@ -69,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }) {
           <div className="h-16 flex items-center justify-between px-5">
             <Link to="/" onClick={onClose} className="flex items-center gap-3 group">
               <img
-                src="/images/logo-elysium.png"
+                src="/images/logoElysiumFix.png"
                 alt="Elysium Arena"
                 className="h-8 w-auto rounded-md object-contain"
               />
