@@ -27,7 +27,6 @@ class AuthenticateDeviceClient
 
         \Log::info("SMARTLOCK 200: Device match! Found device code: " . $device->code . " (ID: " . $device->id . ")");
 
-        // Tempelkan device ke request supaya controller tinggal ambil, tidak perlu query ulang
         $request->attributes->set('client_device', $device);
 
         return $next($request);

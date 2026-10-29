@@ -9,7 +9,7 @@ export default function DeviceCard({ device, onEdit, onDelete, onViewDetail, onB
   return (
     <div className="group bg-white border border-zinc-950 rounded-2xl overflow-hidden hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#18181b] shadow-[2px_2px_0px_0px_#18181b] transition-all flex flex-col justify-between">
       <div>
-        {/* Cover Image Banner */}
+
         <div className="relative h-44 bg-zinc-100 overflow-hidden">
           {device.photo ? (
             <img
@@ -24,20 +24,17 @@ export default function DeviceCard({ device, onEdit, onDelete, onViewDetail, onB
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-          {/* Type Badge (Top-Left) */}
           <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white border border-zinc-950 flex items-center gap-1.5 text-zinc-900 text-[11px] font-bold shadow-[1px_1px_0px_0px_#18181b]">
             <Icon size={13} className="text-cust-red" />
             <span>{device.device_type?.name}</span>
           </div>
 
-          {/* Status Badge (Top-Right) */}
           <div className="absolute top-3 right-3">
             <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b] ${status.badgeClass || 'bg-zinc-100 text-zinc-800'}`}>
               {status.label}
             </span>
           </div>
 
-          {/* Price Tag Bottom Left */}
           <div className="absolute bottom-2.5 left-4">
             <p className="text-[10px] text-zinc-300 uppercase tracking-wider font-semibold">Tarif Sewa</p>
             <p className="font-display font-black text-xl text-white">
@@ -47,7 +44,6 @@ export default function DeviceCard({ device, onEdit, onDelete, onViewDetail, onB
           </div>
         </div>
 
-        {/* Card Body Info */}
         <div className="p-4 pt-3">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-display font-black text-zinc-950 text-lg uppercase tracking-tight">
@@ -67,7 +63,6 @@ export default function DeviceCard({ device, onEdit, onDelete, onViewDetail, onB
         </div>
       </div>
 
-      {/* Action Buttons Strip */}
       <div className={`p-2.5 pt-0 border-t border-zinc-100 grid ${isAvailable && onStartWalkIn ? 'grid-cols-5' : 'grid-cols-4'} gap-1.5 bg-zinc-50/50`}>
         {isAvailable && onStartWalkIn && (
           <button

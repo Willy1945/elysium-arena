@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('loyalty_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('type'); // earn_session, redeem_reward, manual_adjustment, bonus
-            $table->integer('amount'); // +100 or -2000
+            $table->string('type');
+            $table->integer('amount');
             $table->string('description');
             $table->unsignedBigInteger('reference_id')->nullable();
             $table->timestamps();

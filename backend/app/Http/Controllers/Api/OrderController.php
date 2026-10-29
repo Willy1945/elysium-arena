@@ -45,10 +45,9 @@ class OrderController extends Controller
         $isStaff = in_array($actor->role?->name, ['OWNER', 'ADMIN', 'STAFF_CAFE']);
 
         if (!$isStaff) {
-            // Customer cuma boleh order atas nama dirinya sendiri
+
             $data['user_id'] = $actor->id;
 
-            // Kalau menyertakan session_id, pastikan itu session miliknya sendiri & masih aktif
             if (!empty($data['session_id'])) {
                 $session = \App\Models\GamingSession::find($data['session_id']);
                 if (!$session || $session->user_id !== $actor->id || $session->status !== 'active') {

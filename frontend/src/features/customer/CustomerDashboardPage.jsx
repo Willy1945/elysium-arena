@@ -16,6 +16,7 @@ import { useToast } from '../../context/ToastContext';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import RatingFormModal from './RatingFormModal';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import UserAvatar from '../../components/common/UserAvatar';
 import { formatRupiah, BOOKING_STATUS_CONFIG } from '../../utils/format';
 
 const STATUS_BADGE_STYLE = {
@@ -32,7 +33,6 @@ const ORDER_STEP_LABEL = {
   ready: 'Siap Diantar ke Meja',
 };
 
-// ── KARTU SESI AKTIF (MINIMALIST PREMIUM HUD) ──
 function ActiveSessionCard({ session }) {
   const { formatted, isExpired } = useSessionTimer(session.end_time, session.status);
 
@@ -46,7 +46,7 @@ function ActiveSessionCard({ session }) {
 
   return (
     <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] relative overflow-hidden">
-      {/* Top Header */}
+
       <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-200/80">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2.5 w-2.5">
@@ -62,7 +62,6 @@ function ActiveSessionCard({ session }) {
         </span>
       </div>
 
-      {/* Device Info */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
           <p className="text-xs text-zinc-500 font-medium">
@@ -80,7 +79,6 @@ function ActiveSessionCard({ session }) {
         </div>
       </div>
 
-      {/* Countdown Timer Display */}
       <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200/90 text-center mb-6 shadow-inner">
         <p className="text-xs text-zinc-600 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5 font-semibold">
           <Clock size={14} className="text-cust-red" />
@@ -95,7 +93,6 @@ function ActiveSessionCard({ session }) {
           {formatted}
         </p>
 
-        {/* Meter Bar */}
         <div className="mt-4 max-w-sm mx-auto">
           <div className="flex items-center justify-between text-[11px] text-zinc-500 mb-1.5 font-medium">
             <span>Durasi Berjalan</span>
@@ -110,7 +107,6 @@ function ActiveSessionCard({ session }) {
         </div>
       </div>
 
-      {/* Price & Order CTA */}
       <div className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-50 border border-zinc-200 mb-5">
         <span className="text-xs text-zinc-600 font-medium">Tarif Sesi Ini</span>
         <span className="font-display font-black text-xl text-zinc-950">
@@ -150,7 +146,7 @@ export default function CustomerDashboardPage() {
       const { data: updated } = await customerDashboardService.getSummary();
       setData(updated);
     } catch (err) {
-      // ignore
+
     }
   };
 
@@ -280,25 +276,19 @@ export default function CustomerDashboardPage() {
 
   return (
     <PublicLayout>
-      {/* ── PLAYER HEADER BANNER ── */}
+
       <section className="bg-gradient-to-b from-zinc-50 via-white to-white border-b border-zinc-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            
-            {/* User Profile Info */}
+
             <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
               <div className="relative shrink-0">
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-zinc-200 shadow-md"
-                  />
-                ) : (
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-display font-black text-xl sm:text-2xl shadow-sm">
-                    {user?.name?.charAt(0).toUpperCase()}
-                  </div>
-                )}
+                <UserAvatar
+                  src={user?.avatar}
+                  name={user?.name}
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl object-cover border border-zinc-200 shadow-md"
+                  fallbackClassName="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-display font-black text-xl sm:text-2xl shadow-sm"
+                />
                 <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white shadow-sm" />
               </div>
 
@@ -328,7 +318,6 @@ export default function CustomerDashboardPage() {
               </div>
             </div>
 
-            {/* Quick Action Buttons */}
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <Link
                 to="/rewards"
@@ -359,7 +348,6 @@ export default function CustomerDashboardPage() {
         </div>
       </section>
 
-      {/* ── QUICK NAVIGATION STRIP ── */}
       <section className="bg-zinc-50/80 border-b border-zinc-200/80 py-3">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-6 overflow-x-auto no-scrollbar text-xs">
@@ -390,11 +378,9 @@ export default function CustomerDashboardPage() {
         </div>
       </section>
 
-      {/* ── MAIN DASHBOARD CONTENT ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* ── LEFT COLUMN: Sesi Aktif & Rating ── */}
+
           <div className="lg:col-span-5 flex flex-col gap-6">
             {data.active_session ? (
               <ActiveSessionCard session={data.active_session} />
@@ -419,7 +405,6 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 1. Ulasan yang Pernah Dikirim Customer (Bisa Dihapus) */}
             {data.my_rating && (
               <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] relative overflow-hidden">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-200/80">
@@ -439,7 +424,6 @@ export default function CustomerDashboardPage() {
                   </button>
                 </div>
 
-                {/* Stars and Date */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((s) => (
@@ -468,7 +452,6 @@ export default function CustomerDashboardPage() {
                   )}
                 </div>
 
-                {/* Comment Text */}
                 {data.my_rating.comment ? (
                   <p className="text-zinc-700 text-xs sm:text-sm leading-relaxed italic bg-zinc-50 p-3.5 rounded-2xl border border-zinc-200/80">
                     "{data.my_rating.comment}"
@@ -479,7 +462,6 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 2. Beri Rating Arena Baru (Muncul jika belum ada ulasan & sudah main) */}
             {data.can_rate_arena && (
               <div className="rounded-3xl border border-amber-200 bg-amber-50/50 p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-2">
@@ -502,10 +484,8 @@ export default function CustomerDashboardPage() {
             )}
           </div>
 
-          {/* ── RIGHT COLUMN: Tagihan, Booking, F&B, Transaksi ── */}
           <div className="lg:col-span-7 flex flex-col gap-6">
-            
-            {/* 1. Tagihan Menunggu Pembayaran */}
+
             {data.pending_transactions.length > 0 && (
               <div className="rounded-3xl border border-amber-200 bg-amber-50/30 p-6 sm:p-7 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
@@ -548,7 +528,6 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 2. Booking Mendatang */}
             <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5">
@@ -624,7 +603,6 @@ export default function CustomerDashboardPage() {
               )}
             </div>
 
-            {/* 2b. Riwayat Booking Lampau (Selesai & Dibatalkan) */}
             {data.booking_history?.length > 0 && (
               <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center justify-between mb-5">
@@ -681,7 +659,6 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 3. Status Pesanan F&B Aktif */}
             {data.active_orders.length > 0 && (
               <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center gap-2.5 mb-5">
@@ -712,7 +689,6 @@ export default function CustomerDashboardPage() {
                           {o.items.map((item) => `${item.product.name} ×${item.quantity}`).join(', ')}
                         </p>
 
-                        {/* Tracker Steps */}
                         <div className="flex gap-2">
                           {ORDER_STEPS.map((step, idx) => (
                             <div key={step} className="flex-1 flex flex-col gap-1.5">
@@ -740,7 +716,6 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {/* 4. Riwayat Transaksi */}
             <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2.5">
@@ -805,7 +780,6 @@ export default function CustomerDashboardPage() {
         </div>
       </div>
 
-      {/* Modal Rating */}
       <RatingFormModal
         open={!!ratingTarget}
         onClose={() => setRatingTarget(null)}
@@ -813,7 +787,6 @@ export default function CustomerDashboardPage() {
         loading={submittingRating}
       />
 
-      {/* Dialog Konfirmasi Hapus Ulasan */}
       <ConfirmDialog
         open={deletingRating}
         title="Hapus Ulasan Anda?"
@@ -825,7 +798,6 @@ export default function CustomerDashboardPage() {
         loading={actionLoading}
       />
 
-      {/* Dialog Konfirmasi Hapus Satu Transaksi */}
       <ConfirmDialog
         open={!!deletingTrxId}
         title="Hapus Riwayat Transaksi?"
@@ -837,7 +809,6 @@ export default function CustomerDashboardPage() {
         loading={actionLoading}
       />
 
-      {/* Dialog Konfirmasi Bersihkan Semua Riwayat Transaksi */}
       <ConfirmDialog
         open={confirmClearAllTrx}
         title="Bersihkan Semua Riwayat Transaksi?"
@@ -849,7 +820,6 @@ export default function CustomerDashboardPage() {
         loading={actionLoading}
       />
 
-      {/* Dialog Konfirmasi Batalkan Jadwal Booking */}
       <ConfirmDialog
         open={!!cancellingBookingId}
         title="Batalkan Jadwal Booking?"
@@ -861,7 +831,6 @@ export default function CustomerDashboardPage() {
         loading={actionLoading}
       />
 
-      {/* Dialog Konfirmasi Hapus Satu Riwayat Booking */}
       <ConfirmDialog
         open={!!deletingBookingId}
         title="Hapus Riwayat Booking?"
@@ -873,7 +842,6 @@ export default function CustomerDashboardPage() {
         loading={actionLoading}
       />
 
-      {/* Dialog Konfirmasi Bersihkan Semua Riwayat Booking */}
       <ConfirmDialog
         open={confirmClearAllBookings}
         title="Bersihkan Semua Riwayat Booking?"

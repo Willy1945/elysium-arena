@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\DeviceTypeController;
 use App\Http\Controllers\Api\GameController;
@@ -23,11 +24,13 @@ use App\Http\Controllers\Api\DeviceClientController;
 use App\Http\Controllers\Api\StaffController;
 use Illuminate\Support\Facades\Route;
 
-// ── Public: tanpa perlu login ──
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect']);
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
 Route::get('/public/devices', [DeviceController::class, 'index']);
 Route::get('/public/devices/{device}', [DeviceController::class, 'show']);
@@ -37,28 +40,23 @@ Route::get('/public/products', [ProductController::class, 'index']);
 Route::get('/public/reviews', [RatingController::class, 'recent']);
 Route::get('/public/occupancy-stats', [OccupancyController::class, 'stats']);
 
-// ── PC Client (Smart Lock): autentikasi pakai token device, bukan login user ──
 Route::middleware('device.client')->group(function () {
     Route::get('/client/status', [DeviceClientController::class, 'status']);
 });
 
-// ── Wajib login (semua role) ──
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
     Route::put('/profile', [AuthController::class, 'updateProfile']);
-    Route::put('/profile', [AuthController::class, 'updateProfile']);
     Route::post('/profile', [AuthController::class, 'updateProfile']);
     Route::get('/my-dashboard', [CustomerDashboardController::class, 'index']);
 
-    // Device & Game Catalog
     Route::get('/device-types', [DeviceTypeController::class, 'index']);
     Route::get('/devices', [DeviceController::class, 'index']);
     Route::get('/devices/{device}', [DeviceController::class, 'show']);
     Route::get('/games', [GameController::class, 'index']);
     Route::get('/games/{game}', [GameController::class, 'show']);
 
-    // Booking
     Route::get('/devices/{device}/availability', [BookingController::class, 'availability']);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
@@ -67,44 +65,35 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus']);
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
 
-    // Session
     Route::get('/sessions', [SessionController::class, 'index']);
 
-    // Product Catalog
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{product}', [ProductController::class, 'show']);
 
-    // Order
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{order}', [OrderController::class, 'show']);
     Route::post('/orders', [OrderController::class, 'store']);
 
-    // Transaction
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
     Route::delete('/my-transactions/clear', [TransactionController::class, 'clearCustomerHistory']);
     Route::delete('/my-transactions/{transaction}', [TransactionController::class, 'hideFromCustomer']);
 
-    // Ratings
     Route::post('/ratings', [RatingController::class, 'store']);
     Route::delete('/ratings/{rating}', [RatingController::class, 'destroy']);
     Route::delete('/my-rating', [RatingController::class, 'destroyMyRating']);
 
-    // Feedback
     Route::get('/feedback', [FeedbackController::class, 'index']);
     Route::post('/feedback', [FeedbackController::class, 'store']);
     Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 
-    // Loyalty Rewards
     Route::get('/my-rewards', [LoyaltyRewardController::class, 'index']);
     Route::post('/rewards/redeem', [LoyaltyRewardController::class, 'redeem']);
     Route::post('/rewards/{reward}/choose', [LoyaltyRewardController::class, 'choose']);
     Route::delete('/rewards/clear-redeemed', [LoyaltyRewardController::class, 'clearRedeemed']);
     Route::delete('/rewards/{reward}', [LoyaltyRewardController::class, 'destroy']);
 
-
-    // ── Khusus OWNER & ADMIN ──
     Route::middleware('role:OWNER,ADMIN')->group(function () {
         Route::post('/devices', [DeviceController::class, 'store']);
         Route::put('/devices/{device}', [DeviceController::class, 'update']);
@@ -141,7 +130,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/admin/loyalty-rewards', [LoyaltyRewardController::class, 'adminIndex']);
 
-        // ── Khusus OWNER ──
         Route::middleware('role:OWNER')->group(function () {
             Route::get('/staff', [StaffController::class, 'index']);
             Route::post('/staff', [StaffController::class, 'store']);
@@ -153,7 +141,6 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    // ── Khusus OWNER, ADMIN, STAFF_CAFE ──
     Route::middleware('role:OWNER,ADMIN,STAFF_CAFE')->group(function () {
         Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
         Route::get('/cafe-dashboard', [CafeDashboardController::class, 'index']);

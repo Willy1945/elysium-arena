@@ -11,10 +11,7 @@ use Illuminate\Validation\ValidationException;
 
 class TransactionService
 {
-    /**
-     * Checkout dari session yang sudah selesai — otomatis menggabungkan
-     * biaya gaming + semua order F&B yang terhubung ke session itu.
-     */
+
     public function checkoutSession(int $sessionId): Transaction
     {
         return DB::transaction(function () use ($sessionId) {
@@ -58,9 +55,6 @@ class TransactionService
         });
     }
 
-    /**
-     * Checkout order take-away (tanpa session gaming) — misal customer cuma beli makanan.
-     */
     public function checkoutOrders(array $orderIds, int $userId): Transaction
     {
         return DB::transaction(function () use ($orderIds, $userId) {

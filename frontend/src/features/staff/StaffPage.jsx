@@ -81,7 +81,7 @@ export default function StaffPage() {
 
     return (
         <DashboardLayout onSearch={setSearch}>
-            {/* ── HEADER ── */}
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -103,7 +103,6 @@ export default function StaffPage() {
                 </button>
             </div>
 
-            {/* ── TABLE CARD CONTAINER ── */}
             <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-xs min-w-[650px]">

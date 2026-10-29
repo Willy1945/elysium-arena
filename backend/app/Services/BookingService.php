@@ -16,15 +16,12 @@ class BookingService
     public function __construct(protected TelegramService $telegramService)
     {
     }
-    /**
-     * Cek apakah device tersedia pada rentang waktu tertentu.
-     */
+
     public function isAvailable(int $deviceId, string $date, string $startTime, int $durationMinutes, ?int $excludeBookingId = null): bool
     {
         $start = Carbon::parse("$date $startTime");
         $end = $start->copy()->addMinutes($durationMinutes);
 
-        // 1. Cek bentrok dengan booking lain
         $conflict = Booking::where('device_id', $deviceId)
             ->where('booking_date', $date)
             ->whereIn('status', ['pending', 'confirmed'])
@@ -37,7 +34,6 @@ class BookingService
             return false;
         }
 
-        // 2. Cek bentrok dengan active session yang sedang berlangsung hari ini
         if ($date === now()->toDateString()) {
             $activeSession = GamingSession::where('device_id', $deviceId)
                 ->where('status', 'active')
@@ -55,9 +51,6 @@ class BookingService
         return true;
     }
 
-    /**
-     * Ambil semua slot yang sudah terbooking pada tanggal tertentu (untuk ditampilkan di frontend).
-     */
     public function getBookedSlots(int $deviceId, string $date): array
     {
         $slots = Booking::where('device_id', $deviceId)
@@ -71,7 +64,6 @@ class BookingService
             ])
             ->toArray();
 
-        // Jika mengecek ketersediaan hari ini, tambahkan sesi bermain yang sedang aktif sebagai slot terisi
         if ($date === now()->toDateString()) {
             $activeSession = GamingSession::where('device_id', $deviceId)
                 ->where('status', 'active')
@@ -88,9 +80,6 @@ class BookingService
         return $slots;
     }
 
-    /**
-     * Buat booking baru dengan validasi ulang (double-check) + row locking untuk mencegah race condition.
-     */
     public function create(int $userId, array $data): Booking
     {
         $booking = DB::transaction(function () use ($userId, $data) {
@@ -104,7 +93,6 @@ class BookingService
                 throw ValidationException::withMessages(['device_id' => 'Device sedang maintenance dan tidak bisa dibooking.']);
             }
 
-            // Double-check availability di dalam transaction (mencegah race condition dua booking bentrok bersamaan)
             if (! $this->isAvailable($device->id, $data['booking_date'], $data['start_time'], $data['duration'])) {
                 throw ValidationException::withMessages(['start_time' => 'Slot waktu ini sudah dibooking oleh customer lain.']);
             }
@@ -113,7 +101,6 @@ class BookingService
             $end = $start->copy()->addMinutes($data['duration']);
             $totalPrice = ($data['duration'] / 60) * $device->price_per_hour;
 
-            // ── Reward: Gratis Jam Main (1 Jam atau 2 Jam) ──
             $reward = null;
             if (! empty($data['reward_id'])) {
                 $reward = LoyaltyReward::where('id', $data['reward_id'])
@@ -156,7 +143,6 @@ class BookingService
             return $booking;
         });
 
-        // Notifikasi Telegram ke Admin / Kasir
         $this->telegramService->sendNewBookingNotification($booking);
 
         return $booking;

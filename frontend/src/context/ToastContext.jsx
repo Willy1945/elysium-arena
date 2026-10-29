@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import ToastContainer from '../components/common/ToastContainer';
 
 const ToastContext = createContext(null);
@@ -12,17 +12,22 @@ export function ToastProvider({ children }) {
 
   const showToast = useCallback((type, message, duration = 4000) => {
     const id = `${Date.now()}-${Math.random()}`;
-    setToasts((prev) => [...prev, { id, type, message }]);
+    setToasts((prev) => {
+
+      const isDuplicate = prev.some((t) => t.message === message && t.type === type);
+      if (isDuplicate) return prev;
+      return [...prev, { id, type, message }];
+    });
     if (duration) {
       setTimeout(() => removeToast(id), duration);
     }
   }, [removeToast]);
 
-  const toast = {
+  const toast = useMemo(() => ({
     success: (message) => showToast('success', message),
     error: (message) => showToast('error', message),
     info: (message) => showToast('info', message),
-  };
+  }), [showToast]);
 
   return (
     <ToastContext.Provider value={toast}>

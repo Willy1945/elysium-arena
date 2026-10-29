@@ -145,10 +145,8 @@ class AuthController extends Controller
             ]);
         }
 
-        // Generate token
         $token = Str::random(64);
 
-        // Store or update in password_reset_tokens
         DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $user->email],
             [
@@ -157,7 +155,6 @@ class AuthController extends Controller
             ]
         );
 
-        // Build reset URL pointing to frontend (detect Origin/Referer header automatically, or fallback to FRONTEND_URL)
         $origin = $request->header('Origin');
         if (!$origin && $request->header('Referer')) {
             $parsed = parse_url($request->header('Referer'));
@@ -205,22 +202,19 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Check if token expired (60 minutes)
         if (Carbon::parse($record->created_at)->addMinutes(60)->isPast()) {
             DB::table('password_reset_tokens')->where('email', $request->email)->delete();
             return response()->json([
                 'message' => 'Tautan reset password telah kedaluwarsa. Silakan ajukan permintaan baru.',
             ], 422);
         }
-
-        // Verify token
+        
         if (!Hash::check($request->token, $record->token) && $request->token !== $record->token) {
             return response()->json([
                 'message' => 'Token reset password tidak valid.',
             ], 422);
         }
 
-        // Update user password
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             return response()->json([
@@ -231,10 +225,8 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        // Delete token
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-        // Revoke old tokens
         $user->tokens()->delete();
 
         return response()->json([

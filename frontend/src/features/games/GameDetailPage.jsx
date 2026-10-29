@@ -88,7 +88,7 @@ export default function GameDetailPage() {
 
   return (
     <DashboardLayout>
-      {/* ── TOP NAV LINK ── */}
+
       <div className="mb-6">
         <Link
           to="/admin/games"
@@ -99,7 +99,7 @@ export default function GameDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Kolom Kiri — Cover & Actions */}
+
         <div className="lg:col-span-4 flex flex-col gap-5">
           <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b] p-3">
             <div className="aspect-[3/4] rounded-xl overflow-hidden bg-zinc-100 border border-zinc-950">
@@ -129,7 +129,6 @@ export default function GameDetailPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan — Info & Device List */}
         <div className="lg:col-span-8 flex flex-col gap-6">
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">

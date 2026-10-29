@@ -9,7 +9,6 @@ class GamingSession extends Model
 {
     use HasFactory;
 
-    // Nama class beda dari nama tabel, jadi wajib dideklarasikan manual
     protected $table = 'sessions';
 
     protected $fillable = [
@@ -32,7 +31,6 @@ class GamingSession extends Model
         ];
     }
 
-    // ── Relationships ──
     public function booking()
     {
         return $this->belongsTo(Booking::class);
@@ -58,7 +56,6 @@ class GamingSession extends Model
         return $this->hasOne(Transaction::class, 'session_id');
     }
 
-    // ── Helper untuk timer (§6 PRD): sisa detik dihitung dari end_time, bukan setInterval polos ──
     public function getRemainingSecondsAttribute(): int
     {
         return max(0, now()->diffInSeconds($this->end_time, false));

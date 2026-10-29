@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('category'); // complaint, game_request, menu_request, other
+            $table->string('category');
             $table->string('subject');
             $table->text('message');
-            $table->string('status')->default('pending'); // pending, in_review, resolved
+            $table->string('status')->default('pending');
             $table->text('admin_response')->nullable();
             $table->timestamps();
         });

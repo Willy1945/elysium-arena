@@ -1,8 +1,11 @@
-const API_ORIGIN = import.meta.env.VITE_API_URL.replace('/api', '');
+const RAW_API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const API_ORIGIN = RAW_API_URL.replace(/\/api\/?$/, '');
 
 export function resolveImageUrl(path) {
   if (!path) return null;
-  return path.startsWith('http') ? path : `${API_ORIGIN}${path}`;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_ORIGIN}${cleanPath}`;
 }
 
 export function formatRupiah(value) {

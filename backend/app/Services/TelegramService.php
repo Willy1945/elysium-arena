@@ -20,9 +20,6 @@ class TelegramService
         $this->chatId = config('services.telegram.chat_id');
     }
 
-    /**
-     * Kirim pesan teks berformat HTML ke Telegram.
-     */
     public function sendMessage(string $text, ?string $chatId = null): bool
     {
         $targetChatId = $chatId ?: $this->chatId;
@@ -53,16 +50,13 @@ class TelegramService
         }
     }
 
-    /**
-     * Notifikasi Pesanan Kafe & Kitchen Baru (F&B On-Desk Ordering).
-     */
     public function sendNewOrderNotification(Order $order): void
     {
         try {
             $order->loadMissing(['user', 'session.device', 'items.product']);
 
             $customerName = $order->user?->name ?: 'Tamu (Walk-in)';
-            $tableOrStation = $order->session?->device?->code 
+            $tableOrStation = $order->session?->device?->code
                 ? "Stasiun " . $order->session->device->code . " (" . $order->session->device->name . ")"
                 : "Meja Kafe / Takeaway";
 
@@ -94,9 +88,6 @@ class TelegramService
         }
     }
 
-    /**
-     * Notifikasi Reservasi / Booking Stasiun PC/PS Baru dari Pelanggan.
-     */
     public function sendNewBookingNotification(Booking $booking): void
     {
         try {
@@ -134,9 +125,6 @@ class TelegramService
         }
     }
 
-    /**
-     * Notifikasi Masukan / Kendala Teknis dari Pelanggan.
-     */
     public function sendFeedbackNotification(Feedback $feedback): void
     {
         try {
@@ -170,9 +158,6 @@ class TelegramService
         }
     }
 
-    /**
-     * Notifikasi Pembayaran Transaksi Kasir Lunas.
-     */
     public function sendPaymentNotification(Transaction $transaction, string $method): void
     {
         try {

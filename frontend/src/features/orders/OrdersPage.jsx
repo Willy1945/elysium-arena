@@ -80,7 +80,7 @@ export default function OrdersPage() {
 
   return (
     <DashboardLayout>
-      {/* ── HEADER ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -108,7 +108,6 @@ export default function OrdersPage() {
         </div>
       )}
 
-      {/* ── MOBILE COLUMN SELECTOR (md:hidden) ── */}
       <div className="md:hidden mb-6 overflow-x-auto pb-1 scrollbar-none">
         <div className="bg-white border border-zinc-950 rounded-xl p-1 inline-flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
           <button
@@ -155,7 +154,7 @@ export default function OrdersPage() {
                 key={col.status}
                 className="bg-white border border-zinc-950 rounded-2xl p-4 sm:p-5 shadow-[3px_3px_0px_0px_#18181b] flex flex-col gap-4"
               >
-                {/* Column Header */}
+
                 <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
                   <div className="flex items-center gap-2">
                     <span className={`p-1.5 rounded-lg border border-zinc-950 shadow-[1px_1px_0px_0px_#18181b] ${col.badgeClass}`}>
@@ -170,7 +169,6 @@ export default function OrdersPage() {
                   </span>
                 </div>
 
-                {/* Column Cards */}
                 <div className="flex flex-col gap-3 min-h-[160px]">
                   {columnOrders.length === 0 ? (
                     <div className="h-32 flex flex-col items-center justify-center border border-dashed border-zinc-300 rounded-xl text-center p-4">

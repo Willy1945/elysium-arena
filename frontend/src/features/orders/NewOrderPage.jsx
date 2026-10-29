@@ -22,7 +22,7 @@ export default function NewOrderPage() {
   const [selectedUserId, setSelectedUserId] = useState('');
   const [activeSessions, setActiveSessions] = useState([]);
   const [selectedSessionId, setSelectedSessionId] = useState('');
-  const [cart, setCart] = useState({}); // { productId: quantity }
+  const [cart, setCart] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -95,7 +95,7 @@ export default function NewOrderPage() {
 
   return (
     <DashboardLayout>
-      {/* ── TOP NAV LINK & HEADER ── */}
+
       <div className="mb-6">
         <Link
           to="/admin/orders"
@@ -120,9 +120,9 @@ export default function NewOrderPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Kolom Kiri — Katalog Produk */}
+
         <div className="lg:col-span-2 flex flex-col gap-4">
-          {/* Filter Bar */}
+
           <div className="overflow-x-auto pb-1 scrollbar-none">
             <div className="bg-white border border-zinc-950 rounded-xl p-1 inline-flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
               {filters.map((f) => (
@@ -141,7 +141,6 @@ export default function NewOrderPage() {
             </div>
           </div>
 
-          {/* Grid Products */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
             {filteredProducts.map((product) => (
               <button
@@ -192,9 +191,8 @@ export default function NewOrderPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan — Cart & Customer */}
         <div className="flex flex-col gap-4">
-          {/* Target Customer Card */}
+
           <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b]">
             <h3 className="text-zinc-950 font-black text-sm uppercase tracking-wider font-display mb-4 flex items-center gap-2">
               <User size={15} className="text-cust-red" />
@@ -239,7 +237,6 @@ export default function NewOrderPage() {
             </select>
           </div>
 
-          {/* Cart Card */}
           <div id="cart-section" className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b] flex flex-col scroll-mt-24">
             <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-4">
               <div className="flex items-center gap-2">
@@ -324,7 +321,6 @@ export default function NewOrderPage() {
         </div>
       </div>
 
-      {/* Floating Mobile Order Bar (lg:hidden) */}
       {cartItems.length > 0 && (
         <div className="lg:hidden fixed bottom-4 left-3 right-3 z-40 bg-white/95 backdrop-blur-xl border border-zinc-950 rounded-2xl p-3.5 shadow-[4px_4px_0px_0px_#18181b] flex items-center justify-between">
           <div className="flex items-center gap-2.5">

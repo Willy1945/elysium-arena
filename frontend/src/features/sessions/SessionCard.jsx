@@ -14,7 +14,7 @@ export default function SessionCard({ session, onExtend, onEnd, actingId }) {
       }`}
     >
       <div>
-        {/* Header Unit & Alert */}
+
         <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-zinc-100">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-950 flex items-center justify-center text-cust-red shadow-[1px_1px_0px_0px_#18181b]">
@@ -41,7 +41,6 @@ export default function SessionCard({ session, onExtend, onEnd, actingId }) {
           )}
         </div>
 
-        {/* Customer Info */}
         <div className="flex items-center justify-between gap-2 text-xs text-zinc-900 mb-4 bg-zinc-50 px-3 py-2 rounded-xl border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b]">
           <div className="flex items-center gap-2 min-w-0">
             <User size={13} className="text-zinc-600 shrink-0" />
@@ -62,7 +61,6 @@ export default function SessionCard({ session, onExtend, onEnd, actingId }) {
           )}
         </div>
 
-        {/* Big Countdown Timer */}
         <div className="text-center py-5 rounded-xl bg-zinc-50 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] mb-4">
           <p className="text-xs text-zinc-600 uppercase font-bold tracking-wider mb-1 flex items-center justify-center gap-1.5">
             <Clock size={12} className="text-cust-red" />
@@ -73,14 +71,12 @@ export default function SessionCard({ session, onExtend, onEnd, actingId }) {
           </p>
         </div>
 
-        {/* Rate & Duration Info */}
         <div className="flex items-center justify-between text-xs text-zinc-600 mb-5 px-1 font-mono-tech">
           <span>Durasi: <strong className="text-zinc-950">{session.duration / 60} jam</strong></span>
           <span className="text-zinc-950 font-black">{formatRupiah(session.price)}</span>
         </div>
       </div>
 
-      {/* Action Controls */}
       <div className="grid grid-cols-2 gap-2 pt-3 border-t border-zinc-200">
         <button
           onClick={() => onExtend(session)}

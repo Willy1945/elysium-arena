@@ -5,15 +5,13 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('device_type_id')->constrained('device_types')->restrictOnDelete();
-            $table->string('code'); // "PS5 #01"
+            $table->string('code');
             $table->unsignedInteger('price_per_hour');
             $table->enum('status', ['available', 'booked', 'occupied', 'maintenance'])
                 ->default('available');
@@ -25,9 +23,6 @@ return new class extends Migration {
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('devices');

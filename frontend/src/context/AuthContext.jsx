@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { authService } from '../api/authService';
 
 const AuthContext = createContext(null);
@@ -17,8 +17,7 @@ export function AuthProvider({ children }) {
     return stored ? normalizeUser(JSON.parse(stored)) : null;
   });
 
-  // Setiap kali user diubah dari manapun, WAJIB lewat sini — role selalu dinormalisasi otomatis
-  const setUser = (rawUser) => {
+  const setUser = useCallback((rawUser) => {
     const normalized = normalizeUser(rawUser);
     if (normalized) {
       localStorage.setItem('user', JSON.stringify(normalized));
@@ -26,33 +25,52 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('user');
     }
     setRawUser(normalized);
-  };
+  }, []);
 
-  const login = async (credentials) => {
+  const login = useCallback(async (credentials) => {
     const { data } = await authService.login(credentials);
     localStorage.setItem('token', data.token);
     setUser(data.user);
     return normalizeUser(data.user);
-  };
+  }, [setUser]);
 
-  const register = async (payload) => {
+  const register = useCallback(async (payload) => {
     const { data } = await authService.register(payload);
     localStorage.setItem('token', data.token);
     setUser(data.user);
     return normalizeUser(data.user);
-  };
+  }, [setUser]);
 
-  const logout = async () => {
+  const loginWithToken = useCallback((userData, token) => {
+    localStorage.setItem('token', token);
+    const normalized = normalizeUser(userData);
+    if (normalized) {
+      localStorage.setItem('user', JSON.stringify(normalized));
+    }
+    setRawUser(normalized);
+    return normalized;
+  }, []);
+
+  const logout = useCallback(async () => {
     try {
       await authService.logout();
     } catch (e) {
     }
     localStorage.removeItem('token');
     setUser(null);
-  };
+  }, [setUser]);
+
+  const value = useMemo(() => ({
+    user,
+    setUser,
+    login,
+    register,
+    logout,
+    loginWithToken,
+  }), [user, setUser, login, register, logout, loginWithToken]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

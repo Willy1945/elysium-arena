@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('device_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->unsignedTinyInteger('rating'); // 1-5
+            $table->unsignedTinyInteger('rating');
             $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->unique(['device_id', 'user_id']); // 1 user cuma bisa 1 rating per device (bisa update)
+            $table->unique(['device_id', 'user_id']);
         });
     }
 

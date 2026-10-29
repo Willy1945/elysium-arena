@@ -32,7 +32,6 @@ export default function ContactPage() {
   const { user } = useAuth();
   const toast = useToast();
 
-  // Form State
   const [guestName, setGuestName] = useState('');
   const [guestContact, setGuestContact] = useState('');
   const [category, setCategory] = useState('game_request');
@@ -40,7 +39,6 @@ export default function ContactPage() {
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // History State for logged-in user
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [deletingFeedback, setDeletingFeedback] = useState(null);
@@ -68,7 +66,6 @@ export default function ContactPage() {
     }
   }, [user]);
 
-  // Submit via System (for logged-in user)
   const handleSubmitSystem = async (e) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) {
@@ -91,7 +88,6 @@ export default function ContactPage() {
     }
   };
 
-  // Submit / Forward to WhatsApp (for guest or quick direct action)
   const handleSendWhatsApp = (e) => {
     if (e) e.preventDefault();
     if (!subject.trim() || !message.trim()) {
@@ -103,7 +99,7 @@ export default function ContactPage() {
     const senderName = user?.name || guestName.trim() || 'Pengunjung Elysium Arena';
     const senderContact = user?.email || guestContact.trim() || '-';
 
-    const textPayload = 
+    const textPayload =
       `*HALO ELYSIUM ARENA - PESAN & MASUKAN*\n` +
       `──────────────────────────\n` +
       `👤 *Nama:* ${senderName}\n` +
@@ -135,14 +131,14 @@ export default function ContactPage() {
 
   return (
     <PublicLayout>
-      {/* ── 1. HERO HEADER BANNER (CINEMATIC DARK THEME) ── */}
+
       <section className="relative bg-black text-white overflow-hidden border-b border-zinc-800 -mt-[72px] sm:-mt-[80px] pt-36 sm:pt-44 pb-20 sm:pb-24">
-        {/* Full-bleed Background Image with Dark Tint */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-25 scale-100 pointer-events-none"
           style={{ backgroundImage: "url('/images/device-room.jpeg')" }}
         />
-        {/* Gradient scrim for depth and legibility */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/50 pointer-events-none" />
         <div className="pointer-events-none absolute -top-40 right-10 w-[500px] h-[500px] bg-cust-red/15 rounded-full blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-40 left-10 w-[400px] h-[400px] bg-cust-red/10 rounded-full blur-[140px]" />
@@ -167,7 +163,6 @@ export default function ContactPage() {
             Kunjungi markas arena gaming kami di pusat kota Sumedang, konsultasikan kebutuhan mabar & turnamen, atau sampaikan masukan, request game, serta ide menu baru.
           </p>
 
-          {/* Quick Live Telemetry Strip in dark HUD style */}
           <div className="inline-flex flex-wrap items-center justify-center gap-3 bg-black/60 backdrop-blur-md border border-white/15 px-4 py-2 rounded-2xl shadow-md text-xs font-medium text-zinc-300">
             <span className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
@@ -186,14 +181,12 @@ export default function ContactPage() {
       </section>
 
       <div className="bg-zinc-50/60 border-b border-zinc-200">
-        {/* ── 2. TWO-COLUMN SPLIT GRID ── */}
+
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* ── LEFT COLUMN: ALAMAT & AKSES KONTAK (5 COLS) ── */}
+
             <div className="lg:col-span-5 space-y-5">
-              
-              {/* Alamat Card */}
+
               <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_8px_20px_-4px_rgba(0,0,0,0.04)] hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
                   <div className="w-11 h-11 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -224,9 +217,8 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Direct Channels (WhatsApp & Jam Buka) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* WhatsApp CS Card */}
+
                 <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-2xs hover:shadow-xs transition">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mb-3 shadow-2xs">
                     <Phone size={18} />
@@ -247,7 +239,6 @@ export default function ContactPage() {
                   </a>
                 </div>
 
-                {/* Jam Operasional Card */}
                 <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 shadow-2xs hover:shadow-xs transition">
                   <div className="w-10 h-10 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-700 mb-3 shadow-2xs">
                     <Clock size={18} />
@@ -263,7 +254,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Email Resmi Card */}
               <div className="bg-white border border-zinc-200/90 rounded-2xl p-5 flex items-center justify-between gap-4 shadow-2xs">
                 <div className="flex items-center gap-3.5">
                   <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -282,7 +272,6 @@ export default function ContactPage() {
                 </a>
               </div>
 
-              {/* Interactive Embedded Google Maps */}
               <div className="bg-white border border-zinc-200 rounded-3xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06)]">
                 <div className="p-3.5 border-b border-zinc-100 bg-zinc-50/70 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2 text-zinc-800 font-bold">
@@ -312,10 +301,8 @@ export default function ContactPage() {
 
             </div>
 
-            {/* ── RIGHT COLUMN: FORMULIR MASUKAN & REQUEST (7 COLS) ── */}
             <div className="lg:col-span-7 space-y-8">
-              
-              {/* Form Container */}
+
               <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.05)]">
                 <div className="mb-6">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-cust-red text-xs font-bold uppercase tracking-wider mb-2">
@@ -330,7 +317,6 @@ export default function ContactPage() {
                   </p>
                 </div>
 
-                {/* Logged in User Badge or Guest Contact Fields */}
                 {user ? (
                   <div className="mb-6 p-4 rounded-2xl bg-zinc-50 border border-zinc-200/90 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -396,10 +382,8 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                {/* Form Controls */}
                 <form onSubmit={user ? handleSubmitSystem : handleSendWhatsApp} className="space-y-5">
-                  
-                  {/* Category Selection */}
+
                   <div>
                     <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2.5">
                       Pilih Kategori Pesan
@@ -437,7 +421,6 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Subject Input */}
                   <div>
                     <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-1.5">
                       Judul / Topik Masukan
@@ -452,7 +435,6 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  {/* Message Detail Input */}
                   <div>
                     <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-1.5">
                       Penjelasan Detail
@@ -472,7 +454,6 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  {/* Multi-Channel Action Buttons */}
                   <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     {user ? (
                       <>
@@ -519,7 +500,6 @@ export default function ContactPage() {
                 </form>
               </div>
 
-              {/* ── 3. RIWAYAT MASUKAN (KHUSUS MEMBER LOGGED-IN) ── */}
               {user && (
                 <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.05)]">
                   <div className="flex items-center justify-between mb-5">

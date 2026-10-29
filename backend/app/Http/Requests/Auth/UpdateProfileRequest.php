@@ -9,7 +9,7 @@ class UpdateProfileRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // sudah dijamin login lewat middleware auth:sanctum di route
+        return true;
     }
 
     public function rules(): array

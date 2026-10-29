@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        // Reset data lama — struktur berubah dari per-device jadi 1 rating per akun
+
         DB::table('device_ratings')->truncate();
 
         Schema::table('device_ratings', function (Blueprint $table) {

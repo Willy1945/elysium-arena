@@ -5,6 +5,7 @@ import PublicLayout from '../../components/layout/PublicLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { authService } from '../../api/authService';
+import UserAvatar from '../../components/common/UserAvatar';
 
 export default function ProfilePage() {
   const { user, setUser } = useAuth();
@@ -97,7 +98,7 @@ export default function ProfilePage() {
   return (
     <PublicLayout>
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-        {/* Back Link */}
+
         <Link
           to="/dashboard"
           className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-semibold uppercase tracking-wider mb-8 transition"
@@ -106,7 +107,6 @@ export default function ProfilePage() {
           <span>Kembali ke Dashboard</span>
         </Link>
 
-        {/* Page Title */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
             <User size={14} />
@@ -121,25 +121,19 @@ export default function ProfilePage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          
-          {/* Avatar Section */}
+
           <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
             <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-4">
               Foto Profil Pelanggan
             </p>
             <div className="flex items-center gap-5">
               <div className="relative">
-                {avatarPreview ? (
-                  <img
-                    src={avatarPreview}
-                    alt="Avatar"
-                    className="w-20 h-20 rounded-2xl object-cover border border-zinc-200 shadow-md"
-                  />
-                ) : (
-                  <div className="w-20 h-20 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-cust-red font-display font-black text-3xl shadow-sm">
-                    {initials || <User size={28} />}
-                  </div>
-                )}
+                <UserAvatar
+                  src={avatarPreview}
+                  name={form.name || user?.name}
+                  className="w-20 h-20 rounded-2xl object-cover border border-zinc-200 shadow-md"
+                  fallbackClassName="w-20 h-20 rounded-2xl bg-zinc-100 border border-zinc-200 flex items-center justify-center text-cust-red font-display font-black text-3xl shadow-sm"
+                />
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
@@ -165,7 +159,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Basic Info */}
           <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
             <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider mb-5">
               Informasi Dasar
@@ -213,7 +206,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Change Password */}
           <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
             <p className="text-zinc-950 text-xs font-bold uppercase tracking-wider mb-1">
               Ganti Kata Sandi

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
+import UserAvatar from '../common/UserAvatar';
 
 const NAV_LINKS = [
   { label: 'Beranda', path: '/' },
@@ -25,7 +26,6 @@ export default function PublicNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Efek glassmorphism dinamis saat discroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -34,7 +34,6 @@ export default function PublicNavbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Tutup dropdown saat klik di luar
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -45,7 +44,6 @@ export default function PublicNavbar() {
     return () => window.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Tutup mobile menu saat pindah rute
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
@@ -71,8 +69,7 @@ export default function PublicNavbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-16 flex items-center justify-between">
-          
-          {/* Logo dengan tipografi tajam */}
+
           <Link to="/" className="flex items-center gap-3 group">
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -98,9 +95,8 @@ export default function PublicNavbar() {
             </div>
           </Link>
 
-          {/* Right Group: Nav Links + Profile / Auth */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            {/* Desktop Nav Links (Tanpa kotak, clean minimal) */}
+
             <nav className="flex items-center gap-5 lg:gap-7">
               {NAV_LINKS.map((link) => {
                 const active = location.pathname === link.path;
@@ -129,10 +125,8 @@ export default function PublicNavbar() {
               })}
             </nav>
 
-            {/* Subtle Divider */}
             <div className={`h-5 w-px ${isDarkHeader ? 'bg-white/20' : 'bg-zinc-200'}`} />
 
-            {/* User Dropdown / Auth CTA */}
             <div className="flex items-center gap-4">
               {user ? (
                 <div className="relative" ref={dropdownRef}>
@@ -150,17 +144,12 @@ export default function PublicNavbar() {
                         : 'bg-white border-zinc-200 text-zinc-700 hover:text-zinc-950 hover:border-zinc-300 shadow-xs'
                     }`}
                   >
-                    {user.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.name}
-                        className="w-7 h-7 rounded-md object-cover border border-zinc-200"
-                      />
-                    ) : (
-                      <div className="w-7 h-7 rounded-md bg-gradient-to-br from-cust-red to-cust-red-dark flex items-center justify-center text-white font-bold text-xs shadow-xs">
-                        {user.name?.charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    <UserAvatar
+                      src={user.avatar}
+                      name={user.name}
+                      className="w-7 h-7 rounded-md object-cover border border-zinc-200"
+                      fallbackClassName="w-7 h-7 rounded-md bg-gradient-to-br from-cust-red to-cust-red-dark flex items-center justify-center text-white font-bold text-xs shadow-xs"
+                    />
                     <span className="text-xs font-bold uppercase tracking-wide">
                       {user.name?.split(' ')[0]}
                     </span>
@@ -172,7 +161,6 @@ export default function PublicNavbar() {
                     </motion.div>
                   </motion.button>
 
-                  {/* Animated Dropdown Menu */}
                   <AnimatePresence>
                     {dropdownOpen && (
                       <motion.div
@@ -253,7 +241,6 @@ export default function PublicNavbar() {
             </div>
           </div>
 
-          {/* Mobile Menu Trigger */}
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -268,7 +255,6 @@ export default function PublicNavbar() {
         </div>
       </div>
 
-      {/* Animated Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -301,13 +287,12 @@ export default function PublicNavbar() {
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-3 py-2 bg-zinc-50 rounded-lg border border-zinc-200 mb-1">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-md object-cover" />
-                    ) : (
-                      <div className="w-8 h-8 rounded-md bg-cust-red flex items-center justify-center text-white font-bold text-xs">
-                        {user.name?.charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    <UserAvatar
+                      src={user.avatar}
+                      name={user.name}
+                      className="w-8 h-8 rounded-md object-cover"
+                      fallbackClassName="w-8 h-8 rounded-md bg-cust-red flex items-center justify-center text-white font-bold text-xs"
+                    />
                     <div>
                       <p className="text-zinc-900 font-bold text-xs">{user.name}</p>
                       <p className="text-zinc-500 text-[10px] font-mono-tech">{user.email}</p>

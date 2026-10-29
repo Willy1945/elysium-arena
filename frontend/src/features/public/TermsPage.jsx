@@ -17,7 +17,7 @@ export default function TermsPage() {
   return (
     <PublicLayout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-        {/* Top Back Link */}
+
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-bold uppercase tracking-wider mb-8 transition"
@@ -26,7 +26,6 @@ export default function TermsPage() {
           <span>Kembali ke Beranda</span>
         </Link>
 
-        {/* Page Title Header */}
         <div className="mb-10 pb-8 border-b border-zinc-200">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-bold uppercase tracking-wider mb-3 shadow-2xs">
             <FileText size={14} />
@@ -45,10 +44,8 @@ export default function TermsPage() {
           </div>
         </div>
 
-        {/* ── SECTIONS LIST ── */}
         <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-zinc-700">
-          
-          {/* Pasal 1: Ketentuan Umum & Akun */}
+
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -71,7 +68,6 @@ export default function TermsPage() {
             </div>
           </section>
 
-          {/* Pasal 2: Tata Tertib Stasiun Gaming & Perangkat */}
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -97,7 +93,6 @@ export default function TermsPage() {
             </div>
           </section>
 
-          {/* Pasal 3: Reservasi & Booking Waktu */}
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -120,7 +115,6 @@ export default function TermsPage() {
             </div>
           </section>
 
-          {/* Pasal 4: Kafe F&B & Kenyamanan Bersama */}
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
@@ -143,7 +137,6 @@ export default function TermsPage() {
             </div>
           </section>
 
-          {/* Pasal 5: Koin Loyalitas & Voucher Reward */}
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">
@@ -166,7 +159,6 @@ export default function TermsPage() {
             </div>
           </section>
 
-          {/* Pasal 6: Keamanan & Pembatasan Tanggung Jawab */}
           <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shrink-0 shadow-2xs">
@@ -188,7 +180,6 @@ export default function TermsPage() {
 
         </div>
 
-        {/* Support Contact Box */}
         <div className="mt-12 bg-white border border-zinc-200 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shrink-0 shadow-2xs">

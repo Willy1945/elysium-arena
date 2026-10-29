@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
@@ -18,7 +16,7 @@ return new class extends Migration
             $table->foreignId('device_id')->constrained('devices')->restrictOnDelete();
             $table->date('booking_date');
             $table->time('start_time');
-            $table->unsignedInteger('duration'); // dalam menit
+            $table->unsignedInteger('duration');
             $table->time('end_time');
             $table->unsignedInteger('total_price');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])
@@ -29,9 +27,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('bookings');

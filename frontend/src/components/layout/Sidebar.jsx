@@ -5,6 +5,7 @@ import {
   Users, LogOut, ChevronRight, X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import UserAvatar from '../common/UserAvatar';
 
 const NAV_GROUPS = [
   {
@@ -51,7 +52,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-      {/* ── MOBILE BACKDROP OVERLAY ── */}
+
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-200"
@@ -64,7 +65,7 @@ export default function Sidebar({ isOpen, onClose }) {
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
         }`}
       >
-        {/* ── TOP BRAND HEADER ── */}
+
         <div>
           <div className="h-16 flex items-center justify-between px-5">
             <Link to="/" onClick={onClose} className="flex items-center gap-3 group">
@@ -83,7 +84,6 @@ export default function Sidebar({ isOpen, onClose }) {
               </div>
             </Link>
 
-            {/* Mobile Close Button */}
             <button
               onClick={onClose}
               className="lg:hidden p-1.5 rounded-lg bg-zinc-100 text-zinc-600 hover:text-zinc-950 hover:bg-zinc-200 transition cursor-pointer"
@@ -93,7 +93,6 @@ export default function Sidebar({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* ── GROUPED NAVIGATION LINKS ── */}
           <nav className="p-3.5 space-y-5 overflow-y-auto max-h-[calc(100vh-140px)] no-scrollbar">
             {NAV_GROUPS.map((group) => {
               const visibleItems = group.items.filter((item) => item.roles.includes(user?.role));
@@ -129,21 +128,15 @@ export default function Sidebar({ isOpen, onClose }) {
           </nav>
         </div>
 
-        {/* ── BOTTOM USER FOOTER CARD ── */}
         <div className="p-3 bg-white">
           <div className="flex items-center justify-between p-2 rounded-xl bg-zinc-50 border border-zinc-200/80">
             <div className="flex items-center gap-2.5 min-w-0">
-              {user?.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-8 h-8 rounded-lg object-cover border border-zinc-200 shrink-0"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-bold text-xs shrink-0">
-                  {user?.name?.charAt(0).toUpperCase()}
-                </div>
-              )}
+              <UserAvatar
+                src={user?.avatar}
+                name={user?.name}
+                className="w-8 h-8 rounded-lg object-cover border border-zinc-200 shrink-0"
+                fallbackClassName="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-900 font-bold text-xs shrink-0"
+              />
               <div className="min-w-0">
                 <p className="text-zinc-950 text-xs font-bold truncate leading-tight">
                   {user?.name}

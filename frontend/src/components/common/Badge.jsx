@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PRESETS = {
-  // ── Green / Emerald (Confirmed, Lunas, Paid, Ready, Available, In Stock, Success) ──
+
   'status-available': {
     badge: 'bg-emerald-100 text-emerald-950 border-zinc-950',
     dot: 'bg-emerald-600 border-zinc-950/60',
@@ -43,7 +43,6 @@ const PRESETS = {
     dot: 'bg-emerald-600 border-zinc-950/60',
   },
 
-  // ── Amber / Yellow (Pending, Menunggu, Belum Dibayar, Booked, Low Stock) ──
   'status-booked': {
     badge: 'bg-amber-100 text-amber-950 border-zinc-950',
     dot: 'bg-amber-500 border-zinc-950/60',
@@ -77,7 +76,6 @@ const PRESETS = {
     dot: 'bg-amber-500 border-zinc-950/60',
   },
 
-  // ── Red / Rose (Cancelled, Batal, Failed, Gagal, Occupied, Out of Stock) ──
   'status-occupied': {
     badge: 'bg-rose-100 text-rose-950 border-zinc-950',
     dot: 'bg-rose-600 border-zinc-950/60',
@@ -123,7 +121,6 @@ const PRESETS = {
     dot: 'bg-rose-600 border-zinc-950/60',
   },
 
-  // ── Blue / Sky / Indigo (Completed, Selesai, Processing, Delivered) ──
   'status-maintenance': {
     badge: 'bg-sky-100 text-sky-950 border-zinc-950',
     dot: 'bg-sky-600 border-zinc-950/60',
@@ -157,7 +154,6 @@ const PRESETS = {
     dot: 'bg-sky-600 border-zinc-950/60',
   },
 
-  // ── Neutral Fallback ──
   neutral: {
     badge: 'bg-zinc-100 text-zinc-900 border-zinc-950',
     dot: 'bg-zinc-400 border-zinc-950/60',

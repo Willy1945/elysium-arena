@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Gamepad2,
@@ -22,17 +22,25 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { authService } from '../../api/authService';
+import GoogleLoginButton from '../../components/common/GoogleLoginButton';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // State Lupa Password Modal
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setError(errorParam);
+    }
+  }, [searchParams]);
+
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotLoading, setForgotLoading] = useState(false);
@@ -83,19 +91,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-zinc-50 to-white text-zinc-950 flex flex-col lg:flex-row relative overflow-hidden font-sans selection:bg-cust-red selection:text-white">
-      {/* Background Ambient Glows & Grid Pattern */}
+
       <div className="pointer-events-none absolute -top-40 -left-40 w-[600px] h-[600px] bg-cust-red/[0.04] rounded-full blur-[140px]" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-amber-500/[0.03] rounded-full blur-[160px]" />
 
-      {/* ── LEFT SHOWCASE PANEL (Desktop: Visual Narrative & Arena Perks) ── */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-7/12 relative flex-col justify-between p-12 xl:p-16 border-r border-zinc-200 overflow-hidden bg-zinc-50/50">
-        {/* Background Image with Light Wash */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-[0.06] mix-blend-luminosity scale-105 pointer-events-none"
           style={{ backgroundImage: `url('/images/hero-gaming-room.jpg')` }}
         />
 
-        {/* Header Branding */}
         <div className="relative z-10 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3.5 group">
             <img
@@ -113,7 +119,6 @@ export default function LoginPage() {
             </div>
           </Link>
 
-          {/* Operational Hours Pill */}
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-zinc-200 shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span className="text-[11px] font-bold text-zinc-700 tracking-wider uppercase font-mono">
@@ -122,7 +127,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Center Main Headline & Bento Perks */}
         <div className="relative z-10 my-auto py-10 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 mb-4 shadow-2xs">
             <span className="w-1.5 h-1.5 rounded-full bg-cust-red" />
@@ -137,11 +141,10 @@ export default function LoginPage() {
           </h1>
 
           <p className="text-zinc-600 text-sm xl:text-base leading-relaxed mb-8 font-medium">
-            Masuk ke akun member Anda untuk mengelola reservasi stasiun PC & PS5, 
+            Masuk ke akun member Anda untuk mengelola reservasi stasiun PC & PS5,
             memantau durasi bermain, serta menukarkan poin reward.
           </p>
 
-          {/* Micro Bento Perk Cards with Elevation */}
           <div className="grid grid-cols-3 gap-3.5 pt-2">
             <div className="bg-white border border-zinc-200 hover:border-cust-red/40 p-3.5 rounded-xl transition-all shadow-xs hover:shadow-md">
               <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-200 flex items-center justify-center mb-2.5 text-cust-red shadow-2xs">
@@ -181,7 +184,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Footer Meta Details */}
         <div className="relative z-10 flex items-center justify-between pt-6 border-t border-zinc-200 text-xs text-zinc-500 font-medium">
           <div className="flex items-center gap-2">
             <MapPin size={13} className="text-cust-red" />
@@ -191,10 +193,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ── RIGHT AUTH FORM CONTAINER ── */}
       <div className="w-full lg:w-1/2 xl:w-5/12 flex items-center justify-center p-6 sm:p-10 lg:p-12 xl:p-14 relative z-10 my-auto">
         <div className="w-full max-w-md">
-          {/* Mobile Brand Header */}
+
           <div className="lg:hidden flex items-center justify-between mb-8">
             <Link to="/" className="flex items-center gap-3">
               <img
@@ -216,10 +217,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Card Enclosure with Elevation */}
           <div className="bg-white border border-zinc-200 rounded-3xl p-7 sm:p-9 shadow-[0_20px_45px_rgba(0,0,0,0.08)] relative">
 
-            {/* Header Content */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-block w-2 h-2 rounded-sm bg-cust-red" />
@@ -235,7 +234,6 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Animated Error Alert */}
             <AnimatePresence>
               {error && (
                 <motion.div
@@ -250,9 +248,8 @@ export default function LoginPage() {
               )}
             </AnimatePresence>
 
-            {/* Main Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email Field */}
+
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-2 font-bold">
                   Email Address
@@ -272,7 +269,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Password Field */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider font-bold">
@@ -314,7 +310,6 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Submit CTA Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -337,7 +332,17 @@ export default function LoginPage() {
               </button>
             </form>
 
-            {/* Switch to Register */}
+            <div className="relative my-5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-zinc-200" />
+              </div>
+              <div className="relative flex justify-center text-[11px] uppercase tracking-wider font-bold">
+                <span className="bg-white px-3 text-zinc-400 font-mono-tech">Atau masuk dengan</span>
+              </div>
+            </div>
+
+            <GoogleLoginButton text="Masuk dengan Google" />
+
             <p className="text-center text-zinc-600 text-xs sm:text-sm mt-6 font-medium">
               Belum memiliki akun member?{' '}
               <Link to="/register" className="text-cust-red font-bold hover:underline ml-1">
@@ -348,11 +353,10 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ── FORGOT PASSWORD MODAL ── */}
       <AnimatePresence>
         {forgotModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -361,7 +365,6 @@ export default function LoginPage() {
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
 
-            {/* Modal Dialog */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -369,7 +372,7 @@ export default function LoginPage() {
               transition={{ duration: 0.2 }}
               className="relative w-full max-w-md bg-white border border-zinc-200 rounded-3xl p-6 sm:p-7 shadow-2xl text-zinc-900 z-10"
             >
-              {/* Close Button */}
+
               <button
                 type="button"
                 onClick={() => setForgotModalOpen(false)}
@@ -391,7 +394,6 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              {/* Alert Success */}
               {forgotSuccess && (
                 <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs p-3.5 rounded-xl mb-4 flex items-start gap-2.5 font-medium shadow-2xs">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -403,7 +405,6 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {/* Alert Error */}
               {forgotError && (
                 <div className="bg-red-50 border border-red-200 text-red-800 text-xs p-3.5 rounded-xl mb-4 flex items-start gap-2.5 font-medium shadow-2xs">
                   <AlertCircle className="w-4 h-4 text-cust-red shrink-0 mt-0.5" />
@@ -411,7 +412,6 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {/* Form Input */}
               {!forgotSuccess && (
                 <form onSubmit={handleSendResetEmail} className="space-y-4">
                   <div>
@@ -457,7 +457,6 @@ export default function LoginPage() {
                 </form>
               )}
 
-              {/* Fast WhatsApp Help Option */}
               <div className="mt-5 pt-4 border-t border-zinc-100">
                 <div className="flex items-center justify-between text-xs mb-2">
                   <span className="text-zinc-500 font-medium">Sedang di arena & butuh bantuan cepat?</span>

@@ -68,7 +68,7 @@ export default function SessionsPage() {
 
   return (
     <DashboardLayout>
-      {/* ── HEADER TITLE ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -132,7 +132,6 @@ export default function SessionsPage() {
         </div>
       )}
 
-      {/* Modal Mulai Sesi Walk-In */}
       <StartSessionModal
         open={startWalkInOpen}
         onClose={() => setStartWalkInOpen(false)}

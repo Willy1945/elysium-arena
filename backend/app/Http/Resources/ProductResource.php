@@ -17,7 +17,7 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'minimum_stock' => $this->minimum_stock,
-            'stock_status' => $this->stock_status, // pakai accessor dari Model
+            'stock_status' => $this->stock_status,
             'image' => $this->image ? Storage::url($this->image) : null,
             'description' => $this->description,
             'is_active' => (bool) $this->is_active,

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '../features/auth/LoginPage';
+import GoogleCallbackPage from '../features/auth/GoogleCallbackPage';
 import ResetPasswordPage from '../features/auth/ResetPasswordPage';
 import DevicesPage from '../features/devices/DevicesPage';
 import ProtectedRoute from './ProtectedRoute';
@@ -220,6 +221,7 @@ export default function AppRouter() {
         <Route path="/browse-devices" element={<BrowseDevicesPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/browse-games" element={<BrowseGamesPage />} />
         <Route path="/browse-games/:id" element={<PublicGameDetailPage />} />

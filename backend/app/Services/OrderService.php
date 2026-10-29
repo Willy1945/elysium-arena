@@ -22,9 +22,8 @@ class OrderService
             $totalPrice = 0;
             $lockedProducts = [];
 
-            // Lock & validasi stok semua item dulu, sebelum ada yang diproses (all-or-nothing)
             foreach ($data['items'] as $item) {
-                $product = Product::where('id', $item['product_id'])->lockForUpdate()->first();
+                $product = Product::with('category')->where('id', $item['product_id'])->lockForUpdate()->first();
 
                 if (! $product->is_active) {
                     throw ValidationException::withMessages(['items' => "Produk {$product->name} sedang tidak tersedia."]);
@@ -40,11 +39,13 @@ class OrderService
                 $totalPrice += $product->price * $item['quantity'];
             }
 
-            // ── Reward: Gratis Makanan ──
             $reward = null;
-            $rewardProduct = null;
+            $discount = 0;
+            $discountedProductId = null;
+
             if (! empty($data['reward_id'])) {
-                $reward = LoyaltyReward::where('id', $data['reward_id'])
+                $reward = LoyaltyReward::with('catalog')
+                    ->where('id', $data['reward_id'])
                     ->where('user_id', $actorId)
                     ->where('status', 'available')
                     ->where('type', 'free_food')
@@ -56,16 +57,47 @@ class OrderService
                     ]);
                 }
 
-                $rewardProduct = Product::where('is_reward_item', true)
-                    ->where('is_active', true)
-                    ->lockForUpdate()
-                    ->first();
+                $rewardTitle = strtolower($reward->title ?? $reward->catalog?->title ?? '');
+                $isDrinkReward = str_contains($rewardTitle, 'minum') || str_contains($rewardTitle, 'kopi');
+                $isNoodleReward = str_contains($rewardTitle, 'mie');
 
-                if (! $rewardProduct || $rewardProduct->stock < 1) {
-                    throw ValidationException::withMessages([
-                        'reward_id' => 'Item reward sedang tidak tersedia.',
-                    ]);
+                $eligibleItem = null;
+                foreach ($data['items'] as $item) {
+                    $prod = $lockedProducts[$item['product_id']];
+                    $catName = strtolower($prod->category?->name ?? '');
+                    $prodName = strtolower($prod->name);
+
+                    if ($isDrinkReward) {
+                        if ($catName === 'minuman' || $catName === 'kopi' || str_contains($prodName, 'kopi') || str_contains($prodName, 'teh') || str_contains($prodName, 'minerale')) {
+                            $eligibleItem = $item;
+                            break;
+                        }
+                    } elseif ($isNoodleReward) {
+                        if (str_contains($prodName, 'mie')) {
+                            $eligibleItem = $item;
+                            break;
+                        }
+                    }
                 }
+
+                if (! $eligibleItem) {
+                    if ($isDrinkReward) {
+                        throw ValidationException::withMessages([
+                            'reward_id' => 'Voucher ini berlaku untuk menu Minuman/Kopi. Silakan tambahkan minuman ke keranjang.',
+                        ]);
+                    } elseif ($isNoodleReward) {
+                        throw ValidationException::withMessages([
+                            'reward_id' => 'Voucher ini berlaku untuk menu Mie. Silakan tambahkan menu mie ke keranjang.',
+                        ]);
+                    } else {
+                        $eligibleItem = $data['items'][0];
+                    }
+                }
+
+                $discountProduct = $lockedProducts[$eligibleItem['product_id']];
+                $discount = $discountProduct->price;
+                $discountedProductId = $discountProduct->id;
+                $totalPrice = max(0, $totalPrice - $discount);
             }
 
             $order = Order::create([
@@ -76,33 +108,49 @@ class OrderService
                 'total_price' => $totalPrice,
             ]);
 
+            $rewardItemHandled = false;
             foreach ($data['items'] as $item) {
                 $product = $lockedProducts[$item['product_id']];
-                $subtotal = $product->price * $item['quantity'];
+                $quantity = $item['quantity'];
 
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'quantity' => $item['quantity'],
-                    'price' => $product->price,
-                    'subtotal' => $subtotal,
-                ]);
+                if ($discountedProductId && $item['product_id'] === $discountedProductId && ! $rewardItemHandled) {
+                    $rewardItemHandled = true;
 
-                $product->decrement('stock', $item['quantity']);
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'quantity' => 1,
+                        'price' => 0,
+                        'subtotal' => 0,
+                    ]);
+
+                    if ($quantity > 1) {
+                        $remainingQty = $quantity - 1;
+                        $remainingSubtotal = $product->price * $remainingQty;
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'product_id' => $product->id,
+                            'quantity' => $remainingQty,
+                            'price' => $product->price,
+                            'subtotal' => $remainingSubtotal,
+                        ]);
+                    }
+                } else {
+                    $subtotal = $product->price * $quantity;
+
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
+                        'quantity' => $quantity,
+                        'price' => $product->price,
+                        'subtotal' => $subtotal,
+                    ]);
+                }
+
+                $product->decrement('stock', $quantity);
             }
 
-            // ── Tambahkan item reward gratis ke order (kalau ada) ──
-            if ($reward && $rewardProduct) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $rewardProduct->id,
-                    'quantity' => 1,
-                    'price' => 0,
-                    'subtotal' => 0,
-                ]);
-
-                $rewardProduct->decrement('stock', 1);
-
+            if ($reward) {
                 $reward->update([
                     'status' => 'redeemed',
                     'redeemed_order_id' => $order->id,
@@ -113,7 +161,6 @@ class OrderService
             return $order;
         });
 
-        // Notifikasi Telegram ke Dapur & Kasir
         $this->telegramService->sendNewOrderNotification($order);
 
         return $order;
@@ -125,11 +172,20 @@ class OrderService
             $order = Order::where('id', $order->id)->lockForUpdate()->first();
 
             if ($status === 'cancelled' && $order->status !== 'cancelled') {
-                // Kembalikan stok kalau order dibatalkan
+
                 foreach ($order->items as $item) {
                     $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
-                    $product->increment('stock', $item->quantity);
+                    if ($product) {
+                        $product->increment('stock', $item->quantity);
+                    }
                 }
+
+                LoyaltyReward::where('redeemed_order_id', $order->id)
+                    ->update([
+                        'status' => 'available',
+                        'redeemed_order_id' => null,
+                        'redeemed_at' => null,
+                    ]);
             }
 
             $order->update(['status' => $status]);

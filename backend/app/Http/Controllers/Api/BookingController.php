@@ -94,12 +94,10 @@ class BookingController extends Controller
         $isStaff = in_array($user->role?->name, ['OWNER', 'ADMIN']);
 
         if (!$isStaff) {
-            // Customer hanya boleh membatalkan booking miliknya sendiri, selama belum completed
             if ($booking->user_id !== $user->id || $request->status !== 'cancelled' || $booking->status === 'completed') {
                 return response()->json(['message' => 'Anda tidak memiliki akses untuk mengubah status ini.'], 403);
             }
 
-            // Larang pembatalan jika sesi bermain stasiun untuk booking ini sedang berjalan aktif
             $hasActiveSession = \App\Models\GamingSession::where('status', 'active')
                 ->where(function ($q) use ($booking) {
                     $q->where('booking_id', $booking->id)

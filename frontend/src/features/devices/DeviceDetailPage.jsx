@@ -98,7 +98,7 @@ export default function DeviceDetailPage() {
 
   return (
     <DashboardLayout>
-      {/* ── TOP NAV LINK ── */}
+
       <div className="mb-6">
         <Link
           to="/admin/devices"
@@ -109,7 +109,7 @@ export default function DeviceDetailPage() {
       </div>
 
       <div className="flex flex-col lg:flex-row items-start gap-6">
-        {/* ── Kolom Kiri: Sidebar Stasiun ── */}
+
         <div className="w-full lg:w-80 shrink-0 flex flex-col gap-5">
           <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
             <div className="relative h-48 bg-zinc-100 overflow-hidden">
@@ -163,7 +163,6 @@ export default function DeviceDetailPage() {
           </div>
         </div>
 
-        {/* ── Kolom Kanan: Detail & Metrik ── */}
         <div className="flex-1 w-full flex flex-col gap-6">
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex items-start justify-between mb-6">
@@ -206,7 +205,6 @@ export default function DeviceDetailPage() {
             )}
           </div>
 
-          {/* Installed Games Section */}
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex items-center justify-between pb-4 border-b border-zinc-100 mb-5">
               <div className="flex items-center gap-2">
@@ -244,7 +242,6 @@ export default function DeviceDetailPage() {
             )}
           </div>
 
-          {/* Recent Booking History */}
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex items-center gap-2 pb-4 border-b border-zinc-100 mb-5">
               <History size={16} className="text-cust-red" />

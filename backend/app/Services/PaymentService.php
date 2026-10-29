@@ -39,7 +39,6 @@ class PaymentService
             return $transaction->fresh();
         });
 
-        // Notifikasi Telegram transaksi lunas
         $this->telegramService->sendPaymentNotification($paidTransaction, $method);
 
         return $paidTransaction;

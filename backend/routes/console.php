@@ -8,9 +8,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-/**
- * Cek pesan masuk bot Telegram untuk menemukan Chat ID / Group ID.
- */
 Artisan::command('telegram:updates', function () {
     $botToken = config('services.telegram.bot_token');
 
@@ -64,9 +61,6 @@ Artisan::command('telegram:updates', function () {
     }
 })->purpose('Cek pesan masuk dan temukan Chat ID / Group ID bot Telegram');
 
-/**
- * Uji coba kirim pesan notifikasi bot Telegram.
- */
 Artisan::command('telegram:test', function (\App\Services\TelegramService $telegramService) {
     $this->info("Mengirim pesan uji coba ke Telegram Bot Elysium Arena...");
 

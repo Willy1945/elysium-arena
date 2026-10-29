@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('sessions', function (Blueprint $table) {
@@ -17,8 +15,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('device_id')->constrained('devices')->restrictOnDelete();
             $table->dateTime('start_time');
-            $table->dateTime('end_time'); // dipakai untuk hitung timer, bukan setInterval polos
-            $table->unsignedInteger('duration'); // menit, ter-update tiap extend
+            $table->dateTime('end_time');
+            $table->unsignedInteger('duration');
             $table->unsignedInteger('price');
             $table->enum('status', ['active', 'completed'])->default('active');
             $table->timestamps();
@@ -27,9 +25,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('sessions');

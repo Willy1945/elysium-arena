@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Gamepad2,
@@ -21,10 +21,12 @@ import {
   MapPin,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import GoogleLoginButton from '../../components/common/GoogleLoginButton';
 
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [form, setForm] = useState({
     name: '',
@@ -39,6 +41,13 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setGeneralError(errorParam);
+    }
+  }, [searchParams]);
 
   const passwordsMatch =
     form.password_confirmation.length > 0 &&
@@ -81,19 +90,17 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-zinc-50 to-white text-zinc-950 flex flex-col lg:flex-row relative overflow-hidden font-sans selection:bg-cust-red selection:text-white">
-      {/* Background Ambient Glows & Grid Pattern */}
+
       <div className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] bg-cust-red/[0.04] rounded-full blur-[140px]" />
       <div className="pointer-events-none absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-amber-500/[0.03] rounded-full blur-[160px]" />
 
-      {/* ── LEFT SHOWCASE PANEL (Desktop: Visual Narrative & Member Perks) ── */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-7/12 relative flex-col justify-between p-12 xl:p-16 border-r border-zinc-200 overflow-hidden bg-zinc-50/50">
-        {/* Background Image with Light Wash */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-[0.06] mix-blend-luminosity scale-105 pointer-events-none"
           style={{ backgroundImage: `url('/images/gaming-hall.jpg')` }}
         />
 
-        {/* Header Branding */}
         <div className="relative z-10 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3.5 group">
             <img
@@ -111,7 +118,6 @@ export default function RegisterPage() {
             </div>
           </Link>
 
-          {/* Member Registration Status Badge */}
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-zinc-200 shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-cust-red" />
             <span className="text-[11px] font-bold text-zinc-700 tracking-wider uppercase font-mono">
@@ -120,7 +126,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Center Main Headline & Bento Perks */}
         <div className="relative z-10 my-auto py-10 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 mb-4 shadow-2xs">
             <span className="w-1.5 h-1.5 rounded-full bg-cust-red" />
@@ -135,11 +140,10 @@ export default function RegisterPage() {
           </h1>
 
           <p className="text-zinc-600 text-sm xl:text-base leading-relaxed mb-8 font-medium">
-            Daftarkan diri Anda untuk merasakan pengalaman gaming terbaik. 
+            Daftarkan diri Anda untuk merasakan pengalaman gaming terbaik.
             Nikmati kemudahan reservasi stasiun PC & PS5, pesan makanan antar ke meja, serta kumpulkan poin reward.
           </p>
 
-          {/* Micro Bento Perk Cards with Elevation */}
           <div className="grid grid-cols-3 gap-3.5 pt-2">
             <div className="bg-white border border-zinc-200 hover:border-cust-red/40 p-3.5 rounded-xl transition-all shadow-xs hover:shadow-md">
               <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center mb-2.5 text-amber-600 shadow-2xs">
@@ -179,7 +183,6 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* Footer Meta Details */}
         <div className="relative z-10 flex items-center justify-between pt-6 border-t border-zinc-200 text-xs text-zinc-500 font-medium">
           <div className="flex items-center gap-2">
             <MapPin size={13} className="text-cust-red" />
@@ -189,10 +192,9 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* ── RIGHT AUTH FORM CONTAINER ── */}
       <div className="w-full lg:w-1/2 xl:w-5/12 flex items-center justify-center p-6 sm:p-10 lg:p-12 xl:p-14 relative z-10 my-auto">
         <div className="w-full max-w-md">
-          {/* Mobile Brand Header */}
+
           <div className="lg:hidden flex items-center justify-between mb-8">
             <Link to="/" className="flex items-center gap-3">
               <img
@@ -214,10 +216,8 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Card Enclosure with Elevation */}
           <div className="bg-white border border-zinc-200 rounded-3xl p-7 sm:p-9 shadow-[0_20px_45px_rgba(0,0,0,0.08)] relative">
 
-            {/* Header Content */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-2">
                 <span className="inline-block w-2 h-2 rounded-sm bg-cust-red" />
@@ -233,7 +233,6 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            {/* Animated General Error Alert */}
             <AnimatePresence>
               {generalError && (
                 <motion.div
@@ -248,9 +247,8 @@ export default function RegisterPage() {
               )}
             </AnimatePresence>
 
-            {/* Main Register Form */}
             <form onSubmit={handleSubmit} className="space-y-3.5">
-              {/* Full Name */}
+
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Nama Lengkap
@@ -275,7 +273,6 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              {/* Email Address */}
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Email Address
@@ -300,7 +297,6 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              {/* Phone Number (Optional) */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider font-bold">
@@ -326,7 +322,6 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              {/* Password */}
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Password
@@ -359,7 +354,6 @@ export default function RegisterPage() {
                 )}
               </div>
 
-              {/* Password Confirmation with Realtime Indicator */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider font-bold">
@@ -411,7 +405,6 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Submit CTA Button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -449,7 +442,17 @@ export default function RegisterPage() {
               </button>
             </form>
 
-            {/* Switch to Login */}
+            <div className="relative my-5">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-zinc-200" />
+              </div>
+              <div className="relative flex justify-center text-[11px] uppercase tracking-wider font-bold">
+                <span className="bg-white px-3 text-zinc-400 font-mono-tech">Atau daftar instan dengan</span>
+              </div>
+            </div>
+
+            <GoogleLoginButton text="Daftar Cepat dengan Google" />
+
             <p className="text-center text-zinc-600 text-xs sm:text-sm mt-6 font-medium">
               Sudah memiliki akun?{' '}
               <Link to="/login" className="text-cust-red font-bold hover:underline ml-1">

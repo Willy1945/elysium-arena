@@ -103,13 +103,12 @@ export default function GameDetailPage() {
 
   return (
     <PublicLayout>
-      {/* ── CINEMATIC AMBIENT WRAPPER (CLEAN LIGHT RED-WHITE) ── */}
+
       <div className="relative overflow-hidden bg-gradient-to-b from-white via-zinc-50/70 to-white text-zinc-950 border-b border-zinc-200">
         <div className="pointer-events-none absolute -top-40 right-10 w-[500px] h-[500px] bg-cust-red/[0.04] rounded-full blur-[140px]" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-          
-          {/* Top Breadcrumb Nav */}
+
           <div className="flex items-center justify-between gap-4 mb-10 flex-wrap">
             <Link
               to="/browse-games"
@@ -126,13 +125,10 @@ export default function GameDetailPage() {
             </div>
           </div>
 
-          {/* Main Grid: Poster Left & Overview Right */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            
-            {/* Left Column: Game Poster & Telemetry Card */}
+
             <div className="lg:col-span-4 flex flex-col gap-6">
-              
-              {/* Poster Frame */}
+
               <div className="relative aspect-[3/4.2] rounded-3xl overflow-hidden border border-zinc-200/90 shadow-[0_15px_35px_-5px_rgba(0,0,0,0.08)] bg-zinc-100 group">
                 {game.cover_image ? (
                   <img
@@ -149,7 +145,6 @@ export default function GameDetailPage() {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
 
-                {/* Floating Platform Pills Top Right */}
                 <div className="absolute top-4 right-4 flex flex-wrap gap-1.5 justify-end">
                   {game.platforms?.map((p) => (
                     <span
@@ -161,7 +156,6 @@ export default function GameDetailPage() {
                   ))}
                 </div>
 
-                {/* Bottom Watermark Tag */}
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
                   <span className="text-[10px] font-mono-tech text-white uppercase tracking-widest bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/20 font-bold">
                     Verified Release
@@ -169,7 +163,6 @@ export default function GameDetailPage() {
                 </div>
               </div>
 
-              {/* Quick Telemetry Box */}
               <div className="bg-white border border-zinc-200 rounded-3xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 pb-4 mb-4 border-b border-zinc-100">
                   <Layers size={14} className="text-cust-red" />
@@ -199,10 +192,8 @@ export default function GameDetailPage() {
 
             </div>
 
-            {/* Right Column: Title, Overview & Available Stations */}
             <div className="lg:col-span-8 flex flex-col gap-8">
-              
-              {/* Game Title Header */}
+
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-[11px] font-mono-tech font-bold uppercase tracking-wider mb-4 shadow-2xs">
                   <Sparkles size={12} />
@@ -218,7 +209,6 @@ export default function GameDetailPage() {
                 </p>
               </div>
 
-              {/* Game Description */}
               {game.description && (
                 <div className="bg-white border border-zinc-200 rounded-3xl p-7 shadow-sm">
                   <h3 className="font-display font-black text-zinc-950 text-lg uppercase mb-3 tracking-wide">
@@ -230,10 +220,8 @@ export default function GameDetailPage() {
                 </div>
               )}
 
-              {/* Available Station Deployment List */}
               <div className="bg-white border border-zinc-200 rounded-3xl p-7 shadow-sm">
-                
-                {/* Section Header */}
+
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 mb-6 border-b border-zinc-100">
                   <div>
                     <h2 className="font-display font-black text-zinc-950 text-2xl uppercase tracking-wide flex items-center gap-2">
@@ -250,7 +238,6 @@ export default function GameDetailPage() {
                   </span>
                 </div>
 
-                {/* Stations Grid */}
                 {(!game.devices || game.devices.length === 0) ? (
                   <div className="text-center py-12 border border-dashed border-zinc-300 rounded-2xl bg-zinc-50/50">
                     <p className="text-zinc-600 text-sm font-mono-tech font-medium">
@@ -274,7 +261,7 @@ export default function GameDetailPage() {
                               : 'bg-zinc-100/50 border-zinc-200 opacity-80'
                           }`}
                         >
-                          {/* Station Header */}
+
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 rounded-xl bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 shadow-2xs">
@@ -296,7 +283,6 @@ export default function GameDetailPage() {
                             </span>
                           </div>
 
-                          {/* Occupancy or Price */}
                           <div className="pt-3 border-t border-zinc-200/80 flex items-center justify-between">
                             {isOccupied && device.estimated_free_at ? (
                               <div>
@@ -337,7 +323,6 @@ export default function GameDetailPage() {
 
           </div>
 
-          {/* ── BANNER REQUEST GAME ── */}
           <div className="mt-14 bg-white border border-zinc-200 rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-cust-red/[0.04] rounded-full blur-[100px] pointer-events-none" />
 

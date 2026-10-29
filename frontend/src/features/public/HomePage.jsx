@@ -127,27 +127,24 @@ export default function HomePage() {
 
   return (
     <PublicLayout>
-      {/* ── 1. CINEMATIC HERO SECTION (FULL GAMING ROOM BACKGROUND) ── */}
+
       <section className="relative bg-black text-white overflow-hidden border-b border-zinc-800 -mt-[72px] sm:-mt-[80px]">
-        {/* Full-bleed Hero Background Image */}
+
         <div
           className="absolute inset-0 bg-cover bg-center scale-100 pointer-events-none"
           style={{ backgroundImage: "url('/images/hero-gaming-room.jpg')" }}
         />
 
-        {/* Ambient Dark Scrim & Gradient Overlays (NO WHITE OVERLAY)
-            - Keeping image 100% full across the hero while maintaining comfortable text legibility */}
         <div className="absolute inset-0 bg-black/40 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/60 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
 
-        {/* Subtle Ambient Red Glow */}
         <div className="pointer-events-none absolute -top-40 right-10 w-[550px] h-[550px] bg-cust-red/20 rounded-full blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-20 left-10 w-[450px] h-[450px] bg-cust-red/15 rounded-full blur-[110px]" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 sm:pt-40 lg:pt-44 pb-32 lg:pb-40">
           <div className="max-w-3xl">
-            {/* Minimalist Glass Pill Badge */}
+
             <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/20 shadow-md mb-6 text-xs text-white">
               <span className="w-2.5 h-2.5 rounded-full bg-cust-red animate-pulse" />
               <span className="font-medium tracking-wide">Elysium Gaming Arena • Sumedang</span>
@@ -157,18 +154,15 @@ export default function HomePage() {
               </span>
             </div>
 
-            {/* Clean, Bold Headline */}
             <h1 className="font-display font-black text-3xl sm:text-5xl lg:text-7xl uppercase tracking-tight leading-[1.05] sm:leading-[0.95] mb-6 text-white drop-shadow-md">
               Elysium Arena, <br />
               <span className="text-cust-red drop-shadow-[0_2px_15px_rgba(227,30,36,0.6)]">Surga Para Gamer.</span>
             </h1>
 
-            {/* Highly Legible, Balanced Subtitle - Focused on Elysium Arena itself */}
             <p className="text-zinc-200 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl font-normal drop-shadow-sm">
               Pusat hiburan gaming dan café lounge modern di jantung kota Sumedang. Diciptakan sebagai tempat berkumpul terbaik untuk mabar bersama teman, mengasah jiwa kompetitif, serta menikmati waktu luang dengan kenyamanan maksimal dan kemudahan booking online langsung dari ponselmu.
             </p>
 
-            {/* Action Buttons: Modern, Rounded, Non-Brutalist */}
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 to="/browse-devices"
@@ -190,11 +184,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. FLOATING 4 QUICK METRIC CARDS (ELEVATED CARDS WITH TACTILE DEPTH) ── */}
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-16 z-20 mb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-          
-          {/* Card 1: Koleksi Game */}
+
           <Link
             to="/browse-games"
             className="group bg-white border border-zinc-200/90 border-b-4 border-b-cust-red hover:border-cust-red/60 hover:border-b-cust-red-dark rounded-2xl p-5 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.08),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_35px_-5px_rgba(0,0,0,0.12),0_10px_15px_-5px_rgba(227,30,36,0.15)] hover:-translate-y-1 transition-all duration-200 flex items-start gap-4"
@@ -211,7 +203,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* Card 2: Station Tersedia */}
           <Link
             to="/browse-devices"
             className="group bg-white border border-zinc-200/90 border-b-4 border-b-cust-red hover:border-cust-red/60 hover:border-b-cust-red-dark rounded-2xl p-5 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.08),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_35px_-5px_rgba(0,0,0,0.12),0_10px_15px_-5px_rgba(227,30,36,0.15)] hover:-translate-y-1 transition-all duration-200 flex items-start gap-4"
@@ -234,7 +225,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* Card 3: Okupansi / Status Realtime */}
           <Link
             to="/browse-devices"
             className="group bg-white border border-zinc-200/90 border-b-4 border-b-cust-red hover:border-cust-red/60 hover:border-b-cust-red-dark rounded-2xl p-5 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.08),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_35px_-5px_rgba(0,0,0,0.12),0_10px_15px_-5px_rgba(227,30,36,0.15)] hover:-translate-y-1 transition-all duration-200 flex items-start gap-4"
@@ -251,7 +241,6 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* Card 4: Kafe & Pemesanan */}
           <Link
             to="/menu"
             className="group bg-white border border-zinc-200/90 border-b-4 border-b-cust-red hover:border-cust-red/60 hover:border-b-cust-red-dark rounded-2xl p-5 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.08),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_35px_-5px_rgba(0,0,0,0.12),0_10px_15px_-5px_rgba(227,30,36,0.15)] hover:-translate-y-1 transition-all duration-200 flex items-start gap-4"
@@ -271,14 +260,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. FEATURE SPOTLIGHT: MALAS ANTRE? BOOKING DARI RUMAH! ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white border border-zinc-200 rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12),0_10px_20px_-5px_rgba(0,0,0,0.06)]">
-          {/* Subtle Red Ambient Glow */}
+
           <div className="absolute top-0 right-0 w-96 h-96 bg-cust-red/[0.04] rounded-full blur-3xl pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-            {/* Left Content */}
+
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-bold uppercase tracking-wider mb-4 shadow-2xs">
                 <Sparkles size={14} />
@@ -326,7 +314,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Preview Card: Live Station Snapshot */}
             <div className="lg:col-span-5">
               <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-5 sm:p-6 shadow-sm">
                 <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-zinc-200">
@@ -340,7 +327,6 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* Station Mini Grid with Tangible Elevation */}
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-4 sm:mb-5">
                   {devices.slice(0, 8).map((device) => {
                     const pill = STATUS_PILL[device.status] || STATUS_PILL.available;
@@ -377,7 +363,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 4. KATEGORI RIG & SPESIFIKASI (CLEAN WHITE CARDS WITH SHADOWS) ── */}
       <section className="bg-zinc-50/80 border-y border-zinc-200 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
@@ -399,7 +384,6 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* 3 Crisp Category Cards with Rich Hover Lift */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {categories.map((cat) => (
               <div
@@ -407,7 +391,7 @@ export default function HomePage() {
                 className="bg-white border border-zinc-200/90 hover:border-cust-red/50 rounded-3xl overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-[0_16px_40px_-5px_rgba(0,0,0,0.1),0_8px_16px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_25px_50px_-10px_rgba(0,0,0,0.18)] hover:-translate-y-1.5 group"
               >
                 <div>
-                  {/* Visual Banner */}
+
                   <div className="relative h-56 overflow-hidden bg-zinc-950 border-b border-zinc-200/80">
                     <img
                       src={cat.photo}
@@ -415,7 +399,6 @@ export default function HomePage() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
 
-                    {/* Badges on Banner */}
                     <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                       <span className="text-[11px] font-black uppercase px-3 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/20 text-white shadow-sm">
                         {cat.badge}
@@ -426,7 +409,6 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Content */}
                   <div className="p-6">
                     <h3 className="font-display font-black text-zinc-950 text-2xl uppercase tracking-wide mb-2">
                       {cat.title}
@@ -435,7 +417,6 @@ export default function HomePage() {
                       {cat.desc}
                     </p>
 
-                    {/* Checklist Specs */}
                     <div className="space-y-2.5 mb-6">
                       {cat.specs.map((spec, i) => (
                         <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-zinc-800 font-semibold">
@@ -447,7 +428,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Bottom Price & Booking Strip */}
                 <div className="p-6 pt-4 border-t border-zinc-200/90 flex items-center justify-between bg-zinc-50">
                   <div>
                     <p className="text-[10px] text-zinc-600 uppercase tracking-wider font-bold">Tarif Sewa</p>
@@ -469,10 +449,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. LIVE ARENA STATION MATRIX (INTERACTIVE MONITORING WITH SHADOWS) ── */}
       <section className="bg-white border-b border-zinc-200 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -486,7 +465,6 @@ export default function HomePage() {
               </h2>
             </div>
 
-            {/* Type Filter Buttons */}
             <div className="bg-zinc-100 border border-zinc-200 rounded-xl p-1.5 flex gap-1 w-fit shadow-inner">
               {['Semua', 'PC', 'PS5', 'PS4'].map((f) => {
                 const count = f === 'Semua' ? devices.length : typeCounts[f];
@@ -510,8 +488,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            {/* Station Matrix Display (8 Cols) */}
+
             <div className="lg:col-span-8 bg-zinc-50/90 border border-zinc-200 rounded-3xl p-6 sm:p-8 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.05)]">
               <div className="flex flex-wrap items-center justify-between pb-5 mb-6 border-b border-zinc-200 gap-4">
                 <div className="flex items-center gap-3">
@@ -574,9 +551,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Peak Hours / Occupancy Guide (4 Cols) - CLEAN WHITE THEME */}
             <div className="lg:col-span-4 bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-[0_10px_30px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_14px_35px_-5px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all duration-300 text-zinc-950">
-              
+
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-cust-red text-[10px] font-black uppercase tracking-wider border border-red-200 shadow-2xs">
@@ -595,7 +571,7 @@ export default function HomePage() {
 
                 {occupancy?.has_data ? (
                   <div className="space-y-5">
-                    {/* Bar Chart Container */}
+
                     <div className="bg-zinc-50 rounded-2xl p-3 border border-zinc-200/80">
                       <div className="flex items-end gap-1.5 h-32 px-1 mb-2">
                         {occupancy.hourly.map((h) => {
@@ -615,8 +591,7 @@ export default function HomePage() {
                           );
                         })}
                       </div>
-                      
-                      {/* Hour Labels */}
+
                       <div className="flex gap-1.5 text-[9px] text-zinc-500 font-mono-tech text-center font-bold px-1">
                         {occupancy.hourly.map((h) => (
                           <span key={h.hour} className="flex-1">{h.hour}</span>
@@ -624,7 +599,6 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* Peak & Quiet Hours Box */}
                     <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200/80 space-y-2.5">
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-zinc-700 font-semibold">Jam Paling Santai:</span>
@@ -658,7 +632,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 6. CARA BOOKING & BERMAIN (4 LANGKAH SEDERHANA DENGAN BAYANGAN) ── */}
       <section className="bg-zinc-50/80 border-b border-zinc-200 py-20 text-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="inline-flex items-center gap-2 text-cust-red text-xs font-bold uppercase tracking-wider mb-2">
@@ -718,18 +691,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 7. GAME VAULT BENTO SHOWCASE (GAMEE POSTER WALL BACKGROUND) ── */}
       <section className="relative overflow-hidden py-16 sm:py-20 lg:py-24 border-b border-zinc-900/60 bg-zinc-950 text-white">
-        {/* Full-bleed Background Image */}
+
         <div
           className="absolute inset-0 bg-cover bg-center pointer-events-none"
           style={{ backgroundImage: "url('/images/gamee.jpeg')" }}
         />
-        {/* Subtle cinematic gradient so text & cards pop with crisp contrast without hiding the game wall */}
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/80 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Header */}
+
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider mb-3 shadow-md">
@@ -743,7 +715,7 @@ export default function HomePage() {
                 Dari rilisan blockbuster AAA hingga turnamen esports kompetitif. Cek ketersediaan judul favorit di stasiun gaming Elysium.
               </p>
             </div>
-            
+
             <Link
               to="/browse-games"
               className="inline-flex items-center gap-2 self-start md:self-auto text-xs font-bold uppercase tracking-wider text-white hover:text-cust-red group transition px-3.5 py-2 rounded-xl bg-black/50 backdrop-blur-md border border-white/20 hover:border-cust-red/40 shadow-md"
@@ -761,14 +733,12 @@ export default function HomePage() {
 
               return (
                 <div className="space-y-6 sm:space-y-8">
-                  {/* Bento Grid: Left Spotlight (5 cols) + Right Subgrid (7 cols) */}
+
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                    
-                    {/* LEFT: Featured Spotlight Card (Double-Bezel High-End Glass Container) */}
+
                     <div className="lg:col-span-5 p-2 rounded-[28px] bg-black/50 backdrop-blur-md border border-white/20 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.6)] flex flex-col">
                       <div className="relative rounded-[22px] min-h-[460px] sm:min-h-[520px] lg:h-full flex flex-col justify-between overflow-hidden bg-zinc-950/90 text-white p-6 sm:p-8 isolate border border-white/10">
-                        
-                        {/* Background Artwork Crossfade */}
+
                         <AnimatePresence mode="wait">
                           <motion.div
                             key={featuredGame.id}
@@ -789,16 +759,14 @@ export default function HomePage() {
                                 <Gamepad2 size={64} />
                               </div>
                             )}
-                            {/* Deep High-End Editorial Gradients */}
+
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/30" />
                             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/40" />
                           </motion.div>
                         </AnimatePresence>
 
-                        {/* Ambient Brand Glow */}
                         <div className="pointer-events-none absolute -bottom-12 -left-12 w-64 h-64 bg-cust-red/25 rounded-full blur-[100px] z-10" />
 
-                        {/* Card Top HUD */}
                         <div className="relative z-20 flex items-center justify-between gap-2">
                           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold uppercase tracking-wider shadow-sm">
                             <span className="w-2 h-2 rounded-full bg-cust-red animate-pulse" />
@@ -823,7 +791,6 @@ export default function HomePage() {
                           </div>
                         </div>
 
-                        {/* Card Bottom: Metadata & Button-in-Button Nested CTA */}
                         <div className="relative z-20 pt-24 sm:pt-32">
                           <AnimatePresence mode="wait">
                             <motion.div
@@ -848,7 +815,6 @@ export default function HomePage() {
                             </motion.div>
                           </AnimatePresence>
 
-                          {/* Button-in-Button Nested CTA Architecture */}
                           <Link
                             to={`/browse-games/${featuredGame.id}`}
                             className="group/spotlight flex items-center justify-between p-2 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 transition-all duration-300 shadow-md"
@@ -865,7 +831,6 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* RIGHT: Curated 6-Item Bento Subgrid */}
                     <div className="lg:col-span-7 flex flex-col justify-between">
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
                         {displayGames.map((game, idx) => {
@@ -882,7 +847,7 @@ export default function HomePage() {
                                   : 'bg-black/60 hover:bg-black/75 border-white/15 hover:border-white/30 shadow-md hover:shadow-xl hover:-translate-y-1'
                               }`}
                             >
-                              {/* Poster Image */}
+
                               <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-zinc-950 mb-3">
                                 {game.cover_image ? (
                                   <img
@@ -897,7 +862,6 @@ export default function HomePage() {
                                 )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
 
-                                {/* Floating Platform Tag */}
                                 <div className="absolute top-2 left-2 flex flex-wrap gap-1">
                                   {(game.platforms || ['PC']).slice(0, 2).map((p) => (
                                     <span
@@ -909,7 +873,6 @@ export default function HomePage() {
                                   ))}
                                 </div>
 
-                                {/* Active Selection Dot */}
                                 {isSelected && (
                                   <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-cust-red text-white text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 shadow-xs">
                                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
@@ -917,13 +880,11 @@ export default function HomePage() {
                                   </div>
                                 )}
 
-                                {/* Bottom count inside poster */}
                                 <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-white/90 text-[10px] font-bold">
                                   <span>{game.devices_count || 4} Station</span>
                                 </div>
                               </div>
 
-                              {/* Game Title & Link */}
                               <div>
                                 <h4 className="font-bold text-white text-xs sm:text-sm line-clamp-1 group-hover:text-cust-red transition-colors">
                                   {game.name}
@@ -945,7 +906,6 @@ export default function HomePage() {
                         })}
                       </div>
 
-                      {/* Integrated Vault Banner (Bottom of Subgrid) */}
                       <div className="mt-4 sm:mt-5 rounded-2xl border border-white/15 bg-black/60 backdrop-blur-md p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
                         <div className="flex items-center gap-3.5">
                           <div className="w-10 h-10 rounded-xl bg-cust-red/20 border border-cust-red/40 text-cust-red flex items-center justify-center shrink-0">
@@ -982,15 +942,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 8. REPUTASI & ULASAN TERVERIFIKASI (FLOATING DARK ISLAND CANVAS) ── */}
       {reviews.reviews.length > 0 && (
         <section className="bg-white border-b border-zinc-200 py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            {/* The Floating Dark Island Container */}
+
             <div className="relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-gradient-to-br from-[#1a080b] via-[#100507] to-[#080304] border border-red-950/40 p-7 sm:p-10 lg:p-12 text-white shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5),0_10px_25px_-5px_rgba(227,30,36,0.15)]">
-              
-              {/* Subtle Red Ambient Glows */}
+
               <div className="pointer-events-none absolute -top-28 -right-20 w-[450px] h-[450px] bg-cust-red/15 rounded-full blur-[130px]" />
               <div className="pointer-events-none absolute -bottom-28 -left-20 w-[400px] h-[400px] bg-cust-red/10 rounded-full blur-[110px]" />
 
@@ -1011,7 +968,6 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                {/* Glassmorphic Testimonial Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                   {reviews.reviews.slice(0, 3).map((r) => (
                     <div
@@ -1046,11 +1002,8 @@ export default function HomePage() {
         </section>
       )}
 
-
-
-      {/* ── 10. FINAL CALL TO ACTION BANNER (CLEAN WHITE) ── */}
       <section className="relative bg-white py-20 sm:py-28 text-center text-zinc-950 overflow-hidden border-t border-zinc-200">
-        {/* Subtle Brand Ambient Radial Glow */}
+
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(227,30,36,0.05),transparent)]" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">

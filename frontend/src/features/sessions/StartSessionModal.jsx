@@ -33,11 +33,9 @@ export default function StartSessionModal({
   const [loadingDevices, setLoadingDevices] = useState(false);
   const [selectedDeviceId, setSelectedDeviceId] = useState('');
 
-  // Customer Type: 'guest' (Tamu / Non-member) or 'member' (Terdaftar)
   const [customerType, setCustomerType] = useState('guest');
   const [guestName, setGuestName] = useState('');
 
-  // Member Search
   const [searchMember, setSearchMember] = useState('');
   const [customers, setCustomers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState('');
@@ -47,7 +45,6 @@ export default function StartSessionModal({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch available devices if none pre-selected
   useEffect(() => {
     if (!open) return;
 
@@ -72,7 +69,6 @@ export default function StartSessionModal({
     }
   }, [open, preselectedDevice, toast]);
 
-  // Fetch registered members when member tab is active
   useEffect(() => {
     if (!open || customerType !== 'member') return;
 
@@ -92,7 +88,6 @@ export default function StartSessionModal({
     return () => clearTimeout(timer);
   }, [open, customerType, searchMember]);
 
-  // Reset states when closed
   useEffect(() => {
     if (!open) {
       setCustomerType('guest');
@@ -104,19 +99,16 @@ export default function StartSessionModal({
     }
   }, [open]);
 
-  // Determine active selected device
   const activeDevice = useMemo(() => {
     if (preselectedDevice) return preselectedDevice;
     return availableDevices.find((d) => String(d.id) === String(selectedDeviceId)) || null;
   }, [preselectedDevice, availableDevices, selectedDeviceId]);
 
-  // Live pricing
   const totalPrice = useMemo(() => {
     if (!activeDevice) return 0;
     return duration * activeDevice.price_per_hour;
   }, [activeDevice, duration]);
 
-  // Live Estimated Time
   const { startTimeStr, endTimeStr } = useMemo(() => {
     const now = new Date();
     const end = new Date(now.getTime() + duration * 60 * 60 * 1000);
@@ -148,7 +140,7 @@ export default function StartSessionModal({
     try {
       const payload = {
         device_id: activeDevice.id,
-        duration: duration * 60, // menit
+        duration: duration * 60,
         user_id: customerType === 'member' ? Number(selectedUserId) : null,
         guest_name:
           customerType === 'guest'
@@ -188,7 +180,7 @@ export default function StartSessionModal({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
       <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 max-w-lg w-full shadow-[4px_4px_0px_0px_#18181b] relative max-h-[92vh] overflow-y-auto">
-        {/* Header */}
+
         <div className="flex items-start justify-between pb-4 border-b border-zinc-100 mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-red-50 border border-zinc-950 flex items-center justify-center text-cust-red shrink-0 shadow-[2px_2px_0px_0px_#18181b]">
@@ -221,7 +213,7 @@ export default function StartSessionModal({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* 1. Pilih Stasiun Gaming */}
+
           <div>
             <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
@@ -269,7 +261,6 @@ export default function StartSessionModal({
             )}
           </div>
 
-          {/* 2. Tipe Pelanggan (Tamu vs Member) */}
           <div>
             <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <User size={14} className="text-cust-red" />
@@ -303,7 +294,6 @@ export default function StartSessionModal({
             </div>
           </div>
 
-          {/* Input Sesuai Tipe Pelanggan */}
           {customerType === 'guest' ? (
             <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-950 shadow-[2px_2px_0px_0px_#18181b] space-y-2">
               <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider">
@@ -357,7 +347,6 @@ export default function StartSessionModal({
             </div>
           )}
 
-          {/* 3. Durasi Sewa */}
           <div>
             <label className="block text-zinc-800 text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Clock size={14} className="text-cust-red" />
@@ -381,7 +370,6 @@ export default function StartSessionModal({
             </div>
           </div>
 
-          {/* 4. Live Telemetry & Summary Box */}
           <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-950 space-y-2.5 font-mono-tech text-xs shadow-[2px_2px_0px_0px_#18181b]">
             <div className="flex items-center justify-between text-zinc-600">
               <span className="font-bold">Waktu Mulai:</span>
@@ -399,7 +387,6 @@ export default function StartSessionModal({
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex items-center gap-3 pt-1">
             <button
               type="button"

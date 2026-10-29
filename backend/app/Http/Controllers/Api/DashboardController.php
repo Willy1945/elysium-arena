@@ -16,7 +16,6 @@ class DashboardController extends Controller
         $today = now()->toDateString();
         $monthStart = now()->startOfMonth()->toDateString();
 
-        // ── Ringkasan Device ──
         $deviceCounts = Device::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->pluck('total', 'status');
@@ -29,12 +28,10 @@ class DashboardController extends Controller
             'maintenance' => $deviceCounts['maintenance'] ?? 0,
         ];
 
-        // ── Booking Hari Ini ──
         $bookingsToday = Booking::where('booking_date', $today)
             ->whereIn('status', ['pending', 'confirmed'])
             ->count();
 
-        // ── Pendapatan Hari Ini ──
         $revenueToday = Transaction::where('status', 'paid')
             ->whereDate('created_at', $today)
             ->selectRaw('COALESCE(SUM(gaming_amount), 0) as gaming, COALESCE(SUM(food_amount), 0) as food')
@@ -42,12 +39,10 @@ class DashboardController extends Controller
 
         $transactionsToday = Transaction::where('status', 'paid')->whereDate('created_at', $today)->count();
 
-        // ── Pendapatan Bulan Ini ──
         $revenueMonth = Transaction::where('status', 'paid')
             ->whereDate('created_at', '>=', $monthStart)
             ->sum('total_amount');
 
-        // ── Grafik 7 Hari Terakhir (gaming vs food) ──
         $rawDaily = Transaction::where('status', 'paid')
             ->whereDate('created_at', '>=', now()->subDays(6)->toDateString())
             ->selectRaw('DATE(created_at) as date, SUM(gaming_amount) as gaming, SUM(food_amount) as food')

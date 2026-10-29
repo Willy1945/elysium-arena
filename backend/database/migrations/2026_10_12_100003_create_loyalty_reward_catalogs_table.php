@@ -13,9 +13,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->unsignedInteger('points_required');
-            $table->string('reward_type'); // free_hour, free_2_hours, free_food
-            $table->unsignedInteger('value')->default(1); // 1 jam, 2 jam, etc.
-            $table->string('icon')->default('gamepad'); // gamepad, utensils, coffee, spark
+            $table->string('reward_type');
+            $table->unsignedInteger('value')->default(1);
+            $table->string('icon')->default('gamepad');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

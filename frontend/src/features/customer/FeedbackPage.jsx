@@ -77,7 +77,7 @@ export default function FeedbackPage() {
   return (
     <PublicLayout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-        {/* Back Link */}
+
         <Link
           to="/dashboard"
           className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-semibold uppercase tracking-wider mb-8 transition"
@@ -86,7 +86,6 @@ export default function FeedbackPage() {
           <span>Kembali ke Dashboard</span>
         </Link>
 
-        {/* Page Header */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-semibold uppercase tracking-wider mb-2">
             <MessageSquarePlus size={14} />
@@ -100,7 +99,6 @@ export default function FeedbackPage() {
           </p>
         </div>
 
-        {/* Form Card */}
         <form onSubmit={handleSubmit} className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] mb-12">
           <label className="block text-zinc-700 text-xs font-bold uppercase tracking-wider mb-3">
             Pilih Kategori
@@ -158,7 +156,6 @@ export default function FeedbackPage() {
           </button>
         </form>
 
-        {/* Feedback History */}
         <div>
           <div className="flex items-center gap-2 mb-5">
             <MessageSquarePlus size={18} className="text-cust-red" />

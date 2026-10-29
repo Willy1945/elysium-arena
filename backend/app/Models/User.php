@@ -15,6 +15,7 @@ class User extends Authenticatable
         'role_id',
         'name',
         'email',
+        'google_id',
         'phone',
         'avatar',
         'password',
@@ -37,7 +38,6 @@ class User extends Authenticatable
         ];
     }
 
-    // ── Relationships ──
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -78,7 +78,6 @@ class User extends Authenticatable
         return $this->hasMany(LoyaltyTransaction::class);
     }
 
-    // ── Helper untuk cek role (dipakai di middleware/policy nanti) ──
     public function hasRole(string $roleName): bool
     {
         return $this->role?->name === $roleName;

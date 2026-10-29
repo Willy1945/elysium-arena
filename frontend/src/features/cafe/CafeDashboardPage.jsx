@@ -41,7 +41,7 @@ export default function CafeDashboardPage() {
 
   return (
     <DashboardLayout>
-      {/* ── HEADER ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -57,7 +57,6 @@ export default function CafeDashboardPage() {
         </div>
       </div>
 
-      {/* ── STAT METRIC CARDS ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8">
         <StatCard
           icon={Clock}
@@ -89,7 +88,6 @@ export default function CafeDashboardPage() {
         />
       </div>
 
-      {/* ── SHORTCUT ACTION CARDS ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
         <Link
           to="/admin/orders"
@@ -132,7 +130,6 @@ export default function CafeDashboardPage() {
         </Link>
       </div>
 
-      {/* ── LOW STOCK WARNING ── */}
       {data.low_stock_products.length > 0 && (
         <div className="bg-white border border-zinc-950 rounded-2xl p-5 sm:p-6 shadow-[3px_3px_0px_0px_#18181b]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-100 mb-4 gap-3">

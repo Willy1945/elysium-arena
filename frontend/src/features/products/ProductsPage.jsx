@@ -182,7 +182,7 @@ export default function ProductsPage() {
 
   return (
     <DashboardLayout onSearch={setSearch}>
-      {/* ── HEADER ── */}
+
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -197,7 +197,6 @@ export default function ProductsPage() {
           </p>
         </div>
 
-        {/* Action Controls */}
         <div className="flex flex-wrap items-center gap-2.5">
           {user.role !== 'STAFF_CAFE' && (
             <button
@@ -216,7 +215,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* ── FILTER BAR ── */}
       <div className="mb-6 flex overflow-x-auto pb-2 scrollbar-none">
         <div className="bg-white border border-zinc-950 rounded-xl p-1 flex gap-1 shadow-[2px_2px_0px_0px_#18181b]">
           {filters.map((f) => (
@@ -235,7 +233,6 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* ── PRODUCT GRID ── */}
       {loading ? (
         <div className="py-20 text-center text-zinc-500 font-mono-tech text-xs uppercase tracking-wider">
           Memuat katalog menu...

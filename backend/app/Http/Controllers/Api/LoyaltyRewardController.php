@@ -78,10 +78,8 @@ class LoyaltyRewardController extends Controller
                 ]);
             }
 
-            // Potong poin
             $user->decrement('loyalty_points', $catalog->points_required);
 
-            // Buat voucher reward
             $reward = LoyaltyReward::create([
                 'user_id' => $user->id,
                 'milestone' => 0,
@@ -91,7 +89,6 @@ class LoyaltyRewardController extends Controller
                 'status' => 'available',
             ]);
 
-            // Catat log transaksi poin
             LoyaltyTransaction::create([
                 'user_id' => $user->id,
                 'type' => 'redeem_reward',
@@ -100,7 +97,6 @@ class LoyaltyRewardController extends Controller
                 'reference_id' => $reward->id,
             ]);
 
-            // Buat notifikasi
             Notification::create([
                 'user_id' => $user->id,
                 'title' => 'Penukaran Reward Berhasil! 🎉',
@@ -133,7 +129,6 @@ class LoyaltyRewardController extends Controller
         return new LoyaltyRewardResource($reward);
     }
 
-    // Khusus Admin/Owner — daftar semua reward untuk pemantauan
     public function adminIndex()
     {
         $rewards = LoyaltyReward::with('user', 'catalog')->orderByDesc('created_at')->get();

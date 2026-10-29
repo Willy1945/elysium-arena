@@ -14,7 +14,7 @@ export function useSessionTimer(endTime, status) {
       setRemainingSeconds(Math.max(0, diff));
     };
 
-    calculate(); // hitung langsung saat mount, termasuk setelah refresh halaman
+    calculate();
     const interval = setInterval(calculate, 1000);
     return () => clearInterval(interval);
   }, [endTime, status]);

@@ -174,7 +174,7 @@ export default function CustomerBookingPage() {
 
   return (
     <PublicLayout>
-      {/* ── BREADCRUMB STRIP ── */}
+
       <div className="border-b border-zinc-200/80 bg-zinc-50/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <Link
@@ -191,8 +191,7 @@ export default function CustomerBookingPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        
-        {/* Title Header */}
+
         <div className="mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-cust-red text-xs font-semibold uppercase tracking-wider mb-3">
             <Shield size={14} />
@@ -207,13 +206,11 @@ export default function CustomerBookingPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* ── LEFT COLUMN (Rig Photo & Installed Games) ── */}
+
           <div className="lg:col-span-6 flex flex-col gap-6">
-            
-            {/* Rig Showcase Card */}
+
             <div className="rounded-3xl border border-zinc-200/90 bg-white overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
-              {/* Photo Banner */}
+
               <div className="relative h-64 sm:h-72 bg-zinc-100 overflow-hidden">
                 {device.photo ? (
                   <img
@@ -228,7 +225,6 @@ export default function CustomerBookingPage() {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40" />
 
-                {/* Floating Pills */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
                   <span className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-zinc-200 text-zinc-900 shadow-sm">
                     {device.device_type?.name} Rig
@@ -249,7 +245,6 @@ export default function CustomerBookingPage() {
                   </span>
                 </div>
 
-                {/* Price Tag */}
                 <div className="absolute bottom-4 left-6 z-10">
                   <p className="text-[10px] text-zinc-300 uppercase tracking-wider font-semibold">Tarif Sewa Reguler</p>
                   <p className="font-display font-black text-3xl text-white">
@@ -259,7 +254,6 @@ export default function CustomerBookingPage() {
                 </div>
               </div>
 
-              {/* Rig Description */}
               <div className="p-6 sm:p-7">
                 <h3 className="text-xs uppercase tracking-wider text-zinc-500 font-bold mb-2">
                   Spesifikasi & Fasilitas Rig
@@ -271,7 +265,6 @@ export default function CustomerBookingPage() {
               </div>
             </div>
 
-            {/* Installed Games List */}
             <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -308,9 +301,8 @@ export default function CustomerBookingPage() {
 
           </div>
 
-          {/* ── RIGHT COLUMN (Scheduler & Checkout) ── */}
           <div className="lg:col-span-6 flex flex-col gap-6">
-            
+
             <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
               <div className="flex items-center justify-between border-b border-zinc-200 pb-4 mb-6">
                 <h3 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide flex items-center gap-2">
@@ -328,8 +320,7 @@ export default function CustomerBookingPage() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  
-                  {/* Step 1: Pilih Tanggal */}
+
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold mb-2">
                       1. Pilih Tanggal Bermain
@@ -349,7 +340,6 @@ export default function CustomerBookingPage() {
                     </div>
                   </div>
 
-                  {/* Step 2: Durasi Bermain */}
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold mb-2">
                       2. Durasi Sesi Bermain
@@ -375,7 +365,6 @@ export default function CustomerBookingPage() {
                     </div>
                   </div>
 
-                  {/* Step 3: Pilih Jam Mulai */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label className="block text-xs uppercase tracking-wider text-zinc-700 font-bold">
@@ -418,7 +407,6 @@ export default function CustomerBookingPage() {
               )}
             </div>
 
-            {/* ── CHECKOUT SUMMARY CARD ── */}
             {!isMaintenance && (
               <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-cust-red mb-4">
@@ -446,7 +434,6 @@ export default function CustomerBookingPage() {
                   </div>
                 </div>
 
-                {/* Voucher Loyalty Reward */}
                 {availableGamingRewards.length > 0 && (
                   <div className="mt-4 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
                     <div className="flex items-center justify-between text-xs font-bold text-emerald-800 uppercase mb-2">
@@ -492,7 +479,6 @@ export default function CustomerBookingPage() {
                   </div>
                 )}
 
-                {/* Total Price Display */}
                 <div className="flex items-center justify-between pt-5 mb-6">
                   <div>
                     <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
@@ -516,7 +502,6 @@ export default function CustomerBookingPage() {
                   </div>
                 )}
 
-                {/* Confirm Action Button */}
                 <button
                   type="button"
                   onClick={handleSubmit}

@@ -31,9 +31,9 @@ export default function RewardsPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [redeeming, setRedeeming] = useState(false);
-  const [confirmModal, setConfirmModal] = useState(null); // catalog item being redeemed
-  const [activeTab, setActiveTab] = useState('vouchers'); // 'vouchers' | 'history' | 'used'
-  const [catalogCategory, setCatalogCategory] = useState('all'); // 'all' | 'gaming' | 'food'
+  const [confirmModal, setConfirmModal] = useState(null);
+  const [activeTab, setActiveTab] = useState('vouchers');
+  const [catalogCategory, setCatalogCategory] = useState('all');
   const [choosingLegacy, setChoosingLegacy] = useState(null);
   const [deletingRewardId, setDeletingRewardId] = useState(null);
   const [confirmClearAllRedeemed, setConfirmClearAllRedeemed] = useState(false);
@@ -163,7 +163,7 @@ export default function RewardsPage() {
   return (
     <PublicLayout>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Top Back Link */}
+
         <Link
           to="/dashboard"
           className="inline-flex items-center gap-2 text-zinc-600 hover:text-zinc-950 text-xs font-semibold uppercase tracking-wider mb-8 transition"
@@ -172,7 +172,6 @@ export default function RewardsPage() {
           <span>Kembali ke Dashboard</span>
         </Link>
 
-        {/* Header Title */}
         <div className="mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold uppercase tracking-wider mb-3">
             <Coins size={14} className="text-amber-600" />
@@ -186,14 +185,13 @@ export default function RewardsPage() {
           </p>
         </div>
 
-        {/* ── EXECUTIVE COIN HUD ── */}
         <div className="relative overflow-hidden bg-gradient-to-br from-amber-50/60 via-white to-zinc-50 border border-amber-200/80 rounded-3xl p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] mb-10">
-          {/* Subtle Ambient Glow */}
+
           <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-cust-red/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-amber-200/60">
-            {/* Left: Big Coin Balance */}
+
             <div>
               <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 font-bold flex items-center gap-1.5">
                 <Sparkles size={13} className="text-amber-600" />
@@ -212,7 +210,6 @@ export default function RewardsPage() {
               </p>
             </div>
 
-            {/* Right: Quick Stats */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4 shrink-0">
               <div className="bg-white border border-zinc-200/90 rounded-2xl p-3.5 sm:p-4 text-center shadow-xs">
                 <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">Total Jam</p>
@@ -235,7 +232,6 @@ export default function RewardsPage() {
             </div>
           </div>
 
-          {/* Bottom Rule Strip */}
           <div className="relative z-10 pt-4 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-zinc-600 gap-2 font-medium">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -249,7 +245,6 @@ export default function RewardsPage() {
           </div>
         </div>
 
-        {/* ── LEGACY MILESTONE PENDING CHOICE (IF ANY) ── */}
         {pendingChoice.length > 0 && (
           <div className="mb-10">
             <h2 className="font-display font-black text-zinc-950 uppercase text-xl mb-4 flex items-center gap-2">
@@ -296,7 +291,6 @@ export default function RewardsPage() {
           </div>
         )}
 
-        {/* ── KATALOG PENUKARAN HADIAH ── */}
         <section className="mb-14">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
             <div>
@@ -312,7 +306,6 @@ export default function RewardsPage() {
               </p>
             </div>
 
-            {/* Category Filter Chips */}
             <div className="flex items-center gap-2 bg-zinc-100 border border-zinc-200 p-1 rounded-xl shrink-0 self-start sm:self-auto">
               <button
                 onClick={() => setCatalogCategory('all')}
@@ -347,7 +340,6 @@ export default function RewardsPage() {
             </div>
           </div>
 
-          {/* Catalog Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             {filteredCatalog.map((item) => {
               const canAfford = userPoints >= item.points_required;
@@ -363,7 +355,7 @@ export default function RewardsPage() {
                   }`}
                 >
                   <div>
-                    {/* Header: Icon & Points Badge */}
+
                     <div className="flex items-start justify-between gap-3 mb-4">
                       <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
                         {getRewardIcon(item.icon, item.reward_type)}
@@ -374,7 +366,6 @@ export default function RewardsPage() {
                       </div>
                     </div>
 
-                    {/* Title & Description */}
                     <h3 className="font-display font-bold text-zinc-950 text-base sm:text-lg mb-1.5 group-hover:text-amber-700 transition">
                       {item.title}
                     </h3>
@@ -383,7 +374,6 @@ export default function RewardsPage() {
                     </p>
                   </div>
 
-                  {/* Action Button */}
                   <div className="pt-4 border-t border-zinc-200">
                     {canAfford ? (
                       <button
@@ -411,9 +401,8 @@ export default function RewardsPage() {
           </div>
         </section>
 
-        {/* ── KOLEKSI & RIWAYAT (TABBED) ── */}
         <section className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
-          {/* Tab Navigation */}
+
           <div className="flex items-center gap-2 sm:gap-4 border-b border-zinc-200 pb-4 mb-6 overflow-x-auto no-scrollbar">
             <button
               onClick={() => setActiveTab('vouchers')}
@@ -452,7 +441,6 @@ export default function RewardsPage() {
             </button>
           </div>
 
-          {/* TAB 1: VOUCHER AKTIF SAYA */}
           {activeTab === 'vouchers' && (
             <div>
               {availableVouchers.length > 0 ? (
@@ -522,7 +510,6 @@ export default function RewardsPage() {
             </div>
           )}
 
-          {/* TAB 2: RIWAYAT TRANSAKSI POIN */}
           {activeTab === 'history' && (
             <div>
               {transactions.length > 0 ? (
@@ -578,7 +565,6 @@ export default function RewardsPage() {
             </div>
           )}
 
-          {/* TAB 3: RIWAYAT VOUCHER TERPAKAI */}
           {activeTab === 'used' && (
             <div>
               {usedVouchers.length > 0 ? (
@@ -640,7 +626,6 @@ export default function RewardsPage() {
           )}
         </section>
 
-        {/* ── MODAL KONFIRMASI PENUKARAN KOIN ── */}
         {confirmModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
             <div className="bg-white border border-zinc-200 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative">
@@ -662,7 +647,6 @@ export default function RewardsPage() {
                 Apakah kamu yakin ingin menukarkan koin untuk reward ini?
               </p>
 
-              {/* Reward Details Box */}
               <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-4 mb-6">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <span className="text-zinc-950 font-bold text-sm">{confirmModal.title}</span>
@@ -679,7 +663,6 @@ export default function RewardsPage() {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setConfirmModal(null)}
@@ -707,7 +690,6 @@ export default function RewardsPage() {
           </div>
         )}
 
-        {/* ── MODAL KONFIRMASI HAPUS VOUCHER SATUAN ── */}
         <ConfirmDialog
           isOpen={!!deletingRewardId}
           title="Hapus Riwayat Voucher"
@@ -718,7 +700,6 @@ export default function RewardsPage() {
           onCancel={() => !actionLoading && setDeletingRewardId(null)}
         />
 
-        {/* ── MODAL KONFIRMASI BERSIHKAN SEMUA VOUCHER TERPAKAI ── */}
         <ConfirmDialog
           isOpen={confirmClearAllRedeemed}
           title="Bersihkan Semua Riwayat Voucher"

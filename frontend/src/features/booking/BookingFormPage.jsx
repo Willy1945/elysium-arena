@@ -115,7 +115,7 @@ export default function BookingFormPage() {
 
   return (
     <DashboardLayout>
-      {/* ── TOP NAV LINK & HEADER ── */}
+
       <div className="mb-6">
         <Link
           to="/admin/devices"
@@ -140,7 +140,7 @@ export default function BookingFormPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Kolom Kiri — Device Info & Catalog */}
+
         <div className="lg:col-span-7 flex flex-col gap-6">
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <div className="flex flex-col sm:flex-row gap-5">
@@ -209,7 +209,6 @@ export default function BookingFormPage() {
           </div>
         </div>
 
-        {/* Kolom Kanan — Schedule Session */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
             <h3 className="text-zinc-950 font-black text-sm uppercase tracking-wider font-display pb-4 border-b border-zinc-100 mb-5 flex items-center gap-2">

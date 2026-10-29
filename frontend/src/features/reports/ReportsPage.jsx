@@ -99,7 +99,7 @@ export default function ReportsPage() {
 
   return (
     <DashboardLayout>
-      {/* ── HEADER & EXPORT ACTION ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -124,7 +124,6 @@ export default function ReportsPage() {
         </button>
       </div>
 
-      {/* ── MAIN TABS ── */}
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 mb-6">
         {TAB_OPTIONS.map((t) => {
           const active = tab === t.value;
@@ -146,7 +145,6 @@ export default function ReportsPage() {
         })}
       </div>
 
-      {/* ── PERIOD SELECTOR ── */}
       <div className="flex flex-wrap items-center gap-2 p-1.5 bg-white border border-zinc-950 rounded-xl w-full sm:w-fit mb-6 shadow-[2px_2px_0px_0px_#18181b]">
         {PERIOD_OPTIONS.map((p) => (
           <button
@@ -180,7 +178,6 @@ export default function ReportsPage() {
         )}
       </div>
 
-      {/* ── CONTENT BODY ── */}
       {loading || !isDataMatchingTab ? (
         <div className="py-24 text-center text-zinc-500 text-xs font-mono-tech uppercase tracking-wider flex flex-col items-center justify-center gap-3">
           <div className="w-8 h-8 border border-cust-red border-t-transparent rounded-full animate-spin" />
@@ -188,7 +185,7 @@ export default function ReportsPage() {
         </div>
       ) : (
         <>
-          {/* TAB 1: REVENUE REPORT */}
+
           {tab === 'revenue' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -263,7 +260,6 @@ export default function ReportsPage() {
             </div>
           )}
 
-          {/* TAB 2: GAMING RIG REPORT */}
           {tab === 'gaming' && (
             <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-8 shadow-[3px_3px_0px_0px_#18181b]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
@@ -303,7 +299,6 @@ export default function ReportsPage() {
             </div>
           )}
 
-          {/* TAB 3: FOOD & BEVERAGE REPORT */}
           {tab === 'food' && (
             <div className="bg-white border border-zinc-950 rounded-2xl overflow-hidden shadow-[3px_3px_0px_0px_#18181b]">
               <div className="p-6 border-b border-zinc-100 flex items-center justify-between">

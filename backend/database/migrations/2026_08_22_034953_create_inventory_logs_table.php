@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('inventory_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
-            $table->integer('quantity'); // bisa dipakai signed jika mau, tapi type di bawah sudah jelas arahnya
+            $table->integer('quantity');
             $table->enum('type', ['in', 'out']);
             $table->string('reason')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('inventory_logs');

@@ -13,7 +13,6 @@ return new class extends Migration
             $table->json('platforms')->nullable()->after('platform');
         });
 
-        // Migrasi data lama: platform (string tunggal) -> platforms (array)
         DB::table('games')->get()->each(function ($game) {
             DB::table('games')
                 ->where('id', $game->id)

@@ -97,7 +97,7 @@ export default function DevicesPage() {
 
   return (
     <DashboardLayout onSearch={setSearch}>
-      {/* ── HEADER ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -112,7 +112,6 @@ export default function DevicesPage() {
           </p>
         </div>
 
-        {/* Filter Pills & Add Button */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="flex items-center gap-1 bg-white border border-zinc-950 p-1.5 rounded-xl overflow-x-auto no-scrollbar shadow-[1px_1px_0px_0px_#18181b]">
             <div className="flex items-center gap-1">
@@ -175,7 +174,6 @@ export default function DevicesPage() {
         </div>
       )}
 
-      {/* Modal Mulai Sesi Walk-In Langsung dari Kartu Stasiun */}
       <StartSessionModal
         open={!!walkInDevice}
         onClose={() => setWalkInDevice(null)}

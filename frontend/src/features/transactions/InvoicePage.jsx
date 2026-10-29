@@ -75,7 +75,6 @@ export default function InvoicePage() {
           <ArrowLeft size={14} /> Kembali ke Kasir & Transaksi
         </Link>
 
-        {/* Invoice Card */}
         <div
           id="invoice-print"
           className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-8 shadow-[4px_4px_0px_0px_#18181b] print:border print:border-dashed print:border-zinc-800 print:rounded-none print:p-5 print:shadow-none print:max-w-[360px] print:mx-auto"
@@ -169,7 +168,6 @@ export default function InvoicePage() {
             <Badge colorVar={status.color}>{status.label}</Badge>
           </div>
 
-          {/* Struk Footer Khusus Print */}
           <div className="hidden print:block text-center border-t border-dashed border-zinc-800 pt-4 mt-5">
             <p className="text-xs font-bold text-zinc-950 font-mono-tech">Terima kasih atas kunjungan Anda!</p>
             <p className="text-[10px] text-zinc-600 font-mono-tech mt-0.5">
@@ -178,7 +176,6 @@ export default function InvoicePage() {
           </div>
         </div>
 
-        {/* Payment Action */}
         {transaction.status === 'pending' ? (
           <div className="bg-white border border-zinc-950 rounded-2xl p-6 sm:p-7 mt-5 shadow-[4px_4px_0px_0px_#18181b] print:hidden">
             <h3 className="text-zinc-950 font-black text-sm uppercase tracking-wider font-display mb-3 flex items-center gap-2">

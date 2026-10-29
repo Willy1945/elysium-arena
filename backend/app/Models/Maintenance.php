@@ -9,7 +9,7 @@ class Maintenance extends Model
 {
     use HasFactory;
 
-    protected $table = 'maintenance'; // singular, tidak perlu 's' tambahan
+    protected $table = 'maintenance';
 
     protected $fillable = [
         'device_id',

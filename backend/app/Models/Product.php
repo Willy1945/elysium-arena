@@ -20,7 +20,6 @@ class Product extends Model
         ];
     }
 
-    // ── Relationships ──
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -31,7 +30,6 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // ── Helper status stok, dipakai di §10 PRD ──
     public function getStockStatusAttribute(): string
     {
         if ($this->stock <= 0) {

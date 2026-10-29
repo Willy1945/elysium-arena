@@ -98,14 +98,14 @@ export default function BrowseDevicesPage() {
 
   return (
     <PublicLayout>
-      {/* ── HEADER BANNER (CINEMATIC DARK THEME) ── */}
+
       <section className="relative bg-black text-white overflow-hidden border-b border-zinc-800 -mt-[72px] sm:-mt-[80px] pt-36 sm:pt-44 pb-20 sm:pb-24">
-        {/* Full-bleed Background Image with Dark Tint */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-25 scale-100 pointer-events-none"
           style={{ backgroundImage: "url('/images/gaming-hall.jpg')" }}
         />
-        {/* Gradient scrim for depth and legibility */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/50 pointer-events-none" />
         <div className="pointer-events-none absolute -top-40 right-10 w-[500px] h-[500px] bg-cust-red/15 rounded-full blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-40 left-10 w-[400px] h-[400px] bg-cust-red/10 rounded-full blur-[140px]" />
@@ -133,7 +133,6 @@ export default function BrowseDevicesPage() {
         </div>
       </section>
 
-      {/* ── TELEMETRY STRIP WITH ELEVATED CARDS ── */}
       <section className="border-b border-zinc-200 bg-zinc-50/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -188,7 +187,6 @@ export default function BrowseDevicesPage() {
         </div>
       </section>
 
-      {/* ── FILTER & SEARCH DOCK ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2.5 bg-white border border-zinc-200 rounded-2xl shadow-sm">
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1">
@@ -229,7 +227,6 @@ export default function BrowseDevicesPage() {
         </div>
       </section>
 
-      {/* ── IMMERSIVE GRID (CLEAN WHITE CARDS WITH SHADOWS) ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -270,7 +267,7 @@ export default function BrowseDevicesPage() {
                   className={`bg-white border ${status.borderColor} rounded-3xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_35px_-5px_rgba(0,0,0,0.1),0_10px_20px_-5px_rgba(227,30,36,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group`}
                 >
                   <div>
-                    {/* Visual Banner Preview */}
+
                     <div className="relative h-56 overflow-hidden bg-zinc-950 border-b border-zinc-200/80">
                       {device.photo ? (
                         <img
@@ -284,7 +281,6 @@ export default function BrowseDevicesPage() {
                         </div>
                       )}
 
-                      {/* Floating Badges */}
                       <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                         <div className="flex items-center gap-2 bg-white/95 backdrop-blur-md border border-zinc-200 px-3.5 py-1 rounded-2xl shadow-sm">
                           <span className="w-2 h-2 rounded-full bg-cust-red" />
@@ -302,7 +298,6 @@ export default function BrowseDevicesPage() {
                       </div>
                     </div>
 
-                    {/* Content Section */}
                     <div className="p-6">
                       <div className="flex items-center justify-between gap-2 mb-3">
                         <h3 className="font-display font-black text-zinc-950 text-2xl uppercase tracking-tight">
@@ -319,7 +314,6 @@ export default function BrowseDevicesPage() {
                         </p>
                       </div>
 
-                      {/* Active Session Warning */}
                       {isOccupied && device.estimated_free_at && (
                         <div className="p-3 rounded-2xl bg-red-50 border border-red-200 flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2 text-red-700 text-xs">
@@ -332,7 +326,6 @@ export default function BrowseDevicesPage() {
                         </div>
                       )}
 
-                      {/* Game Catalog Drawer */}
                       <div className="mb-2">
                         <button
                           onClick={() => hasGames && toggleExpand(device.id)}
@@ -374,7 +367,6 @@ export default function BrowseDevicesPage() {
                     </div>
                   </div>
 
-                  {/* Pricing & Booking Action */}
                   <div className="p-6 pt-4 border-t border-zinc-100 flex items-center justify-between gap-4 bg-zinc-50/60">
                     <div>
                       <p className="text-[10px] font-mono-tech text-zinc-500 uppercase font-bold">Tarif Sewa</p>
@@ -412,7 +404,6 @@ export default function BrowseDevicesPage() {
         )}
       </section>
 
-      {/* ── BANNER BANTUAN / GRUP BOOKING ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div className="relative rounded-3xl overflow-hidden border border-zinc-200 p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-[0_12px_30px_-5px_rgba(0,0,0,0.06)] bg-white">
           <div className="absolute top-0 right-0 w-80 h-80 bg-cust-red/[0.04] rounded-full blur-[100px] pointer-events-none" />

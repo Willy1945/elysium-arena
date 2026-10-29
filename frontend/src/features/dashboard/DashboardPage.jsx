@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      {/* ── HEADER TITLE ── */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-100 border border-zinc-950 text-cust-red text-xs font-mono-tech font-bold uppercase tracking-wider mb-2 shadow-[1px_1px_0px_0px_#18181b]">
@@ -103,7 +103,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── 4 STAT METRIC CARDS: STATUS STASIUN ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <MetricCard
           icon={Monitor}
@@ -142,10 +141,8 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* ── 3 REVENUE METRIC CARDS ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        
-        {/* Card 1: Booking Hari Ini */}
+
         <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -169,7 +166,6 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* Card 2: Pendapatan Hari Ini */}
         <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -190,7 +186,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Card 3: Pendapatan Bulan Ini */}
         <div className="bg-white border border-zinc-950 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#18181b] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-3">
@@ -212,7 +207,6 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* ── 7-DAY REVENUE RECHARTS LINE CHART ── */}
       <div className="bg-white border border-zinc-950 rounded-2xl p-5 sm:p-7 shadow-[3px_3px_0px_0px_#18181b]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>

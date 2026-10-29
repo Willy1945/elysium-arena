@@ -46,7 +46,7 @@ class SessionService
                 $guestName = null;
                 $booking->update(['status' => 'confirmed']);
             } elseif ($userId) {
-                // Auto-detect: Sambungkan ke jadwal booking pelanggan jika menyewa stasiun yang sama hari ini
+
                 $matchedBooking = Booking::where('device_id', $device->id)
                     ->where('user_id', $userId)
                     ->where('booking_date', now()->toDateString())
@@ -66,7 +66,6 @@ class SessionService
             $startTime = now();
             $endTime = $startTime->copy()->addMinutes($data['duration']);
 
-            // ── VALIDASI BUFFER JADWAL: CEK BENTROK DENGAN BOOKING MENDATANG ──
             $targetDates = array_unique([$startTime->toDateString(), $endTime->toDateString()]);
             $upcomingBookings = Booking::where('device_id', $device->id)
                 ->whereIn('status', ['pending', 'confirmed'])
@@ -84,7 +83,6 @@ class SessionService
                     $bEnd->addDay();
                 }
 
-                // Cek apakah rentang waktu sesi menabrak rentang waktu booking
                 if ($bStart->lt($endTime) && $bEnd->gt($startTime)) {
                     $availableMinutes = (int) max(0, $startTime->diffInMinutes($bStart, false));
                     $bookingTimeFormatted = substr($b->start_time, 0, 5);
@@ -132,7 +130,6 @@ class SessionService
             $device = $session->device;
             $newDuration = $session->duration + $additionalMinutes;
 
-            // Pengaman: Waktu baru tidak boleh mundur melebihi waktu sekarang
             $newEndTime = Carbon::parse($session->end_time)->addMinutes($additionalMinutes);
             if ($newEndTime->lte(now())) {
                 throw ValidationException::withMessages(['additional_minutes' => 'Tidak dapat mengurangi waktu melebihi durasi bermain yang sudah terpakai.']);
@@ -142,7 +139,6 @@ class SessionService
                 throw ValidationException::withMessages(['additional_minutes' => 'Total durasi sesi minimal adalah 15 menit.']);
             }
 
-            // ── VALIDASI BUFFER JADWAL: CEK BENTROK SAAT PERPANJANGAN (EXTEND) ──
             if ($additionalMinutes > 0) {
                 $sessionCurrentEnd = Carbon::parse($session->end_time);
                 $targetDates = array_unique([$sessionCurrentEnd->toDateString(), $newEndTime->toDateString()]);
@@ -163,7 +159,6 @@ class SessionService
                         $bEnd->addDay();
                     }
 
-                    // Cek apakah perpanjangan menabrak booking ini
                     if ($bStart->lt($newEndTime) && $bEnd->gt($sessionCurrentEnd)) {
                         $maxAddMinutes = (int) max(0, $sessionCurrentEnd->diffInMinutes($bStart, false));
                         $bookingTimeFormatted = substr($b->start_time, 0, 5);
@@ -226,8 +221,7 @@ class SessionService
 
     private function awardLoyaltyPoints(GamingSession $session, ?Device $device): void
     {
-        // 1 jam (60 menit) = 100 poin
-        // 2 jam (120 menit) = 200 poin
+
         $durationMinutes = (int) $session->duration;
         $points = (int) round(($durationMinutes / 60) * 100);
 

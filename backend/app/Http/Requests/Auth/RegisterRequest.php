@@ -8,7 +8,7 @@ class RegisterRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // registrasi terbuka untuk publik
+        return true;
     }
 
     public function rules(): array

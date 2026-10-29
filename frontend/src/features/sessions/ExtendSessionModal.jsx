@@ -16,7 +16,7 @@ const REDUCE_OPTIONS = [
 ];
 
 export default function ExtendSessionModal({ open, onClose, onConfirm, loading }) {
-  const [mode, setMode] = useState('add'); // 'add' | 'reduce'
+  const [mode, setMode] = useState('add');
 
   if (!open) return null;
 
@@ -40,7 +40,6 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
           </button>
         </div>
 
-        {/* Tab Switcher: Tambah vs Kurangi */}
         <div className="grid grid-cols-2 gap-1.5 p-1 bg-zinc-100 border border-zinc-950 rounded-xl mb-5 shadow-[2px_2px_0px_0px_#18181b]">
           <button
             type="button"
@@ -67,7 +66,6 @@ export default function ExtendSessionModal({ open, onClose, onConfirm, loading }
           </button>
         </div>
 
-        {/* Opsi Pilihan Waktu */}
         <div className="grid grid-cols-2 gap-2.5 mb-5">
           {(mode === 'add' ? ADD_OPTIONS : REDUCE_OPTIONS).map((opt) => (
             <button

@@ -26,8 +26,7 @@ export default function TopNavbar({ onSearch, onToggleSidebar }) {
 
   return (
     <header className="fixed top-0 left-0 lg:left-[270px] right-0 h-16 bg-white/80 backdrop-blur-md flex items-center justify-between px-3.5 sm:px-6 z-30">
-      
-      {/* Mobile Hamburger & Search Input Box */}
+
       <div className="flex items-center gap-2.5 sm:gap-3 flex-1 max-w-xs sm:max-w-md">
         <button
           type="button"
@@ -49,16 +48,13 @@ export default function TopNavbar({ onSearch, onToggleSidebar }) {
         </div>
       </div>
 
-      {/* Right Controls */}
       <div className="flex items-center gap-2 sm:gap-4 ml-2">
-        
-        {/* System Online Status Pill (Hidden on mobile) */}
+
         <div className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-[11px] text-zinc-700 font-medium">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-mono-tech">PORT 8000 · ONLINE</span>
         </div>
 
-        {/* View Public Website */}
         <Link
           to="/"
           target="_blank"
@@ -71,7 +67,6 @@ export default function TopNavbar({ onSearch, onToggleSidebar }) {
           <ExternalLink size={12} className="text-zinc-500 shrink-0" />
         </Link>
 
-        {/* User Pill with link to profile */}
         <Link
           to="/profile"
           className="flex items-center gap-2 pl-2 hover:opacity-85 transition group cursor-pointer"

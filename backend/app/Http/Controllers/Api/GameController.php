@@ -57,7 +57,6 @@ class GameController extends Controller
 
         $game->update($data);
 
-        // Bersihkan relasi ke device yang tipenya sudah tidak ada di platforms baru
         if (array_key_exists('platforms', $data)) {
             $game->load('devices.deviceType');
             $invalidDeviceIds = $game->devices

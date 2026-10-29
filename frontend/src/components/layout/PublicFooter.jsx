@@ -25,17 +25,15 @@ export default function PublicFooter() {
 
   return (
     <footer className="relative bg-[#09090c] text-zinc-400 border-t border-zinc-800/80 overflow-hidden font-sans selection:bg-cust-red selection:text-white">
-      {/* Subtle Ambient Red Glow */}
+
       <div className="pointer-events-none absolute top-0 left-1/3 w-[600px] h-[250px] bg-cust-red/[0.04] rounded-full blur-[140px]" />
       <div className="pointer-events-none absolute bottom-0 right-10 w-[400px] h-[200px] bg-red-950/[0.15] rounded-full blur-[120px]" />
 
-      {/* ── MAIN FOOTER CONTENT GRID ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
-          
-          {/* Column 1: Brand & Telemetry (Span 4) */}
+
           <div className="lg:col-span-4">
-            {/* Logo Elysium Arena */}
+
             <Link to="/" className="inline-flex items-center gap-3.5 group mb-5">
               <img
                 src="/images/logoElysiumFix.png"
@@ -56,7 +54,6 @@ export default function PublicFooter() {
               Surga gaming modern dan pusat hiburan esports terdepan di Sumedang yang memadukan kenyamanan lounge bermain dengan kafe berfasilitas lengkap.
             </p>
 
-            {/* Live Operational Badge */}
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300 shadow-xs">
                 <span className="relative flex h-2 w-2">
@@ -67,7 +64,6 @@ export default function PublicFooter() {
               </div>
             </div>
 
-            {/* Metode Pembayaran */}
             <div>
               <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-2 font-semibold">
                 Metode Pembayaran
@@ -85,7 +81,6 @@ export default function PublicFooter() {
             </div>
           </div>
 
-          {/* Column 2: Stasiun & Fasilitas (Span 3) */}
           <div className="lg:col-span-3">
             <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-cust-red rounded-full" />
@@ -144,7 +139,6 @@ export default function PublicFooter() {
             </ul>
           </div>
 
-          {/* Column 3: Member Area (Span 2) */}
           <div className="lg:col-span-2">
             <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-cust-red rounded-full" />
@@ -199,7 +193,6 @@ export default function PublicFooter() {
             </ul>
           </div>
 
-          {/* Column 4: Lokasi & Kontak (Span 3) */}
           <div className="lg:col-span-3">
             <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-cust-red rounded-full" />
@@ -241,7 +234,6 @@ export default function PublicFooter() {
                 </a>
               </div>
 
-              {/* Google Maps link button & Contact Page */}
               <div className="pt-1 flex flex-col gap-2">
                 <a
                   href="https://maps.google.com/?q=Jl.+Mayor+Abdurahman+No.209,+Kotakaler,+Kec.+Sumedang+Utara,+Kabupaten+Sumedang,+Jawa+Barat+45323"
@@ -266,7 +258,6 @@ export default function PublicFooter() {
         </div>
       </div>
 
-      {/* ── SUB-FOOTER BOTTOM BAR ── */}
       <div className="border-t border-zinc-800/80 bg-[#050507]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-xs text-zinc-400 font-mono text-center sm:text-left">
@@ -287,7 +278,6 @@ export default function PublicFooter() {
             </div>
           </div>
 
-          {/* Back to top button */}
           <button
             onClick={scrollToTop}
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-mono text-xs transition-all duration-200 cursor-pointer active:scale-95 group shadow-xs"

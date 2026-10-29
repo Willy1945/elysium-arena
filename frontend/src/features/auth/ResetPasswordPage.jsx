@@ -71,11 +71,10 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen bg-[#070709] text-zinc-100 flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans selection:bg-cust-red selection:text-white">
-      {/* Background Gradients & Ambient Neon Glow */}
+
       <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-cust-red/10 rounded-full blur-[140px]" />
       <div className="pointer-events-none absolute bottom-10 right-10 w-[400px] h-[300px] bg-red-950/20 rounded-full blur-[120px]" />
 
-      {/* Brand Header */}
       <div className="text-center mb-8 relative z-10">
         <Link to="/" className="inline-flex items-center gap-3 group mb-4">
           <img
@@ -94,7 +93,6 @@ export default function ResetPasswordPage() {
         </Link>
       </div>
 
-      {/* Main Card Container */}
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -102,7 +100,7 @@ export default function ResetPasswordPage() {
         className="w-full max-w-md bg-white border border-zinc-200 rounded-3xl p-7 sm:p-9 shadow-[0_20px_50px_rgba(0,0,0,0.25)] relative z-10 text-zinc-900"
       >
         {success ? (
-          /* SUCCESS STATE */
+
           <div className="text-center py-4 space-y-5">
             <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
               <CheckCircle2 size={36} />
@@ -132,7 +130,7 @@ export default function ResetPasswordPage() {
             </div>
           </div>
         ) : (
-          /* FORM STATE */
+
           <>
             <div className="mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-cust-red text-xs font-bold uppercase tracking-wider mb-2">
@@ -147,7 +145,6 @@ export default function ResetPasswordPage() {
               </p>
             </div>
 
-            {/* Error Notification */}
             <AnimatePresence>
               {error && (
                 <motion.div
@@ -163,7 +160,7 @@ export default function ResetPasswordPage() {
             </AnimatePresence>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Email Address (Read-only / verified) */}
+
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Email Akun
@@ -184,7 +181,6 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              {/* Password Baru */}
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Password Baru
@@ -212,7 +208,6 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              {/* Konfirmasi Password Baru */}
               <div>
                 <label className="block text-zinc-800 text-xs font-mono-tech uppercase tracking-wider mb-1.5 font-bold">
                   Ulangi Password Baru
@@ -240,7 +235,6 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              {/* Password Requirement Hint */}
               <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-xl text-[11px] text-zinc-600 font-medium space-y-1">
                 <p className="flex items-center gap-1.5 font-bold text-zinc-800">
                   <Sparkles size={12} className="text-cust-red" />
@@ -250,7 +244,6 @@ export default function ResetPasswordPage() {
                 <p>• Tautan reset ini berlaku selama 60 menit sejak dikirim.</p>
               </div>
 
-              {/* Submit CTA */}
               <button
                 type="submit"
                 disabled={loading}

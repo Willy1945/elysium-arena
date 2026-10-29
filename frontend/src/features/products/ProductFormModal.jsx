@@ -47,7 +47,7 @@ export default function ProductFormModal({ open, onClose, onSubmit, categories, 
     e.preventDefault();
     const formData = new FormData();
     Object.entries(form).forEach(([key, value]) => {
-      if (key === 'stock' && initialData) return; // stok dikunci saat edit
+      if (key === 'stock' && initialData) return;
       formData.append(key, (key === 'is_active' || key === 'is_reward_item') ? (value ? 1 : 0) : value);
     });
     if (imageFile) formData.append('image', imageFile);

@@ -16,9 +16,6 @@ class ResetPasswordMail extends Mailable
     public string $userName;
     public int $expiresInMinutes;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct(string $resetUrl, string $userName, int $expiresInMinutes = 60)
     {
         $this->resetUrl = $resetUrl;
@@ -26,9 +23,6 @@ class ResetPasswordMail extends Mailable
         $this->expiresInMinutes = $expiresInMinutes;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -36,9 +30,6 @@ class ResetPasswordMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
@@ -51,11 +42,6 @@ class ResetPasswordMail extends Mailable
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];

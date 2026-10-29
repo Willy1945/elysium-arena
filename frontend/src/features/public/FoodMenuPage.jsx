@@ -25,11 +25,9 @@ export default function FoodMenuPage() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Cart state: { [productId]: quantity }
   const [cart, setCart] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  // Customer active session & reward states
   const [activeSessions, setActiveSessions] = useState([]);
   const [selectedSessionId, setSelectedSessionId] = useState('');
   const [availableFoodReward, setAvailableFoodReward] = useState(null);
@@ -63,7 +61,6 @@ export default function FoodMenuPage() {
     }
   }, [user]);
 
-  // Derived filter products
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchCat = activeCategory === 'All' || p.category?.name === activeCategory;
@@ -72,7 +69,6 @@ export default function FoodMenuPage() {
     });
   }, [products, activeCategory, search]);
 
-  // Distinct categories with item count
   const categoryCounts = useMemo(() => {
     const counts = {};
     products.forEach((p) => {
@@ -90,7 +86,6 @@ export default function FoodMenuPage() {
     return { min: Math.min(...prices), max: Math.max(...prices) };
   }, [products]);
 
-  // Cart operations
   const addToCart = (product) => {
     setCart((prev) => ({
       ...prev,
@@ -115,7 +110,66 @@ export default function FoodMenuPage() {
     }).filter((item) => item.product);
   }, [cart, products]);
 
-  const total = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+  const rewardCalculation = useMemo(() => {
+    if (!useReward || !availableFoodReward || cartItems.length === 0) {
+      return { eligibleItem: null, discount: 0, reason: null };
+    }
+
+    const title = (availableFoodReward.title || '').toLowerCase();
+    const isDrinkReward = title.includes('minum') || title.includes('kopi');
+    const isNoodleReward = title.includes('mie');
+
+    let eligible = null;
+    if (isDrinkReward) {
+      eligible = cartItems.find((item) => {
+        const cat = (item.product.category?.name || '').toLowerCase();
+        const name = item.product.name.toLowerCase();
+        return (
+          cat === 'minuman' ||
+          cat === 'kopi' ||
+          name.includes('kopi') ||
+          name.includes('teh') ||
+          name.includes('minerale') ||
+          name.includes('jus')
+        );
+      });
+      if (!eligible) {
+        return {
+          eligibleItem: null,
+          discount: 0,
+          reason: 'Voucher ini berlaku untuk menu Minuman / Kopi. Tambahkan minuman ke keranjang.',
+        };
+      }
+    } else if (isNoodleReward) {
+      eligible = cartItems.find((item) => {
+        const name = item.product.name.toLowerCase();
+        return name.includes('mie');
+      });
+      if (!eligible) {
+        return {
+          eligibleItem: null,
+          discount: 0,
+          reason: 'Voucher ini berlaku untuk menu Mie. Tambahkan menu mie ke keranjang.',
+        };
+      }
+    } else {
+      eligible = cartItems[0];
+    }
+
+    const discountAmount = eligible ? eligible.product.price : 0;
+    return {
+      eligibleItem: eligible,
+      discount: discountAmount,
+      reason: null,
+    };
+  }, [useReward, availableFoodReward, cartItems]);
+
+  const subtotal = useMemo(() => {
+    return cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+  }, [cartItems]);
+
+  const discount = rewardCalculation.discount;
+  const finalTotal = Math.max(0, subtotal - discount);
 
   const handleSubmit = async () => {
     if (!user) {
@@ -124,12 +178,17 @@ export default function FoodMenuPage() {
     }
     if (cartItems.length === 0) return;
 
+    if (useReward && availableFoodReward && rewardCalculation.reason) {
+      toast.error(rewardCalculation.reason);
+      return;
+    }
+
     setSubmitting(true);
     try {
       await orderService.create({
         session_id: selectedSessionId ? Number(selectedSessionId) : null,
         items: cartItems.map((item) => ({ product_id: item.product.id, quantity: item.quantity })),
-        reward_id: useReward && availableFoodReward ? availableFoodReward.id : null,
+        reward_id: useReward && availableFoodReward && rewardCalculation.eligibleItem ? availableFoodReward.id : null,
       });
       toast.success('Pesanan berhasil dibuat! Staf akan segera mengantarkan ke mejamu.');
       setCart({});
@@ -145,14 +204,14 @@ export default function FoodMenuPage() {
 
   return (
     <PublicLayout>
-      {/* ── HEADER BANNER (CINEMATIC DARK THEME) ── */}
+
       <section className="relative bg-black text-white overflow-hidden border-b border-zinc-800 -mt-[72px] sm:-mt-[80px] pt-36 sm:pt-44 pb-20 sm:pb-24">
-        {/* Full-bleed Background Image with Dark Tint */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-25 scale-100 pointer-events-none"
           style={{ backgroundImage: "url('/images/kitchen.jpeg')" }}
         />
-        {/* Gradient scrim for depth and legibility */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/50 pointer-events-none" />
         <div className="pointer-events-none absolute -top-40 right-10 w-[500px] h-[500px] bg-cust-red/15 rounded-full blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-40 left-10 w-[400px] h-[400px] bg-cust-red/10 rounded-full blur-[140px]" />
@@ -179,7 +238,6 @@ export default function FoodMenuPage() {
         </div>
       </section>
 
-      {/* ── TELEMETRY STRIP ── */}
       <section className="border-b border-zinc-200 bg-zinc-50/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -234,14 +292,11 @@ export default function FoodMenuPage() {
         </div>
       </section>
 
-      {/* ── MAIN CONTENT: MENU CATALOG & STICKY CART CONSOLE ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-          {/* Kolom Kiri: Menu Catalog (Spans 8 cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
 
-            {/* Filter Dock & Search Bar */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2.5 bg-white border border-zinc-200 rounded-2xl shadow-sm">
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1">
                 {categoryFilters.map((f) => {
@@ -278,7 +333,6 @@ export default function FoodMenuPage() {
               </div>
             </div>
 
-            {/* Menu Grid with Elevated White Cards */}
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
                 {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -319,7 +373,7 @@ export default function FoodMenuPage() {
                           : 'border-zinc-200/90 hover:border-cust-red/50 hover:shadow-[0_16px_30px_-5px_rgba(0,0,0,0.1),0_8px_16px_rgba(227,30,36,0.08)] hover:-translate-y-1'
                       }`}
                     >
-                      {/* Product Visual */}
+
                       <div className="relative h-32 sm:h-40 bg-zinc-100 overflow-hidden border-b border-zinc-100">
                         {product.image ? (
                           <img
@@ -334,7 +388,6 @@ export default function FoodMenuPage() {
                           </div>
                         )}
 
-                        {/* Top Badges */}
                         <div className="absolute top-2.5 left-2.5 right-2.5 sm:top-3 sm:left-3 sm:right-3 flex items-center justify-between">
                           <span className="text-[9px] sm:text-[10px] font-mono-tech font-bold uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/95 backdrop-blur-md border border-zinc-200 text-zinc-800 shadow-xs">
                             {product.category?.name}
@@ -347,7 +400,6 @@ export default function FoodMenuPage() {
                         </div>
                       </div>
 
-                      {/* Product Content & Action */}
                       <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 sm:gap-3 bg-white">
                         <div>
                           <h4 className="font-display font-black text-zinc-950 text-sm sm:text-base leading-snug uppercase line-clamp-1 group-hover:text-cust-red transition-colors">
@@ -358,7 +410,6 @@ export default function FoodMenuPage() {
                           </p>
                         </div>
 
-                        {/* Interactive Add or Qty Controller */}
                         {itemInCartQty > 0 ? (
                           <div className="flex items-center justify-between p-1 rounded-xl bg-zinc-100 border border-zinc-200">
                             <button
@@ -400,11 +451,9 @@ export default function FoodMenuPage() {
             )}
           </div>
 
-          {/* Kolom Kanan: Sticky Cart Console (Spans 4 cols) */}
           <div id="cart-checkout-console" className="lg:col-span-4 sticky top-24">
             <div className="bg-white border border-zinc-200 rounded-3xl p-6 sm:p-7 shadow-[0_15px_35px_-5px_rgba(0,0,0,0.08)] flex flex-col justify-between">
 
-              {/* Cart Header */}
               <div className="flex items-center justify-between pb-5 mb-5 border-b border-zinc-200">
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-cust-red shadow-2xs">
@@ -423,7 +472,6 @@ export default function FoodMenuPage() {
                 </span>
               </div>
 
-              {/* Station Delivery Selector (If customer is playing) */}
               {user?.role === 'CUSTOMER' && activeSessions.length > 0 && (
                 <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 mb-5">
                   <label className="block text-zinc-700 text-[11px] font-mono-tech uppercase tracking-wider mb-2 font-bold">
@@ -449,7 +497,6 @@ export default function FoodMenuPage() {
                 </div>
               )}
 
-              {/* Cart Items List */}
               {cartItems.length === 0 ? (
                 <div className="text-center py-12 border border-dashed border-zinc-300 rounded-2xl mb-6 bg-zinc-50/50">
                   <Coffee size={36} className="mx-auto text-zinc-300 mb-3" />
@@ -501,46 +548,94 @@ export default function FoodMenuPage() {
                 </div>
               )}
 
-              {/* Total & Loyalty Reward Voucher */}
               <div className="pt-5 border-t border-zinc-200 flex flex-col gap-4">
 
-                {/* Total Bill Row */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-widest block font-bold">
-                      Total Pesanan
-                    </span>
-                    <span className="font-display font-black text-zinc-950 text-2xl">
-                      {formatRupiah(total)}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono-tech text-zinc-700 bg-zinc-100 border border-zinc-200 px-2.5 py-1 rounded-md font-bold">
-                    Bayar di Kasir
-                  </span>
-                </div>
-
-                {/* Free Food Loyalty Reward Voucher Card */}
                 {user?.role === 'CUSTOMER' && availableFoodReward && (
-                  <label className="flex items-start gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 cursor-pointer hover:border-emerald-400 transition shadow-xs">
-                    <input
-                      type="checkbox"
-                      checked={useReward}
-                      onChange={(e) => setUseReward(e.target.checked)}
-                      className="mt-1 accent-emerald-600 rounded"
-                    />
-                    <div>
-                      <div className="flex items-center gap-1.5 text-emerald-800 font-black text-xs uppercase font-mono-tech">
-                        <Gift size={14} />
-                        <span>Klaim Reward Makanan Gratis</span>
+                  <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-300 shadow-2xs">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={useReward}
+                        onChange={(e) => setUseReward(e.target.checked)}
+                        className="mt-1 accent-emerald-600 rounded w-4 h-4 cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-1">
+                          <div className="flex items-center gap-1.5 text-emerald-900 font-black text-xs uppercase font-mono-tech">
+                            <Gift size={14} className="text-emerald-600" />
+                            <span>Klaim Reward: {availableFoodReward.title || 'Voucher Kafe'}</span>
+                          </div>
+                          <span className="text-[10px] font-mono-tech font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded">
+                            Tersedia
+                          </span>
+                        </div>
+                        <p className="text-zinc-600 text-[11px] leading-relaxed mt-1 font-medium">
+                          Gunakan voucher loyalitas untuk menggratiskan 1 item menu yang memenuhi syarat.
+                        </p>
                       </div>
-                      <p className="text-zinc-700 text-[11px] leading-relaxed mt-1 font-medium">
-                        Kamu punya reward loyalitas. Item gratis akan otomatis disertakan ke pesanan ini tanpa biaya tambahan.
-                      </p>
-                    </div>
-                  </label>
+                    </label>
+
+                    {useReward && (
+                      <div className="pt-2 border-t border-emerald-200/60">
+                        {rewardCalculation.eligibleItem ? (
+                          <div className="flex items-center justify-between text-xs bg-emerald-100/90 text-emerald-950 px-2.5 py-1.5 rounded-lg font-mono-tech border border-emerald-300">
+                            <span className="font-bold flex items-center gap-1">
+                              ✓ 1x {rewardCalculation.eligibleItem.product.name}
+                            </span>
+                            <span className="font-black text-emerald-800">
+                              GRATIS (-{formatRupiah(rewardCalculation.discount)})
+                            </span>
+                          </div>
+                        ) : rewardCalculation.reason ? (
+                          <div className="text-[11px] bg-amber-50 text-amber-900 border border-amber-300 px-2.5 py-1.5 rounded-lg font-medium">
+                            ⚠️ {rewardCalculation.reason}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+                  </div>
                 )}
 
-                {/* Submit Checkout Button */}
+                <div className="pt-2 flex flex-col gap-1.5">
+                  {discount > 0 && (
+                    <>
+                      <div className="flex items-center justify-between text-xs font-mono-tech text-zinc-500">
+                        <span>Subtotal Menu</span>
+                        <span className="font-bold">{formatRupiah(subtotal)}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs font-mono-tech text-emerald-700 font-bold">
+                        <span>Diskon Voucher ({availableFoodReward?.title || 'Reward'})</span>
+                        <span>-{formatRupiah(discount)}</span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div>
+                      <span className="text-zinc-500 text-[10px] font-mono-tech uppercase tracking-widest block font-bold">
+                        Total Tagihan
+                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-display font-black text-zinc-950 text-2xl">
+                          {formatRupiah(finalTotal)}
+                        </span>
+                        {discount > 0 && (
+                          <span className="text-xs line-through text-zinc-400 font-mono-tech font-semibold">
+                            {formatRupiah(subtotal)}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-mono-tech px-2.5 py-1 rounded-md font-bold border ${
+                      finalTotal === 0
+                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                        : 'text-zinc-700 bg-zinc-100 border-zinc-200'
+                    }`}>
+                      {finalTotal === 0 ? 'Lunas (Gratis Voucher)' : 'Bayar di Kasir'}
+                    </span>
+                  </div>
+                </div>
+
                 <button
                   onClick={handleSubmit}
                   disabled={cartItems.length === 0 || submitting}
@@ -568,7 +663,6 @@ export default function FoodMenuPage() {
         </div>
       </div>
 
-      {/* ── BANNER PESANAN BESAR / GRUP ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div className="relative rounded-3xl overflow-hidden border border-zinc-200 p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-[0_12px_30px_-5px_rgba(0,0,0,0.06)] bg-white">
           <div className="absolute top-0 right-0 w-80 h-80 bg-cust-red/[0.04] rounded-full blur-[100px] pointer-events-none" />
@@ -596,7 +690,6 @@ export default function FoodMenuPage() {
         </div>
       </section>
 
-      {/* ── FLOATING MOBILE CART BAR ── */}
       {cartItems.length > 0 && (
         <aside
           aria-label="Floating Mobile Cart"
@@ -611,7 +704,7 @@ export default function FoodMenuPage() {
                 {cartItems.length} Menu Terpilih
               </p>
               <p className="font-display font-black text-zinc-950 text-base truncate">
-                {formatRupiah(total)}
+                {formatRupiah(finalTotal)}
               </p>
             </div>
           </div>

@@ -53,14 +53,14 @@ export default function BrowseGamesPage() {
 
   return (
     <PublicLayout>
-      {/* ── HEADER BANNER (CINEMATIC DARK THEME) ── */}
+
       <section className="relative bg-black text-white overflow-hidden border-b border-zinc-800 -mt-[72px] sm:-mt-[80px] pt-36 sm:pt-44 pb-20 sm:pb-24">
-        {/* Full-bleed Background Image with Dark Tint */}
+
         <div
           className="absolute inset-0 bg-cover bg-center opacity-30 scale-100 pointer-events-none"
           style={{ backgroundImage: "url('/images/gamee.jpeg')" }}
         />
-        {/* Gradient scrim for depth and legibility */}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/50 pointer-events-none" />
         <div className="pointer-events-none absolute -top-40 right-10 w-[500px] h-[500px] bg-cust-red/15 rounded-full blur-[140px]" />
         <div className="pointer-events-none absolute -bottom-40 left-10 w-[400px] h-[400px] bg-cust-red/10 rounded-full blur-[140px]" />
@@ -87,7 +87,6 @@ export default function BrowseGamesPage() {
         </div>
       </section>
 
-      {/* ── TELEMETRY STRIP ── */}
       <section className="border-b border-zinc-200 bg-zinc-50/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
@@ -140,10 +139,9 @@ export default function BrowseGamesPage() {
         </div>
       </section>
 
-      {/* ── FILTER & SEARCH DOCK ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-2.5 bg-white border border-zinc-200 rounded-2xl shadow-sm">
-          {/* Segmented Filter Pills */}
+
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1">
             {filters.map((f) => {
               const active = activeFilter === f;
@@ -169,7 +167,6 @@ export default function BrowseGamesPage() {
             })}
           </div>
 
-          {/* Search Box */}
           <div className="relative w-full md:w-72 p-1">
             <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
             <input
@@ -183,7 +180,6 @@ export default function BrowseGamesPage() {
         </div>
       </section>
 
-      {/* ── GAME VAULT POSTER GRID (CLEAN WHITE CARDS WITH SHADOWS) ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
@@ -217,7 +213,7 @@ export default function BrowseGamesPage() {
                   to={`/browse-games/${game.id}`}
                   className="group relative flex flex-col h-full bg-white border border-zinc-200/90 hover:border-cust-red/60 rounded-2xl overflow-hidden transition-all duration-300 shadow-[0_6px_18px_-3px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_30px_-5px_rgba(0,0,0,0.1),0_8px_16px_rgba(227,30,36,0.08)] hover:-translate-y-1.5"
                 >
-                  {/* Poster Image Container */}
+
                   <div className="relative aspect-[3/4.2] overflow-hidden bg-zinc-100">
                     {game.cover_image ? (
                       <img
@@ -232,10 +228,8 @@ export default function BrowseGamesPage() {
                       </div>
                     )}
 
-                    {/* Gradient Vignette */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
 
-                    {/* Top Platform Badges */}
                     {game.platforms?.length > 0 && (
                       <div className="absolute top-2.5 right-2.5 flex flex-wrap gap-1 justify-end max-w-[85%]">
                         {game.platforms.map((p) => (
@@ -249,7 +243,6 @@ export default function BrowseGamesPage() {
                       </div>
                     )}
 
-                    {/* Bottom Station Availability Badge */}
                     <div className="absolute bottom-2.5 left-2.5">
                       <span className="inline-flex items-center gap-1.5 bg-black/75 backdrop-blur-md border border-white/20 text-white text-[10px] font-mono-tech font-bold px-2.5 py-1 rounded-lg shadow-sm">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,1)]" />
@@ -258,7 +251,6 @@ export default function BrowseGamesPage() {
                     </div>
                   </div>
 
-                  {/* Card Content Footer */}
                   <div className="p-4 flex-1 flex flex-col justify-between gap-3 bg-white">
                     <h3 className="font-display font-black text-zinc-950 text-base leading-tight uppercase line-clamp-2 group-hover:text-cust-red transition-colors">
                       {game.name}
@@ -276,7 +268,6 @@ export default function BrowseGamesPage() {
         )}
       </section>
 
-      {/* ── BANNER REQUEST GAME ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div className="relative rounded-3xl overflow-hidden border border-zinc-200 p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-[0_12px_30px_-5px_rgba(0,0,0,0.06)] bg-white">
           <div className="absolute top-0 right-0 w-80 h-80 bg-cust-red/[0.04] rounded-full blur-[100px] pointer-events-none" />
