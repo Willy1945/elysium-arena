@@ -283,7 +283,7 @@ export default function HomePage() {
               <div className="space-y-3 mb-8">
                 {[
                   'Cek ketersediaan rig PC, PS5, dan PS4 secara langsung dan transparan.',
-                  'Station terkunci otomatis dengan Smart Lock hingga kamu login di tempat.',
+                  'PC terkunci otomatis dengan Smart Lock hingga kamu login di tempat.',
                   'Bisa pesan makanan & minuman langsung diantar ke mejamu saat bermain.',
                   'Pembayaran praktis langsung di kasir via QRIS atau Cash Tunai.',
                 ].map((item, idx) => (
