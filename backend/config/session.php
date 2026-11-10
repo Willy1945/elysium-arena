@@ -4,7 +4,7 @@ use Illuminate\Support\Str;
 
 return [
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => env('SESSION_DRIVER', 'file'),
 
     'lifetime' => (int) env('SESSION_LIFETIME', 120),
 
@@ -16,7 +16,7 @@ return [
 
     'connection' => env('SESSION_CONNECTION'),
 
-    'table' => env('SESSION_TABLE', 'sessions'),
+    'table' => env('SESSION_TABLE', 'laravel_sessions'),
 
     'store' => env('SESSION_STORE'),
 
