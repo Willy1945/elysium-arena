@@ -87,10 +87,10 @@ export default function HomePage() {
       publicService.getOccupancyStats(),
     ])
       .then(([devicesRes, gamesRes, reviewsRes, occupancyRes]) => {
-        setDevices(devicesRes.data.data || []);
-        setGames(gamesRes.data.data || []);
-        setReviews(reviewsRes.data || { overall_average: 0, overall_count: 0, reviews: [] });
-        setOccupancy(occupancyRes.data || null);
+        setDevices(Array.isArray(devicesRes?.data?.data) ? devicesRes.data.data : []);
+        setGames(Array.isArray(gamesRes?.data?.data) ? gamesRes.data.data : []);
+        setReviews(reviewsRes?.data?.reviews ? reviewsRes.data : { overall_average: 0, overall_count: 0, reviews: [] });
+        setOccupancy(occupancyRes?.data && typeof occupancyRes.data === 'object' ? occupancyRes.data : null);
       })
       .catch((err) => console.error('Gagal memuat data publik:', err))
       .finally(() => setLoading(false));
@@ -942,7 +942,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {reviews.reviews.length > 0 && (
+      {reviews?.reviews?.length > 0 && (
         <section className="bg-white border-b border-zinc-200 py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -969,7 +969,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-                  {reviews.reviews.slice(0, 3).map((r) => (
+                  {reviews?.reviews?.slice(0, 3).map((r) => (
                     <div
                       key={r.id}
                       className="bg-white/[0.04] backdrop-blur-md border border-white/10 hover:border-cust-red/40 rounded-2xl p-6 flex flex-col justify-between shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_15px_35px_-5px_rgba(227,30,36,0.2)] hover:-translate-y-1.5 transition-all duration-300 group"
