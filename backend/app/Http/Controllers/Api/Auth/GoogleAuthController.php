@@ -12,6 +12,11 @@ use Throwable;
 class GoogleAuthController extends Controller
 {
 
+    private function getFrontendUrl(): string
+    {
+        return rtrim((string) config('app.frontend_url', 'http://localhost:5173'), '/');
+    }
+
     public function redirect(Request $request)
     {
         $clientId = config('services.google.client_id');
@@ -22,7 +27,7 @@ class GoogleAuthController extends Controller
             if ($request->wantsJson() || $request->has('json')) {
                 return response()->json(['message' => $message], 422);
             }
-            $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+            $frontendUrl = $this->getFrontendUrl();
             return redirect("{$frontendUrl}/login?error=" . urlencode($message));
         }
 
@@ -42,14 +47,14 @@ class GoogleAuthController extends Controller
             if ($request->wantsJson() || $request->has('json')) {
                 return response()->json(['message' => $errorMsg], 500);
             }
-            $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+            $frontendUrl = $this->getFrontendUrl();
             return redirect("{$frontendUrl}/login?error=" . urlencode($errorMsg));
         }
     }
 
     public function callback(Request $request)
     {
-        $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+        $frontendUrl = $this->getFrontendUrl();
 
         if ($request->has('error')) {
             return redirect("{$frontendUrl}/login?error=" . urlencode('Login Google dibatalkan atau ditolak.'));

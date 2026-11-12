@@ -1,2 +1,10 @@
 *
 !.gitignore
+!avatars/
+!avatars/*
+!devices/
+!devices/*
+!games/
+!games/*
+!products/
+!products/*
