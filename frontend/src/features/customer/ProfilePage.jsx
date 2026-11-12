@@ -73,6 +73,7 @@ export default function ProfilePage() {
       const { data } = await authService.updateProfile(formData);
       if (setUser) setUser(data.user);
       localStorage.setItem('user', JSON.stringify(data.user));
+      setAvatarPreview(data.user?.avatar || null);
       toast.success('Profil berhasil diperbarui.');
       setForm((prev) => ({
         ...prev,
@@ -154,6 +155,7 @@ export default function ProfilePage() {
                 >
                   Pilih Foto Baru
                 </button>
+                {errors.avatar && <p className="text-cust-red text-xs mt-1.5 font-semibold">{errors.avatar[0]}</p>}
               </div>
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
             </div>

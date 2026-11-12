@@ -3,7 +3,21 @@ const API_ORIGIN = RAW_API_URL.replace(/\/api\/?$/, '');
 
 export function resolveImageUrl(path) {
   if (!path) return null;
-  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('blob:') || path.startsWith('data:')) return path;
+  if (path.startsWith('blob:') || path.startsWith('data:')) return path;
+
+  if (path.startsWith('http://')) {
+    try {
+      const parsed = new URL(path);
+      if (parsed.pathname.startsWith('/storage/')) {
+        return `${API_ORIGIN}${parsed.pathname}`;
+      }
+    } catch {
+      return path;
+    }
+    return path;
+  }
+
+  if (path.startsWith('https://')) return path;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${API_ORIGIN}${cleanPath}`;
 }
