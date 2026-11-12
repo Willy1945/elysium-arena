@@ -15,7 +15,8 @@ class GoogleAuthController extends Controller
 
     private function getFrontendUrl(): string
     {
-        return rtrim((string) config('app.frontend_url', 'http://localhost:5173'), '/');
+        $url = config('app.frontend_url') ?: env('FRONTEND_URL', 'http://localhost:5173');
+        return rtrim((string) $url, '/');
     }
 
     public function redirect(Request $request)
