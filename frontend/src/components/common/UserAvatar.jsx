@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { resolveImageUrl } from '../../utils/format';
 
 export default function UserAvatar({
   src,
@@ -8,17 +9,18 @@ export default function UserAvatar({
   textClassName = '',
 }) {
   const [hasError, setHasError] = useState(false);
+  const resolvedSrc = resolveImageUrl(src);
 
   useEffect(() => {
     setHasError(false);
-  }, [src]);
+  }, [resolvedSrc]);
 
   const initial = name?.trim()?.charAt(0)?.toUpperCase() || 'U';
 
-  if (src && !hasError) {
+  if (resolvedSrc && !hasError) {
     return (
       <img
-        src={src}
+        src={resolvedSrc}
         alt={name || 'User Avatar'}
         referrerPolicy="no-referrer"
         onError={() => setHasError(true)}

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
 use Throwable;
 
@@ -107,7 +108,7 @@ class GoogleAuthController extends Controller
 
         $avatarUrl = $user->avatar;
         if ($avatarUrl && !str_starts_with($avatarUrl, 'http')) {
-            $avatarUrl = asset('storage/' . $avatarUrl);
+            $avatarUrl = Storage::url($avatarUrl);
         }
 
         $payload = [
