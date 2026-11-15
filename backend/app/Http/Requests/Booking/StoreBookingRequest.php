@@ -16,7 +16,24 @@ class StoreBookingRequest extends FormRequest
         return [
             'device_id' => ['required', 'exists:devices,id'],
             'booking_date' => ['required', 'date', 'after_or_equal:today'],
-            'start_time' => ['required', 'date_format:H:i'],
+            'start_time' => [
+                'required',
+                'date_format:H:i',
+                function ($attribute, $value, $fail) {
+                    $bookingDate = $this->input('booking_date');
+                    if ($bookingDate) {
+                        try {
+                            $tz = config('app.timezone', 'Asia/Jakarta');
+                            $startDateTime = \Carbon\Carbon::parse("{$bookingDate} {$value}", $tz);
+                            if ($startDateTime->copy()->addMinute()->isPast()) {
+                                $fail('Waktu booking tidak boleh di masa lalu.');
+                            }
+                        } catch (\Throwable $e) {
+                            // Ignored - date format validator will catch bad formats
+                        }
+                    }
+                },
+            ],
             'duration' => [
                 'required',
                 'integer',

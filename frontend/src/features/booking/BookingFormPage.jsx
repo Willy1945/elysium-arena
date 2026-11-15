@@ -8,15 +8,14 @@ import { bookingService } from '../../api/bookingService';
 import { useToast } from '../../context/ToastContext';
 import {
   formatRupiah, STATUS_CONFIG, resolveImageUrl,
-  addHoursToTime, isSlotAvailable,
+  addHoursToTime, isSlotAvailable, isSlotPast, getLocalDateString,
 } from '../../utils/format';
 
 const OPERATING_HOURS = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 const DURATION_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function todayDate() {
-  const d = new Date();
-  return d.toISOString().split('T')[0];
+  return getLocalDateString();
 }
 
 export default function BookingFormPage() {
@@ -57,6 +56,20 @@ export default function BookingFormPage() {
   useEffect(() => {
     fetchAvailability();
   }, [fetchAvailability]);
+
+  // Real-time ticker to refresh past slot status every 30 seconds
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick((t) => t + 1), 30000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Reset selected slot if it becomes unavailable (past or overlapping)
+  useEffect(() => {
+    if (startTime && !isSlotAvailable(startTime, durationHours, bookedSlots, date)) {
+      setStartTime(null);
+    }
+  }, [date, durationHours, bookedSlots, startTime]);
 
   const endTime = useMemo(
     () => (startTime ? addHoursToTime(startTime, durationHours) : null),
@@ -243,7 +256,8 @@ export default function BookingFormPage() {
                   ) : (
                     <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                       {OPERATING_HOURS.map((slot) => {
-                        const available = isSlotAvailable(slot, durationHours, bookedSlots);
+                        const isPast = isSlotPast(slot, date);
+                        const available = isSlotAvailable(slot, durationHours, bookedSlots, date);
                         const selected = startTime === slot;
                         return (
                           <button
@@ -251,16 +265,20 @@ export default function BookingFormPage() {
                             type="button"
                             disabled={!available}
                             onClick={() => setStartTime(slot)}
+                            title={isPast ? 'Waktu sudah lewat' : !available ? 'Slot sudah dibooking' : 'Slot tersedia'}
                             className={`flex items-center justify-center gap-1 py-2.5 rounded-xl text-xs font-bold font-mono-tech border-2 uppercase tracking-wider transition ${
                               selected
                                 ? 'bg-cust-red border-zinc-950 text-white shadow-[2px_2px_0px_0px_#18181b]'
                                 : available
                                   ? 'bg-white border-zinc-950 text-zinc-900 hover:bg-zinc-100 shadow-[2px_2px_0px_0px_#18181b]'
-                                  : 'bg-zinc-100 border-zinc-300 text-zinc-400 cursor-not-allowed'
+                                  : isPast
+                                    ? 'bg-zinc-100 border-zinc-200 text-zinc-400 cursor-not-allowed opacity-50 line-through'
+                                    : 'bg-zinc-100 border-zinc-300 text-zinc-400 cursor-not-allowed opacity-70'
                             }`}
                           >
                             {!available && <Lock size={10} />}
-                            {slot}
+                            <span>{slot}</span>
+                            {isPast && <span className="text-[9px] font-normal opacity-70">(Lewat)</span>}
                           </button>
                         );
                       })}

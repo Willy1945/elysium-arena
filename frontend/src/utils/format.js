@@ -72,15 +72,38 @@ export function addHoursToTime(time, hours) {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
-export function isSlotAvailable(startTime, durationHours, bookedSlots) {
+export function getLocalDateString(d = new Date()) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function isSlotPast(slotTime, selectedDate) {
+  if (!selectedDate) return false;
+  const todayStr = getLocalDateString();
+  if (selectedDate < todayStr) return true;
+  if (selectedDate > todayStr) return false;
+
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const slotMinutes = timeToMinutes(slotTime);
+  return slotMinutes <= currentMinutes;
+}
+
+export function isSlotAvailable(startTime, durationHours, bookedSlots = [], selectedDate = null) {
+  if (selectedDate && isSlotPast(startTime, selectedDate)) {
+    return false;
+  }
   const start = timeToMinutes(startTime);
   const end = start + durationHours * 60;
-  return !bookedSlots.some((slot) => {
+  return !(bookedSlots || []).some((slot) => {
     const bookedStart = timeToMinutes(slot.start_time);
     const bookedEnd = timeToMinutes(slot.end_time);
     return start < bookedEnd && end > bookedStart;
   });
 }
+
 
 export const STOCK_STATUS_CONFIG = {
   in_stock: { label: 'Stok Aman', color: 'in_stock' },

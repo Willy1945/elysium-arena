@@ -15,6 +15,8 @@ import {
   resolveImageUrl,
   addHoursToTime,
   isSlotAvailable,
+  isSlotPast,
+  getLocalDateString,
 } from '../../utils/format';
 
 const OPERATING_HOURS = [
@@ -32,8 +34,7 @@ const STATUS_LABEL = {
 };
 
 function todayDate() {
-  const d = new Date();
-  return d.toISOString().split('T')[0];
+  return getLocalDateString();
 }
 
 export default function CustomerBookingPage() {
@@ -94,6 +95,20 @@ export default function CustomerBookingPage() {
   useEffect(() => {
     fetchAvailability();
   }, [fetchAvailability]);
+
+  // Real-time ticker to refresh past slot status every 30 seconds
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick((t) => t + 1), 30000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Reset selected slot if it becomes unavailable (past or overlapping)
+  useEffect(() => {
+    if (startTime && !isSlotAvailable(startTime, durationHours, bookedSlots, date)) {
+      setStartTime(null);
+    }
+  }, [date, durationHours, bookedSlots, startTime]);
 
   const selectedReward = useMemo(() => {
     if (!selectedRewardId) return null;
@@ -379,7 +394,8 @@ export default function CustomerBookingPage() {
 
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                       {OPERATING_HOURS.map((slot) => {
-                        const available = isSlotAvailable(slot, durationHours, bookedSlots);
+                        const isPast = isSlotPast(slot, date);
+                        const available = isSlotAvailable(slot, durationHours, bookedSlots, date);
                         const selected = startTime === slot;
                         return (
                           <button
@@ -387,16 +403,23 @@ export default function CustomerBookingPage() {
                             type="button"
                             disabled={!available}
                             onClick={() => setStartTime(slot)}
-                            className={`flex flex-col items-center justify-center py-2.5 rounded-xl text-xs transition cursor-pointer ${
+                            title={isPast ? 'Waktu sudah lewat' : !available ? 'Slot sudah dibooking' : 'Slot tersedia'}
+                            className={`flex flex-col items-center justify-center py-2.5 rounded-xl text-xs transition ${
                               selected
-                                ? 'bg-cust-red text-white font-bold border border-cust-red shadow-sm'
+                                ? 'bg-cust-red text-white font-bold border border-cust-red shadow-sm cursor-pointer'
                                 : available
-                                ? 'bg-zinc-50 text-zinc-800 border border-zinc-200 hover:border-zinc-300 hover:bg-white shadow-xs font-medium'
+                                ? 'bg-zinc-50 text-zinc-800 border border-zinc-200 hover:border-zinc-300 hover:bg-white shadow-xs font-medium cursor-pointer'
+                                : isPast
+                                ? 'bg-zinc-100 text-zinc-400 border border-zinc-200/50 cursor-not-allowed opacity-40 line-through'
                                 : 'bg-zinc-100 text-zinc-400 border border-zinc-200/60 cursor-not-allowed opacity-50 line-through'
                             }`}
                           >
                             <span>{slot}</span>
-                            {!available && <Lock size={10} className="mt-0.5 opacity-60" />}
+                            {isPast ? (
+                              <span className="text-[9px] font-mono-tech tracking-tight text-zinc-400">Lewat</span>
+                            ) : !available ? (
+                              <Lock size={10} className="mt-0.5 opacity-60" />
+                            ) : null}
                           </button>
                         );
                       })}

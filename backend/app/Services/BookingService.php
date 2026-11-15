@@ -19,8 +19,14 @@ class BookingService
 
     public function isAvailable(int $deviceId, string $date, string $startTime, int $durationMinutes, ?int $excludeBookingId = null): bool
     {
-        $start = Carbon::parse("$date $startTime");
+        $tz = config('app.timezone', 'Asia/Jakarta');
+        $start = Carbon::parse("$date $startTime", $tz);
         $end = $start->copy()->addMinutes($durationMinutes);
+
+        // Cannot book slot that has already started/passed
+        if ($start->copy()->addMinute()->isPast()) {
+            return false;
+        }
 
         $conflict = Booking::where('device_id', $deviceId)
             ->where('booking_date', $date)
@@ -34,14 +40,14 @@ class BookingService
             return false;
         }
 
-        if ($date === now()->toDateString()) {
+        if ($date === now($tz)->toDateString()) {
             $activeSession = GamingSession::where('device_id', $deviceId)
                 ->where('status', 'active')
                 ->first();
 
             if ($activeSession) {
-                $sessionStart = Carbon::parse($activeSession->start_time);
-                $sessionEnd = Carbon::parse($activeSession->end_time);
+                $sessionStart = Carbon::parse($activeSession->start_time, $tz);
+                $sessionEnd = Carbon::parse($activeSession->end_time, $tz);
                 if ($sessionEnd->gt($start) && $sessionStart->lt($end)) {
                     return false;
                 }
@@ -64,15 +70,16 @@ class BookingService
             ])
             ->toArray();
 
-        if ($date === now()->toDateString()) {
+        $tz = config('app.timezone', 'Asia/Jakarta');
+        if ($date === now($tz)->toDateString()) {
             $activeSession = GamingSession::where('device_id', $deviceId)
                 ->where('status', 'active')
                 ->first();
 
             if ($activeSession) {
                 $slots[] = [
-                    'start_time' => Carbon::parse($activeSession->start_time)->format('H:i'),
-                    'end_time' => Carbon::parse($activeSession->end_time)->format('H:i'),
+                    'start_time' => Carbon::parse($activeSession->start_time, $tz)->format('H:i'),
+                    'end_time' => Carbon::parse($activeSession->end_time, $tz)->format('H:i'),
                 ];
             }
         }
@@ -94,7 +101,7 @@ class BookingService
             }
 
             if (! $this->isAvailable($device->id, $data['booking_date'], $data['start_time'], $data['duration'])) {
-                throw ValidationException::withMessages(['start_time' => 'Slot waktu ini sudah dibooking oleh customer lain.']);
+                throw ValidationException::withMessages(['start_time' => 'Slot waktu ini sudah tidak tersedia atau sudah lewat.']);
             }
 
             $start = Carbon::parse($data['booking_date'] . ' ' . $data['start_time']);
