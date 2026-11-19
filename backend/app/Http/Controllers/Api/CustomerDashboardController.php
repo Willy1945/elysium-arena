@@ -20,7 +20,7 @@ class CustomerDashboardController extends Controller
     {
         $userId = $request->user()->id;
 
-        $activeSession = GamingSession::with(['device.deviceType'])
+        $activeSession = GamingSession::with(['device.deviceType', 'orders.items.product'])
             ->where('user_id', $userId)
             ->where('status', 'active')
             ->first();
@@ -51,10 +51,17 @@ class CustomerDashboardController extends Controller
             ->limit(5)
             ->get();
 
-        $activeOrders = Order::with(['items.product'])
+        $activeOrders = Order::with(['items.product', 'session.device'])
             ->where('user_id', $userId)
             ->whereNotIn('status', ['completed', 'cancelled'])
             ->orderByDesc('created_at')
+            ->limit(5)
+            ->get();
+
+        $completedOrders = Order::with(['items.product', 'session.device'])
+            ->where('user_id', $userId)
+            ->whereIn('status', ['delivered', 'completed'])
+            ->orderByDesc('updated_at')
             ->limit(5)
             ->get();
 
@@ -90,6 +97,7 @@ class CustomerDashboardController extends Controller
             'upcoming_bookings' => BookingResource::collection($upcomingBookings),
             'booking_history' => BookingResource::collection($bookingHistory),
             'active_orders' => OrderResource::collection($activeOrders),
+            'completed_orders' => OrderResource::collection($completedOrders),
             'pending_transactions' => TransactionResource::collection($pendingTransactions),
             'recent_transactions' => TransactionResource::collection($recentTransactions),
             'can_rate_arena' => $hasCompletedSession && !$myRating,

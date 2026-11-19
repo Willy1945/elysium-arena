@@ -31,7 +31,7 @@ class TelegramService
 
         try {
             $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
-            $response = Http::timeout(5)->post($url, [
+            $response = Http::timeout(12)->withoutVerifying()->post($url, [
                 'chat_id' => $targetChatId,
                 'text' => $text,
                 'parse_mode' => 'HTML',
@@ -40,6 +40,21 @@ class TelegramService
 
             if (! $response->successful()) {
                 Log::warning("Telegram API Error ({$response->status()}): " . $response->body());
+
+                // Fallback: jika parse HTML gagal (400), kirim sebagai plain text murni
+                if ($response->status() === 400) {
+                    $plain = strip_tags(str_replace(['<br>', '<br/>', '<br />'], "\n", $text));
+                    $fallbackRes = Http::timeout(12)->withoutVerifying()->post($url, [
+                        'chat_id' => $targetChatId,
+                        'text' => $plain,
+                        'disable_web_page_preview' => true,
+                    ]);
+                    if ($fallbackRes->successful()) {
+                        return true;
+                    }
+                    Log::warning("Telegram Plaintext Fallback Error ({$fallbackRes->status()}): " . $fallbackRes->body());
+                }
+
                 return false;
             }
 
@@ -55,14 +70,14 @@ class TelegramService
         try {
             $order->loadMissing(['user', 'session.device', 'items.product']);
 
-            $customerName = $order->user?->name ?: 'Tamu (Walk-in)';
+            $customerName = htmlspecialchars($order->user?->name ?: 'Tamu (Walk-in)', ENT_QUOTES, 'UTF-8');
             $tableOrStation = $order->session?->device?->code
-                ? "Stasiun " . $order->session->device->code . " (" . $order->session->device->name . ")"
+                ? "Stasiun " . htmlspecialchars($order->session->device->code, ENT_QUOTES, 'UTF-8')
                 : "Meja Kafe / Takeaway";
 
             $itemsList = "";
             foreach ($order->items as $item) {
-                $productName = $item->product?->name ?: 'Item Menu';
+                $productName = htmlspecialchars($item->product?->name ?: 'Item Menu', ENT_QUOTES, 'UTF-8');
                 $subtotal = number_format($item->subtotal, 0, ',', '.');
                 $itemsList .= "• <b>{$item->quantity}x</b> {$productName} (Rp {$subtotal})\n";
             }
@@ -93,11 +108,12 @@ class TelegramService
         try {
             $booking->loadMissing(['user', 'device.deviceType']);
 
-            $customerName = $booking->user?->name ?: 'Pelanggan';
-            $customerPhone = $booking->user?->phone ? " ({$booking->user->phone})" : "";
-            $deviceCode = $booking->device?->code ?: 'Rig Stasiun';
-            $deviceName = $booking->device?->name ?: '';
-            $deviceType = $booking->device?->deviceType?->name ?: '';
+            $customerName = htmlspecialchars($booking->user?->name ?: 'Pelanggan', ENT_QUOTES, 'UTF-8');
+            $customerPhone = $booking->user?->phone ? " (" . htmlspecialchars($booking->user->phone, ENT_QUOTES, 'UTF-8') . ")" : "";
+            $deviceCode = htmlspecialchars($booking->device?->code ?: 'Rig Stasiun', ENT_QUOTES, 'UTF-8');
+            $deviceType = htmlspecialchars($booking->device?->deviceType?->name ?: 'Gaming', ENT_QUOTES, 'UTF-8');
+            $deviceDesc = htmlspecialchars($booking->device?->description ?: ($booking->device?->name ?: ''), ENT_QUOTES, 'UTF-8');
+            $stationDisplay = $deviceDesc ? "<b>{$deviceCode}</b> ({$deviceDesc}) [{$deviceType}]" : "<b>{$deviceCode}</b> [{$deviceType}]";
 
             $bookingDate = date('d M Y', strtotime($booking->booking_date));
             $startTime = substr($booking->start_time, 0, 5);
@@ -109,7 +125,7 @@ class TelegramService
             $message = "🎮 <b>RESERVASI STASIUN GAMING BARU!</b>\n";
             $message .= "━━━━━━━━━━━━━━━━━━━━\n";
             $message .= "<b>Kode Booking:</b> <code>#{$booking->booking_code}</code>\n";
-            $message .= "<b>Stasiun:</b> <b>{$deviceCode}</b> - {$deviceName} [{$deviceType}]\n";
+            $message .= "<b>Stasiun:</b> {$stationDisplay}\n";
             $message .= "<b>Pelanggan:</b> {$customerName}{$customerPhone}\n";
             $message .= "<b>Tanggal:</b> {$bookingDate}\n";
             $message .= "<b>Waktu Sesi:</b> {$startTime} - {$endTime} ({$durationHours} Jam)\n";
@@ -163,8 +179,8 @@ class TelegramService
         try {
             $transaction->loadMissing(['user', 'session.device']);
 
-            $customer = $transaction->user?->name ?: ($transaction->guest_name ?: 'Tamu (Walk-in)');
-            $station = $transaction->session?->device?->code ? "Stasiun " . $transaction->session->device->code : 'Transaksi Langsung';
+            $customer = htmlspecialchars($transaction->user?->name ?: ($transaction->guest_name ?: 'Tamu (Walk-in)'), ENT_QUOTES, 'UTF-8');
+            $station = $transaction->session?->device?->code ? "Stasiun " . htmlspecialchars($transaction->session->device->code, ENT_QUOTES, 'UTF-8') : 'Transaksi Langsung';
             $methodLabel = strtoupper($method) === 'QRIS' ? '📱 QRIS (Scan Kasir)' : '💵 Tunai / Cash';
             $totalAmount = number_format($transaction->total_amount, 0, ',', '.');
             $timeNow = now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i') . ' WIB';

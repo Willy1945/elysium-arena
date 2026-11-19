@@ -4,7 +4,7 @@ import {
   Gamepad2, CalendarCheck, ShoppingBag, Receipt, ArrowRight,
   Clock, Plus, Star, Coffee, CheckCircle2,
   AlertTriangle, Award, Gift, MessageSquarePlus, User, ChevronRight, Activity, Coins,
-  Trash2
+  Trash2, Flame, PackageCheck, UtensilsCrossed
 } from 'lucide-react';
 import PublicLayout from '../../components/layout/PublicLayout';
 import { useAuth } from '../../context/AuthContext';
@@ -26,12 +26,20 @@ const STATUS_BADGE_STYLE = {
   completed: 'bg-sky-50 text-sky-700 border-sky-200',
 };
 
-const ORDER_STEPS = ['pending', 'processing', 'ready'];
+const ORDER_STEPS = ['pending', 'processing', 'ready', 'delivered'];
 const ORDER_STEP_LABEL = {
   pending: 'Diterima Kasir',
   processing: 'Sedang Disiapkan',
-  ready: 'Siap Diantar ke Meja',
+  ready: 'Siap Diantar',
+  delivered: 'Tiba di Meja',
 };
+
+function getOrderStepIndex(status) {
+  if (status === 'completed' || status === 'delivered') return 3;
+  if (status === 'ready') return 2;
+  if (status === 'processing') return 1;
+  return 0;
+}
 
 function ActiveSessionCard({ session }) {
   const { formatted, isExpired } = useSessionTimer(session.end_time, session.status);
@@ -43,6 +51,14 @@ function ActiveSessionCard({ session }) {
     if (end <= start) return 0;
     return Math.min(100, Math.max(0, ((now - start) / (end - start)) * 100));
   }, [session]);
+
+  const activeSessionOrders = useMemo(() => {
+    return (session.orders || []).filter((o) => ['pending', 'processing', 'ready'].includes(o.status));
+  }, [session.orders]);
+
+  const deliveredSessionOrders = useMemo(() => {
+    return (session.orders || []).filter((o) => ['delivered', 'completed'].includes(o.status));
+  }, [session.orders]);
 
   return (
     <div className="bg-white border border-zinc-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)] relative overflow-hidden">
@@ -114,6 +130,30 @@ function ActiveSessionCard({ session }) {
         </span>
       </div>
 
+      {activeSessionOrders.length > 0 && (
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-50 border border-amber-200 mb-4 text-amber-900 text-xs">
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+          </span>
+          <span className="font-semibold">
+            {activeSessionOrders.length} Pesanan F&B sedang disiapkan dapur ke stasiun ini...
+          </span>
+        </div>
+      )}
+
+      {deliveredSessionOrders.length > 0 && activeSessionOrders.length === 0 && (
+        <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200 mb-4 text-emerald-950 text-xs">
+          <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
+          <div className="min-w-0">
+            <span className="font-bold">Pesanan Kafe Selesai Diantar ke Meja</span>
+            <p className="text-[11px] text-emerald-800 truncate mt-0.5">
+              {deliveredSessionOrders[0]?.items?.map((i) => `${i.product?.name || 'Item'} ×${i.quantity}`).join(', ')}
+            </p>
+          </div>
+        </div>
+      )}
+
       <Link
         to="/menu"
         className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-cust-red hover:bg-cust-red-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-sm"
@@ -160,6 +200,18 @@ export default function CustomerDashboardPage() {
       .catch(() => {
         setLoading(false);
       });
+
+    // Auto-refresh summary data setiap 12 detik agar progres pesanan dapur & status sesi selalu mutakhir
+    const interval = setInterval(() => {
+      customerDashboardService
+        .getSummary()
+        .then(({ data }) => {
+          setData(data);
+        })
+        .catch(() => {});
+    }, 12000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleRatingSubmit = async (payload) => {
@@ -659,60 +711,201 @@ export default function CustomerDashboardPage() {
               </div>
             )}
 
-            {data.active_orders.length > 0 && (
+            {(data.active_orders?.length > 0 || data.completed_orders?.length > 0) && (
               <div className="rounded-3xl border border-zinc-200/90 bg-white p-6 sm:p-7 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_8px_10px_-6px_rgba(0,0,0,0.04)]">
-                <div className="flex items-center gap-2.5 mb-5">
-                  <ShoppingBag size={18} className="text-amber-600" />
-                  <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
-                    Pesanan Kafe Sedang Berjalan
-                  </h2>
+                <div className="flex items-center justify-between mb-5 pb-3.5 border-b border-zinc-100">
+                  <div className="flex items-center gap-2.5">
+                    <ShoppingBag size={18} className="text-amber-600" />
+                    <div>
+                      <h2 className="font-display font-black text-zinc-950 text-xl uppercase tracking-wide">
+                        Pesanan Kafe & F&B
+                      </h2>
+                      <p className="text-[11px] text-zinc-500 font-medium">
+                        Status antrean dapur dan catatan pesanan makanan ke meja Anda
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    to="/menu"
+                    className="text-amber-700 hover:text-amber-800 text-xs font-bold uppercase flex items-center gap-1 transition"
+                  >
+                    <span>Pesan Menu Baru</span>
+                    <ArrowRight size={12} />
+                  </Link>
                 </div>
 
-                <div className="space-y-4">
-                  {data.active_orders.map((o) => {
-                    const currentIdx = ORDER_STEPS.indexOf(o.status);
-                    return (
-                      <div
-                        key={o.id}
-                        className="bg-zinc-50/70 border border-zinc-200 rounded-2xl p-5 shadow-xs"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-amber-700 text-xs font-bold uppercase">
-                            Order #{o.order_code}
-                          </span>
-                          <span className="text-xs font-semibold text-zinc-950">
-                            {formatRupiah(o.total_price)}
-                          </span>
-                        </div>
+                {/* Sub-bagian 1: Pesanan Sedang Diproses */}
+                {data.active_orders?.length > 0 && (
+                  <div className="mb-6 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-amber-900 font-mono-tech">
+                        Sedang Diproses Dapur ({data.active_orders.length})
+                      </h3>
+                    </div>
 
-                        <p className="text-zinc-700 text-xs mb-4 font-medium">
-                          {o.items.map((item) => `${item.product.name} ×${item.quantity}`).join(', ')}
-                        </p>
+                    {data.active_orders.map((o) => {
+                      const currentIdx = getOrderStepIndex(o.status);
+                      const isDelivered = o.status === 'delivered';
 
-                        <div className="flex gap-2">
-                          {ORDER_STEPS.map((step, idx) => (
-                            <div key={step} className="flex-1 flex flex-col gap-1.5">
-                              <div
-                                className={`h-1.5 rounded-full ${
-                                  idx <= currentIdx
-                                    ? 'bg-amber-500'
-                                    : 'bg-zinc-200'
-                                }`}
-                              />
-                              <span
-                                className={`text-[10px] uppercase ${
-                                  idx <= currentIdx ? 'text-amber-700 font-bold' : 'text-zinc-400'
-                                }`}
-                              >
-                                {ORDER_STEP_LABEL[step]}
+                      return (
+                        <div
+                          key={o.id}
+                          className="bg-zinc-50/80 border border-zinc-200 rounded-2xl p-4 sm:p-5 shadow-xs"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-amber-900 text-xs font-bold font-mono-tech uppercase">
+                                #{o.order_code}
+                              </span>
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-200">
+                                {o.session?.device_code ? `Meja ${o.session.device_code}` : 'Take-away'}
                               </span>
                             </div>
-                          ))}
+                            <span className="text-xs font-bold text-zinc-950 font-mono-tech">
+                              {formatRupiah(o.total_price)}
+                            </span>
+                          </div>
+
+                          {/* Rincian Menu */}
+                          <div className="bg-white border border-zinc-200/90 rounded-xl p-3 my-3 divide-y divide-zinc-100">
+                            <p className="text-[10px] font-mono-tech uppercase font-bold text-zinc-400 mb-1.5 tracking-wider">
+                              Rincian Menu ({o.items?.length || 0} Item):
+                            </p>
+                            {o.items?.map((item) => (
+                              <div key={item.id} className="flex items-center justify-between py-1 text-xs first:pt-0 last:pb-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-semibold text-zinc-800">{item.product?.name || 'Item Kafe'}</span>
+                                  <span className="text-zinc-500 font-mono-tech font-bold">×{item.quantity}</span>
+                                </div>
+                                <span className="font-mono-tech font-bold text-zinc-700">{formatRupiah(item.subtotal)}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Stepper Progres */}
+                          <div className="flex gap-2 my-3">
+                            {ORDER_STEPS.map((step, idx) => {
+                              const isStepDone = idx <= currentIdx;
+                              return (
+                                <div key={step} className="flex-1 flex flex-col gap-1.5">
+                                  <div
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                                      isStepDone
+                                        ? isDelivered ? 'bg-emerald-500' : 'bg-amber-500'
+                                        : 'bg-zinc-200'
+                                    }`}
+                                  />
+                                  <span
+                                    className={`text-[9px] sm:text-[10px] uppercase font-mono-tech ${
+                                      isStepDone
+                                        ? isDelivered ? 'text-emerald-700 font-bold' : 'text-amber-800 font-bold'
+                                        : 'text-zinc-400'
+                                    }`}
+                                  >
+                                    {ORDER_STEP_LABEL[step]}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Status Box Info */}
+                          {isDelivered ? (
+                            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mt-2">
+                              <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
+                              <span>Pesanan telah tiba di meja Anda! Selamat menikmati hidangan.</span>
+                            </div>
+                          ) : o.status === 'ready' ? (
+                            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium mt-2">
+                              <PackageCheck size={15} className="text-emerald-600 shrink-0" />
+                              <span>Pesanan sudah siap dan staf sedang berjalan mengantarkan ke meja Anda.</span>
+                            </div>
+                          ) : o.status === 'processing' ? (
+                            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium mt-2">
+                              <Flame size={15} className="text-amber-600 shrink-0" />
+                              <span>Dapur/Barista sedang menyiapkan hidangan & minuman Anda.</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2 p-2.5 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs font-medium mt-2">
+                              <Clock size={15} className="text-zinc-500 shrink-0" />
+                              <span>Pesanan diterima kasir dan masuk antrean pembuatan.</span>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Sub-bagian 2: Catatan Pesanan Selesai Diantar */}
+                {data.completed_orders?.length > 0 && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle2 size={14} className="text-emerald-600" />
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-700 font-mono-tech">
+                        Pesanan Selesai Diantar ({data.completed_orders.filter((co) => !data.active_orders?.some((ao) => ao.id === co.id)).length})
+                      </h3>
+                    </div>
+
+                    {data.completed_orders
+                      .filter((co) => !data.active_orders?.some((ao) => ao.id === co.id))
+                      .map((co) => (
+                        <div
+                          key={co.id}
+                          className="bg-zinc-50/70 border border-zinc-200 hover:border-zinc-300 rounded-2xl p-4 sm:p-5 transition shadow-xs"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-zinc-600 font-mono-tech text-xs uppercase font-bold">
+                                #{co.order_code}
+                              </span>
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <CheckCircle2 size={11} className="text-emerald-600" />
+                                Selesai Diantar
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-zinc-500 font-mono">
+                              {co.created_at
+                                ? new Date(co.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB · ' + new Date(co.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+                                : ''}
+                            </span>
+                          </div>
+
+                          {/* Rincian Menu Selesai */}
+                          <div className="bg-white border border-zinc-200 rounded-xl p-3 mb-3 divide-y divide-zinc-100">
+                            <p className="text-[10px] font-mono-tech uppercase font-bold text-zinc-400 mb-1 tracking-wider">
+                              Rincian Menu ({co.items?.length || 0} Item):
+                            </p>
+                            {co.items?.map((item) => (
+                              <div key={item.id} className="flex items-center justify-between py-1 text-xs first:pt-0 last:pb-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="font-semibold text-zinc-900">{item.product?.name || 'Item Kafe'}</span>
+                                  <span className="text-zinc-500 font-mono-tech font-bold">×{item.quantity}</span>
+                                </div>
+                                <span className="font-mono-tech font-bold text-zinc-700">{formatRupiah(item.subtotal)}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="flex items-center justify-between pt-1">
+                            <span className="text-xs text-zinc-500 font-medium">
+                              {co.session?.device_code ? `Diantar ke: Stasiun ${co.session.device_code}` : 'Pesanan Take-away'}
+                            </span>
+                            <div className="text-right">
+                              <span className="text-[10px] text-zinc-400 uppercase font-mono-tech mr-1.5">Total Tagihan:</span>
+                              <span className="font-display font-black text-sm text-zinc-950">{formatRupiah(co.total_price)}</span>
+                            </div>
+                          </div>
+
+                          <div className="mt-2.5 pt-2 border-t border-zinc-200/80 flex items-center gap-1.5 text-[11px] text-emerald-700 font-medium">
+                            <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
+                            <span>Pesanan telah disajikan ke meja Anda. Selamat menikmati makanan & minumannya!</span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
               </div>
             )}
 

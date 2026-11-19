@@ -19,6 +19,7 @@ class SessionResource extends JsonResource
             'guest_name' => $this->guest_name,
             'is_guest' => is_null($this->user_id),
             'device' => new DeviceResource($this->whenLoaded('device')),
+            'orders' => OrderResource::collection($this->whenLoaded('orders')),
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
             'duration' => $this->duration,
